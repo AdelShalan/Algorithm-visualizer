@@ -1,24 +1,47 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Nav from './Nav';
-import { docsContent, docsSidebar } from '../data/docsContent';
+import { useDocs, useDoc } from '../hooks/useAlgorithmData';
+
+// Build sidebar structure from API data
+function buildSidebar(docs) {
+  if (!docs) return [];
+  const grouped = {};
+  for (const doc of docs) {
+    const tag = doc.tag || 'Other';
+    if (!grouped[tag]) grouped[tag] = [];
+    grouped[tag].push({ id: doc.id, label: doc.title });
+  }
+  return Object.entries(grouped).map(([label, links]) => ({ label, links }));
+}
 
 export default function Docs() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { data: docsList, loading: docsLoading } = useDocs();
   const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const urlDoc = searchParams.get('doc');
-  const activeDoc = (urlDoc && docsContent[urlDoc]) ? urlDoc : 'bubble-sort';
+
+  const sidebar = useMemo(() => buildSidebar(docsList?.docs), [docsList]);
+
+  // Default to first doc if none selected
+  const firstDoc = docsList?.docs?.[0]?.id;
+  const activeDoc = (urlDoc && docsList?.docs?.find(d => d.id === urlDoc)) ? urlDoc : (firstDoc || '');
+
+  const { data: currentDoc, loading: docLoading } = useDoc(activeDoc);
 
   const [search, setSearch] = useState('');
   const [activeSection, setActiveSection] = useState('overview');
+
+  useEffect(() => {
+    setActiveSection('overview');
+  }, [activeDoc]);
 
   const navigateToDoc = useCallback((docId) => {
     setActiveSection('overview');
     navigate(`/docs?doc=${docId}`, { replace: true });
   }, [navigate]);
 
-  const currentDoc = docsContent[activeDoc];
   const sections = currentDoc?.sections || [];
 
   const filteredSections = sections.filter(s => {
@@ -73,7 +96,7 @@ export default function Docs() {
               />
             </div>
 
-            {docsSidebar.sections.map(section => (
+            {sidebar.map(section => (
               <div key={section.label} style={{ marginBottom: '1.25rem' }}>
                 <div style={{
                   fontFamily: 'Syne, sans-serif',
@@ -156,7 +179,7 @@ export default function Docs() {
                   maxWidth: '640px',
                   marginBottom: '1rem',
                 }}>
-                  {currentDoc.desc}
+                  {currentDoc.description}
                 </p>
                 <div style={{
                   display: 'flex',
@@ -339,7 +362,15 @@ export default function Docs() {
                                 <tr key={i}>
                                   {row.cells.map((cell, j) => {
                                     const classes = row.classes || [];
-                                    return (
+  if (docsLoading || docLoading) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
+        <div style={{ textAlign: 'center', color: 'var(--muted)' }}>Loading docs...</div>
+      </div>
+    );
+  }
+
+  return (
                                       <td key={j} style={{
                                         padding: '0.625rem 0.75rem',
                                         borderBottom: i < section.table.rows.length - 1 ? '1px solid var(--border)' : 'none',

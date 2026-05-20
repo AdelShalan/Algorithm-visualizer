@@ -1,65 +1,62 @@
 import { useParams, Link } from 'react-router-dom';
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { getAlgorithm, categories } from '../data/algorithms';
-import { algorithmDetails } from '../data/algorithmDetails';
-import { algorithmCodeSnippets } from '../data/algorithmCodeSnippets';
+import { useEffect, useState, useRef, useCallback, Suspense, lazy } from 'react';
 import { useAlgorithm } from '../contexts/AlgorithmContext';
+import { useAlgorithm as useAlgoApi } from '../hooks/useAlgorithmData';
 import Nav from './Nav';
 
-import BubbleSort from '../visualizers/sorting/BubbleSort';
-import SelectionSort from '../visualizers/sorting/SelectionSort';
-import InsertionSort from '../visualizers/sorting/InsertionSort';
-import MergeSort from '../visualizers/sorting/MergeSort';
-import QuickSort from '../visualizers/sorting/QuickSort';
-import HeapSort from '../visualizers/sorting/HeapSort';
-import LinearSearch from '../visualizers/searching/LinearSearch';
-import BinarySearch from '../visualizers/searching/BinarySearch';
-import BFS from '../visualizers/searching/BFS';
-import DFS from '../visualizers/searching/DFS';
-import Dijkstra from '../visualizers/graph/Dijkstra';
-import AStar from '../visualizers/graph/AStar';
-import BellmanFord from '../visualizers/graph/BellmanFord';
-import FloydWarshall from '../visualizers/graph/FloydWarshall';
-import Kruskal from '../visualizers/graph/Kruskal';
-import Prim from '../visualizers/graph/Prim';
-import Fibonacci from '../visualizers/dp/Fibonacci';
-import Knapsack from '../visualizers/dp/Knapsack';
-import LCS from '../visualizers/dp/LCS';
-import EditDistance from '../visualizers/dp/EditDistance';
-import BST from '../visualizers/tree/BST';
-import AVL from '../visualizers/tree/AVL';
-import RedBlack from '../visualizers/tree/RedBlack';
-import Trie from '../visualizers/tree/Trie';
-import HashChaining from '../visualizers/hashing/HashChaining';
-import HashOpenAddressing from '../visualizers/hashing/HashOpenAddressing';
-import HashLoadFactor from '../visualizers/hashing/HashLoadFactor';
-import NQueens from '../visualizers/backtracking/NQueens';
-import Sudoku from '../visualizers/backtracking/Sudoku';
-import SudokuConstraintPropagation from '../visualizers/constraint-propagation/SudokuConstraintPropagation';
-import Permutations from '../visualizers/backtracking/Permutations';
-import DCMergeSort from '../visualizers/divide-conquer/DCMergeSort';
-import Karatsuba from '../visualizers/divide-conquer/Karatsuba';
-import ClosestPair from '../visualizers/divide-conquer/ClosestPair';
-import KMP from '../visualizers/string/KMP';
-import RabinKarp from '../visualizers/string/RabinKarp';
-import ZAlgorithm from '../visualizers/string/ZAlgorithm';
-import MaxSumSubarray from '../visualizers/sliding-window/MaxSumSubarray';
-import LongestUniqueSubstring from '../visualizers/sliding-window/LongestUniqueSubstring';
-import TwoSumSorted from '../visualizers/sliding-window/TwoSumSorted';
+// Lazy-loaded visualizers
+const visualizerImports = {
+  'bubble-sort': () => import('../visualizers/sorting/BubbleSort'),
+  'selection-sort': () => import('../visualizers/sorting/SelectionSort'),
+  'insertion-sort': () => import('../visualizers/sorting/InsertionSort'),
+  'merge-sort': () => import('../visualizers/sorting/MergeSort'),
+  'quick-sort': () => import('../visualizers/sorting/QuickSort'),
+  'heap-sort': () => import('../visualizers/sorting/HeapSort'),
+  'linear-search': () => import('../visualizers/searching/LinearSearch'),
+  'binary-search': () => import('../visualizers/searching/BinarySearch'),
+  'bfs': () => import('../visualizers/searching/BFS'),
+  'dfs': () => import('../visualizers/searching/DFS'),
+  'dijkstra': () => import('../visualizers/graph/Dijkstra'),
+  'astar': () => import('../visualizers/graph/AStar'),
+  'bellman-ford': () => import('../visualizers/graph/BellmanFord'),
+  'floyd-warshall': () => import('../visualizers/graph/FloydWarshall'),
+  'kruskal': () => import('../visualizers/graph/Kruskal'),
+  'prim': () => import('../visualizers/graph/Prim'),
+  'fibonacci': () => import('../visualizers/dp/Fibonacci'),
+  'knapsack': () => import('../visualizers/dp/Knapsack'),
+  'lcs': () => import('../visualizers/dp/LCS'),
+  'edit-distance': () => import('../visualizers/dp/EditDistance'),
+  'bst': () => import('../visualizers/tree/BST'),
+  'avl': () => import('../visualizers/tree/AVL'),
+  'red-black': () => import('../visualizers/tree/RedBlack'),
+  'trie': () => import('../visualizers/tree/Trie'),
+  'hash-chaining': () => import('../visualizers/hashing/HashChaining'),
+  'hash-open-addressing': () => import('../visualizers/hashing/HashOpenAddressing'),
+  'hash-load-factor': () => import('../visualizers/hashing/HashLoadFactor'),
+  'n-queens': () => import('../visualizers/backtracking/NQueens'),
+  'sudoku': () => import('../visualizers/backtracking/Sudoku'),
+  'sudoku-cp': () => import('../visualizers/constraint-propagation/SudokuConstraintPropagation'),
+  'permutations': () => import('../visualizers/backtracking/Permutations'),
+  'dc-merge-sort': () => import('../visualizers/divide-conquer/DCMergeSort'),
+  'karatsuba': () => import('../visualizers/divide-conquer/Karatsuba'),
+  'closest-pair': () => import('../visualizers/divide-conquer/ClosestPair'),
+  'kmp': () => import('../visualizers/string/KMP'),
+  'rabin-karp': () => import('../visualizers/string/RabinKarp'),
+  'z-algorithm': () => import('../visualizers/string/ZAlgorithm'),
+  'max-sum-subarray': () => import('../visualizers/sliding-window/MaxSumSubarray'),
+  'longest-unique-substring': () => import('../visualizers/sliding-window/LongestUniqueSubstring'),
+  'two-sum-sorted': () => import('../visualizers/sliding-window/TwoSumSorted'),
+};
 
-const visualizerMap = {
-  'bubble-sort': BubbleSort, 'selection-sort': SelectionSort, 'insertion-sort': InsertionSort,
-  'merge-sort': MergeSort, 'quick-sort': QuickSort, 'heap-sort': HeapSort,
-  'linear-search': LinearSearch, 'binary-search': BinarySearch, 'bfs': BFS, 'dfs': DFS,
-  'dijkstra': Dijkstra, 'astar': AStar, 'bellman-ford': BellmanFord,
-  'floyd-warshall': FloydWarshall, 'kruskal': Kruskal, 'prim': Prim,
-  'fibonacci': Fibonacci, 'knapsack': Knapsack, 'lcs': LCS, 'edit-distance': EditDistance,
-  'bst': BST, 'avl': AVL, 'red-black': RedBlack, 'trie': Trie,
-  'hash-chaining': HashChaining, 'hash-open-addressing': HashOpenAddressing, 'hash-load-factor': HashLoadFactor,
-  'n-queens': NQueens, 'sudoku': Sudoku, 'sudoku-cp': SudokuConstraintPropagation, 'permutations': Permutations,
-  'dc-merge-sort': DCMergeSort, 'karatsuba': Karatsuba, 'closest-pair': ClosestPair,
-  'kmp': KMP, 'rabin-karp': RabinKarp, 'z-algorithm': ZAlgorithm,
-  'max-sum-subarray': MaxSumSubarray, 'longest-unique-substring': LongestUniqueSubstring, 'two-sum-sorted': TwoSumSorted,
+const LazyVisualizer = ({ algorithm }) => {
+  const importer = visualizerImports[algorithm];
+  if (!importer) return <div style={{ color: 'var(--muted)', textAlign: 'center', padding: '2rem' }}>Visualizer not found</div>;
+  const Component = lazy(importer);
+  return (
+    <Suspense fallback={<div style={{ color: 'var(--muted)', textAlign: 'center', padding: '2rem' }}>Loading visualizer...</div>}>
+      <Component />
+    </Suspense>
+  );
 };
 
 const speedLabels = ['0.5×', '1×', '2×', '4×'];
@@ -68,8 +65,7 @@ const speedValues = [25, 50, 80, 100];
 export default function AlgorithmPage() {
   const { category, algorithm } = useParams();
   const { isPlaying, speed, setSpeed, currentStep, steps, isComplete, play, pause, stepForward, stepBackward, resetAnimation, runGenerator } = useAlgorithm();
-  const algoInfo = getAlgorithm(category, algorithm);
-  const Visualizer = visualizerMap[algorithm];
+  const { data: algoInfo, loading, error } = useAlgoApi(category, algorithm);
   const [activeTab, setActiveTab] = useState('info');
   const [speedIdx, setSpeedIdx] = useState(() => speedValues.indexOf(speed) !== -1 ? speedValues.indexOf(speed) : 1);
 
@@ -82,7 +78,17 @@ export default function AlgorithmPage() {
 
   const progress = steps.length > 0 ? ((currentStep + 1) / steps.length) * 100 : 0;
 
-  if (!algoInfo || !Visualizer) {
+  if (loading) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
+        <div style={{ textAlign: 'center', color: 'var(--muted)' }}>
+          <div style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.25rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.5rem' }}>Loading...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !algoInfo) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
         <div style={{ textAlign: 'center' }}>
@@ -93,16 +99,12 @@ export default function AlgorithmPage() {
     );
   }
 
-  const relatedAlgos = categories
-    .find(c => c.id === category)
-    ?.algorithms.filter(a => a.id !== algorithm)
-    .slice(0, 3) || [];
+  const relatedAlgos = algoInfo.related?.slice(0, 3) || [];
 
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', background: 'var(--bg)' }}>
-      <Nav breadcrumb={[{ label: algoInfo.category.name }, { label: algoInfo.name }]} />
+      <Nav breadcrumb={[{ label: algoInfo.category }, { label: algoInfo.name }]} />
 
-      {/* Algorithm header */}
       <div style={{
         background: 'var(--white)', borderBottom: '1px solid var(--border)',
         padding: '1.25rem 2rem', display: 'flex', alignItems: 'flex-start',
@@ -114,7 +116,7 @@ export default function AlgorithmPage() {
               fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.625rem',
               background: 'var(--purple-light)', color: 'var(--purple)',
               padding: '0.2rem 0.625rem', borderRadius: '4px', fontWeight: 500,
-            }}>{algoInfo.category.name}</span>
+            }}>{algoInfo.category}</span>
           </div>
           <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '1.5rem', letterSpacing: '-0.025em', color: 'var(--ink)', marginBottom: '0.25rem' }}>
             {algoInfo.name}
@@ -131,16 +133,12 @@ export default function AlgorithmPage() {
         </div>
       </div>
 
-      {/* Progress bar */}
       <div style={{ height: '3px', background: 'var(--border)', flexShrink: 0 }}>
         <div style={{ height: '100%', background: 'var(--purple)', width: `${progress}%`, transition: 'width 0.3s ease', borderRadius: '2px' }} />
       </div>
 
-      {/* Main body */}
       <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 320px', overflow: 'hidden' }}>
-        {/* Left: vis area */}
         <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', borderRight: '1px solid var(--border)' }}>
-          {/* Control bar */}
           <div style={{
             background: 'var(--white)', borderBottom: '1px solid var(--border)',
             padding: '0.75rem 1.5rem', display: 'flex', alignItems: 'center',
@@ -189,15 +187,12 @@ export default function AlgorithmPage() {
             </div>
           </div>
 
-          {/* Canvas area */}
           <div style={{ flex: 1, overflow: 'auto', background: 'var(--surface)', padding: '1.5rem' }}>
-            <Visualizer />
+            <LazyVisualizer algorithm={algorithm} />
           </div>
         </div>
 
-        {/* Right: info panel */}
         <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', background: 'var(--white)' }}>
-          {/* Tabs */}
           <div style={{ display: 'flex', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
             {['info', 'code', 'complexity'].map(tab => (
               <button
@@ -215,7 +210,6 @@ export default function AlgorithmPage() {
             ))}
           </div>
 
-          {/* Panel body */}
           <div style={{ flex: 1, overflowY: 'auto', padding: '1.25rem' }}>
             {activeTab === 'info' && <InfoTab algoInfo={algoInfo} steps={steps} currentStep={currentStep} relatedAlgos={relatedAlgos} category={category} />}
             {activeTab === 'code' && <CodeTab algoInfo={algoInfo} />}
@@ -265,20 +259,18 @@ function ComplexityBox({ label, value, quality }) {
 }
 
 function InfoTab({ algoInfo, steps, currentStep, relatedAlgos, category }) {
-  const details = algorithmDetails[algoInfo.id];
-
   return (
     <div>
-      {details?.overview && (
+      {algoInfo.overview && (
         <Section title="How it works">
-          <p style={{ fontSize: '0.8125rem', color: 'var(--ink2)', lineHeight: 1.65 }}>{details.overview}</p>
+          <p style={{ fontSize: '0.8125rem', color: 'var(--ink2)', lineHeight: 1.65 }}>{algoInfo.overview}</p>
         </Section>
       )}
 
-      {details?.steps && (
+      {algoInfo.steps?.length > 0 && (
         <Section title="Step by step">
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {details.steps.map((step, i) => (
+            {algoInfo.steps.map((step, i) => (
               <div key={i} style={{ display: 'flex', gap: '0.625rem', alignItems: 'flex-start' }}>
                 <span style={{
                   flexShrink: 0, width: 20, height: 20, borderRadius: '50%',
@@ -310,10 +302,10 @@ function InfoTab({ algoInfo, steps, currentStep, relatedAlgos, category }) {
       {relatedAlgos.length > 0 && (
         <Section title="Related algorithms">
           <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-            {relatedAlgos.map(algo => (
+            {relatedAlgos.map((algo, i) => (
               <Link
-                key={algo.id}
-                to={`/${category}/${algo.id}`}
+                key={i}
+                to={`/${category}/${algo.id || algo.name.toLowerCase().replace(/\s+/g, '-')}`}
                 style={{
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                   padding: '0.5rem 0.625rem', border: '1px solid var(--border)', borderRadius: '7px',
@@ -334,7 +326,6 @@ function InfoTab({ algoInfo, steps, currentStep, relatedAlgos, category }) {
 }
 
 function CodeTab({ algoInfo }) {
-  const code = algorithmCodeSnippets[algoInfo.id];
   const codeRef = useRef(null);
 
   const handleWheel = useCallback((e) => {
@@ -347,13 +338,13 @@ function CodeTab({ algoInfo }) {
   return (
     <div>
       <Section title="Implementation">
-        {code ? (
+        {algoInfo.code ? (
           <div
             ref={codeRef}
             onWheel={handleWheel}
             style={{ background: '#111110', borderRadius: '8px', padding: '1rem', fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', lineHeight: 1.8, color: '#9a9891', overflowX: 'auto', whiteSpace: 'pre' }}
           >
-            {code}
+            {algoInfo.code}
           </div>
         ) : (
           <div style={{ background: '#111110', borderRadius: '8px', padding: '1rem', fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', lineHeight: 1.8, color: '#6b7280' }}>

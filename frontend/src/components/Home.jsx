@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Nav from './Nav';
-import { categories } from '../data/algorithms';
+import { useAlgorithmData } from '../hooks/useAlgorithmData';
 
 const categoryConfig = {
   sorting:         { label: '[]',    dot: '#6c47ff', bg: '#ede9ff',  text: '#6c47ff',  cardTop: '#6c47ff' },
@@ -14,27 +14,50 @@ const categoryConfig = {
   'divide-conquer':{ label: 'D/C',   dot: '#2563eb', bg: '#eff6ff',  text: '#1d4ed8',  cardTop: '#2563eb' },
   string:          { label: '"s"',   dot: '#c2410c', bg: '#fff7ed',  text: '#c2410c',  cardTop: '#c2410c' },
   'sliding-window':{ label: '[↔]',   dot: '#0f766e', bg: '#f0fdfa',  text: '#0f766e',  cardTop: '#0f766e' },
+  'constraint-propagation': { label: 'CP', dot: '#7c3aed', bg: '#f5f3ff', text: '#6d28d9', cardTop: '#7c3aed' },
 };
 
-const totalAlgorithms = categories.reduce((s, c) => s + c.algorithms.length, 0);
-
 export default function Home() {
+  const { data, loading, error } = useAlgorithmData();
   const [searchParams] = useSearchParams();
+  const categories = data?.categories || [];
+
   const initialCategory = useMemo(() => {
     const cat = searchParams.get('category');
     return cat && categories.find(c => c.id === cat) ? cat : null;
-  }, [searchParams]);
+  }, [searchParams, categories]);
+
   const [activeCategory, setActiveCategory] = useState(initialCategory);
 
   const visibleCategories = activeCategory
     ? categories.filter(c => c.id === activeCategory)
     : categories;
 
+  const totalAlgorithms = categories.reduce((s, c) => s + c.algorithms.length, 0);
+
+  if (loading) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
+        <div style={{ textAlign: 'center', color: 'var(--muted)' }}>Loading algorithms...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.25rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.5rem' }}>Failed to load</div>
+          <p style={{ color: 'var(--muted)' }}>{error.message}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
       <Nav />
 
-      {/* Page header */}
       <div style={{ background: 'var(--white)', borderBottom: '1px solid var(--border)', padding: '2.5rem 2.5rem 0' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', color: 'var(--muted)', marginBottom: '1.25rem' }}>
           <Link to="/" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Home</Link>
@@ -48,7 +71,6 @@ export default function Home() {
           {totalAlgorithms} interactive visualizations, organized by category. Step through any algorithm frame by frame.
         </p>
 
-        {/* Category tabs */}
         <div style={{ display: 'flex', gap: 0, overflowX: 'auto' }}>
           <TabBtn label={`All (${totalAlgorithms})`} active={!activeCategory} onClick={() => setActiveCategory(null)} />
           {categories.map(c => (
@@ -57,15 +79,12 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Body */}
       <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', minHeight: 'calc(100vh - 240px)' }}>
-        {/* Sidebar */}
         <div style={{
           background: 'var(--white)', borderRight: '1px solid var(--border)',
           padding: '1.5rem', position: 'sticky', top: '61px',
           height: 'calc(100vh - 61px)', overflowY: 'auto',
         }}>
-          {/* Search */}
           <div style={{ position: 'relative', marginBottom: '1.75rem' }}>
             <span style={{ position: 'absolute', left: '0.625rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)', fontSize: '14px' }}>⌕</span>
             <input
@@ -88,7 +107,6 @@ export default function Home() {
             />
           </div>
 
-          {/* Category filter */}
           <div style={{ marginBottom: '1.75rem' }}>
             <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.625rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '0.75rem' }}>Category</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
@@ -124,7 +142,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Main content */}
         <div style={{ padding: '1.5rem 2rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
             <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', color: 'var(--muted)' }}>
@@ -136,7 +153,6 @@ export default function Home() {
             const cfg = categoryConfig[category.id] || {};
             return (
               <div key={category.id} style={{ marginBottom: '2.5rem' }}>
-                {/* Category header */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--border)' }}>
                   <div style={{
                     width: 32, height: 32, borderRadius: '8px',
@@ -148,7 +164,6 @@ export default function Home() {
                   <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', color: 'var(--muted)', marginLeft: 'auto' }}>{category.algorithms.length} algorithms</span>
                 </div>
 
-                {/* Algorithm cards */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
                   {category.algorithms.map(algo => (
                     <AlgoCard key={algo.id} category={category} algo={algo} cfg={cfg} />

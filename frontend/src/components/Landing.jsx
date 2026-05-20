@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Nav from './Nav';
-import { categories } from '../data/algorithms';
+import { useAlgorithmData } from '../hooks/useAlgorithmData';
 
 const featuredCategories = [
   {
@@ -30,9 +30,19 @@ const featuredCategories = [
   },
 ];
 
-const totalAlgorithms = categories.reduce((s, c) => s + c.algorithms.length, 0);
-
 export default function Landing() {
+  const { data, loading } = useAlgorithmData();
+  const categories = data?.categories || [];
+  const totalAlgorithms = categories.reduce((s, c) => s + c.algorithms.length, 0);
+
+  if (loading) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
+        <div style={{ textAlign: 'center', color: 'var(--muted)' }}>Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg)' }}>
       <Nav />
