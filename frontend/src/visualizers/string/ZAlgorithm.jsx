@@ -14,10 +14,11 @@ export default function ZAlgorithm() {
   useEffect(() => { setGenerator(handleRun); }, [handleRun, setGenerator]);
 
   const { currentStep, steps } = useAlgorithm();
-  const currentData = steps?.[currentStep] || { type: 'idle', z: [], log: [] };
+  const currentData = steps?.[currentStep] || { type: 'idle', z: [], zArr: [], log: [] };
+  const zArray = currentData.zArr || (Array.isArray(currentData.z) ? currentData.z : []);
   const logRef = useRef(null);
   useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [currentData.log]);
-  const concat = pattern + '$' + text;
+  const concat = currentData.concat || (pattern + '$' + text);
 
   return (
     <div className="flex h-full flex-col gap-5">
@@ -57,11 +58,11 @@ export default function ZAlgorithm() {
             </div>
           </div>
 
-          {currentData.z.length > 0 && (
+          {zArray.length > 0 && (
             <div>
               <div className="mb-2 font-heading text-[.8125rem] font-bold text-ink">Z-array</div>
               <div className="flex flex-wrap gap-0.5">
-                {currentData.z.map((val, i) => {
+                {zArray.map((val, i) => {
                   const isCurrent = currentData.type === 'compute' && currentData.i === i;
                   const isMatch = val === pattern.length;
                   let bg = 'var(--bg)', color = 'var(--muted)', border = '1px solid var(--border)';
