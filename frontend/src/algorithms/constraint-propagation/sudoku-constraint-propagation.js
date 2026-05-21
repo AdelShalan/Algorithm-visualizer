@@ -101,6 +101,16 @@ export function* generateSteps(puzzle) {
     return true;
   }
 
+  function* eliminateFromPeers(cands, row, col) {
+    const val = board[row][col];
+    for (const [pr, pc] of getPeers(row, col)) {
+      if (board[pr][pc] !== 0) continue;
+      const ok = yield* eliminate(cands, pr, pc, val, row, col);
+      if (!ok) return false;
+    }
+    return true;
+  }
+
   function* search(cands) {
     const propOk = yield* propagate(cands);
     if (!propOk) return false;
@@ -162,6 +172,25 @@ export function* generateSteps(puzzle) {
         log: [...log],
       };
 
+      // Eliminate val from peers before propagation
+      const elimOk = yield* eliminateFromPeers(cands, mr, mc);
+      if (!elimOk) {
+        log.push(`Backtrack from (${mr}, ${mc})`);
+        yield {
+          type: 'backtrack', row: mr, col: mc, num: val,
+          board: savedBoard,
+          candidates: savedCands,
+          log: [...log],
+        };
+        for (let r = 0; r < 9; r++) {
+          for (let c = 0; c < 9; c++) {
+            cands[r][c] = savedCands[r][c];
+            board[r][c] = savedBoard[r][c];
+          }
+        }
+        continue;
+      }
+
       if (yield* search(cands)) return true;
 
       log.push(`Backtrack from (${mr}, ${mc})`);
@@ -180,6 +209,16 @@ export function* generateSteps(puzzle) {
     }
 
     return false;
+  }
+
+  // Initial constraint propagation from puzzle givens
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      if (puzzle[r][c] !== 0) {
+        const ok = yield* eliminateFromPeers(candidates, r, c);
+        if (!ok) return;
+      }
+    }
   }
 
   yield* search(candidates);
