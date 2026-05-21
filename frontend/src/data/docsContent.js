@@ -235,6 +235,76 @@ The array is conceptually divided into two regions — a sorted prefix on the le
         },
       },
       {
+        id: 'code',
+        title: 'Implementation',
+        type: 'code',
+        languages: [
+          {
+            lang: 'JavaScript',
+            filename: 'selection-sort.js',
+            code: `function selectionSort(arr) {
+  const n = arr.length;
+
+  for (let i = 0; i < n - 1; i++) {
+    let minIdx = i;
+
+    for (let j = i + 1; j < n; j++) {
+      if (arr[j] < arr[minIdx]) {
+        minIdx = j;
+      }
+    }
+
+    if (minIdx !== i) {
+      [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
+    }
+  }
+
+  return arr;
+}`,
+            highlightLines: [5, 6, 7, 8, 9],
+          },
+          {
+            lang: 'Python',
+            filename: 'selection_sort.py',
+            code: `def selection_sort(arr: list) -> list:
+    n = len(arr)
+    for i in range(n - 1):
+        min_idx = i
+        for j in range(i + 1, n):
+            if arr[j] < arr[min_idx]:
+                min_idx = j
+        if min_idx != i:
+            arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    return arr`,
+          },
+          {
+            lang: 'Java',
+            filename: 'SelectionSort.java',
+            code: `public class SelectionSort {
+    public static void selectionSort(int[] arr) {
+        int n = arr.length;
+
+        for (int i = 0; i < n - 1; i++) {
+            int minIdx = i;
+
+            for (int j = i + 1; j < n; j++) {
+                if (arr[j] < arr[minIdx]) {
+                    minIdx = j;
+                }
+            }
+
+            if (minIdx != i) {
+                int temp = arr[i];
+                arr[i] = arr[minIdx];
+                arr[minIdx] = temp;
+            }
+        }
+    }
+}`,
+          },
+        ],
+      },
+      {
         id: 'related',
         title: 'Related algorithms',
         type: 'related',
@@ -294,6 +364,69 @@ The algorithm maintains a sorted prefix of the array and, for each new element, 
           title: 'Why it matters',
           body: 'Insertion sort is the algorithm of choice as a base case in hybrid sorts like Timsort (Python, Java) and Introsort (C++ STL), which switch to Insertion Sort for subarrays of size ≤ 16. It\'s stable, in-place, online, and adaptive.',
         },
+      },
+      {
+        id: 'code',
+        title: 'Implementation',
+        type: 'code',
+        languages: [
+          {
+            lang: 'JavaScript',
+            filename: 'insertion-sort.js',
+            code: `function insertionSort(arr) {
+  const n = arr.length;
+
+  for (let i = 1; i < n; i++) {
+    const key = arr[i];
+    let j = i - 1;
+
+    while (j >= 0 && arr[j] > key) {
+      arr[j + 1] = arr[j];
+      j--;
+    }
+
+    arr[j + 1] = key;
+  }
+
+  return arr;
+}`,
+            highlightLines: [5, 6, 7, 8, 9],
+          },
+          {
+            lang: 'Python',
+            filename: 'insertion_sort.py',
+            code: `def insertion_sort(arr: list) -> list:
+    for i in range(1, len(arr)):
+        key = arr[i]
+        j = i - 1
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+    return arr`,
+          },
+          {
+            lang: 'Java',
+            filename: 'InsertionSort.java',
+            code: `public class InsertionSort {
+    public static void insertionSort(int[] arr) {
+        int n = arr.length;
+
+        for (int i = 1; i < n; i++) {
+            int key = arr[i];
+            int j = i - 1;
+
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+
+            arr[j + 1] = key;
+        }
+    }
+}`,
+          },
+        ],
       },
       {
         id: 'related',
