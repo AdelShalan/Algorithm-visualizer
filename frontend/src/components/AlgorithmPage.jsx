@@ -48,10 +48,15 @@ const visualizerImports = {
   'two-sum-sorted': () => import('../visualizers/sliding-window/TwoSumSorted'),
 };
 
+// Lazy-loaded visualizers — created once at module scope
+const LazyVisualizers = {};
+for (const [key, importer] of Object.entries(visualizerImports)) {
+  LazyVisualizers[key] = lazy(importer);
+}
+
 const LazyVisualizer = ({ algorithm }) => {
-  const importer = visualizerImports[algorithm];
-  if (!importer) return <div style={{ color: 'var(--muted)', textAlign: 'center', padding: '2rem' }}>Visualizer not found</div>;
-  const Component = lazy(importer);
+  const Component = LazyVisualizers[algorithm];
+  if (!Component) return <div style={{ color: 'var(--muted)', textAlign: 'center', padding: '2rem' }}>Visualizer not found</div>;
   return (
     <Suspense fallback={<div style={{ color: 'var(--muted)', textAlign: 'center', padding: '2rem' }}>Loading visualizer...</div>}>
       <Component />

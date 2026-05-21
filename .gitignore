@@ -22,3 +22,16 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# MCPs and agent files
+opencode.json
+.playwright
+.playwright-mcp
+.claude
+
+# Build/test artifacts
+*.png
+*.jpg
+*.jpeg
+.vite/
+test-results/
