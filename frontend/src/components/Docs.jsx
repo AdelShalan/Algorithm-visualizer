@@ -272,8 +272,14 @@ export default function Docs() {
                   {section.type === 'related' && section.cards && (
                     <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3">
                       {section.cards.map((card, i) => {
-                        const docMatch = docsList?.docs?.find(d => d.title.toLowerCase() === card.name.toLowerCase());
-                        const docLink = docMatch ? `/docs?doc=${docMatch.id}` : `/docs?doc=${card.name.toLowerCase().replace(/\s+/g, '-').replace(/'/g, '')}`;
+                        const docSlug = card.name.toLowerCase().replace(/\s+/g, '-').replace(/'/g, '');
+                        const docMatch = docsList?.docs?.find(d =>
+                          d.title.toLowerCase() === card.name.toLowerCase() ||
+                          d.title.toLowerCase().includes(card.name.toLowerCase()) ||
+                          card.name.toLowerCase().includes(d.title.toLowerCase()) ||
+                          d.id === docSlug
+                        );
+                        const docLink = docMatch ? `/docs?doc=${docMatch.id}` : `/docs?doc=${docSlug}`;
                         return (
                         <Link
                           key={i}
