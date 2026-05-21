@@ -33,10 +33,10 @@ export default function Permutations() {
           <div className="flex-1">
             <div className="font-heading font-bold text-[0.8125rem] text-ink mb-3">Building permutations</div>
             <div className="flex gap-1.5 flex-wrap">
-              {currentData.current.map((val, i) => (
+              {(currentData.current || []).map((val, i) => (
                 <span key={i} className="w-9 h-9 flex items-center justify-center bg-purple text-white rounded-lg font-mono text-[0.75rem] font-bold">{val}</span>
               ))}
-              {currentData.remaining.map((val, i) => (
+              {(currentData.remaining || []).map((val, i) => (
                 <span key={`r-${i}`} className="w-9 h-9 flex items-center justify-center bg-bg text-muted rounded-lg font-mono text-[0.75rem] font-semibold">{val}</span>
               ))}
             </div>
