@@ -124,7 +124,7 @@ export default function RedBlack() {
     insert(tree, val, ops);
     if (tree.root) tree.root.color = 'black';
     setRoot(tree.root);
-    setLog(ops);
+    setLog(prev => [...prev, ...ops]);
     const result = validateTree(tree.root);
     setViolations(result.violations);
     setInputValue('');
@@ -134,11 +134,14 @@ export default function RedBlack() {
 
   const handleRandom = useCallback(() => {
     const tree = { root: null };
-    const vals = [];
-    for (let i = 0; i < 8; i++) { const v = Math.floor(Math.random() * 100) + 1; vals.push(v); insert(tree, v, []); }
+    const allOps = [];
+    for (let i = 0; i < 8; i++) {
+      const v = Math.floor(Math.random() * 100) + 1;
+      insert(tree, v, allOps);
+    }
     if (tree.root) tree.root.color = 'black';
     setRoot(tree.root);
-    setLog(vals.map(v => `Insert ${v}`));
+    setLog(allOps);
     const result = validateTree(tree.root);
     setViolations(result.violations);
   }, []);
