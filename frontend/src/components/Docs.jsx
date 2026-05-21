@@ -73,7 +73,7 @@ export default function Docs() {
 
       <div className="flex-1 flex overflow-hidden">
         {/* Left sidebar — fixed, never scrolls */}
-        <aside className="fixed left-0 top-[57px] bottom-0 w-[260px] bg-white border-r border-border overflow-y-auto flex-shrink-0">
+        <aside className="fixed left-0 top-[73px] bottom-0 w-[260px] bg-white border-r border-border overflow-y-auto flex-shrink-0">
           <div className="p-5">
             <div className="mb-4">
               <input
@@ -341,7 +341,7 @@ export default function Docs() {
 
         {/* Right TOC — fixed, always visible */}
         {currentDoc && (
-          <aside className="fixed right-0 top-[57px] bottom-0 w-[200px] border-l border-border bg-white overflow-y-auto py-6 px-4">
+          <aside className="fixed right-0 top-[73px] bottom-0 w-[200px] border-l border-border bg-white overflow-y-auto py-6 px-4">
             <div className="font-heading font-bold text-xs text-muted uppercase tracking-wider mb-3">
               Contents
             </div>
