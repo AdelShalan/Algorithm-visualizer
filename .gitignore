@@ -22,3 +22,27 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# MCPs and agent files
+opencode.json
+.playwright
+.playwright-mcp
+.claude
+.agents/
+skills-lock.json
+AGENTS.md
+REFACTOR.md
+REFACTORING_SUMMARY.md
+
+# Build/test artifacts
+*.png
+*.jpg
+*.jpeg
+
+# Screenshots for README (not build artifacts)
+!screenshots/*.png
+.vite/
+test-results/
+
+# Environment
+.env
