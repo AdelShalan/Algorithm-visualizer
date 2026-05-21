@@ -111,16 +111,28 @@ content.get('/docs/:id', async (c) => {
     ? sectionResult[0].values.map((row) => {
         const obj: Record<string, unknown> = {};
         sectionResult[0].columns.forEach((col, i) => { obj[col] = row[i]; });
+        const parsed = JSON.parse(obj.content as string);
         return {
           id: obj.section_id,
           title: obj.title,
           type: obj.type,
-          content: JSON.parse(obj.content as string),
+          content: parsed.content || '',
+          steps: parsed.steps || [],
+          languages: parsed.languages || [],
+          callout: parsed.callout || null,
+          listItems: parsed.listItems || [],
+          table: parsed.table || null,
+          cards: parsed.cards || [],
         };
       })
     : [];
 
-  return c.json({ ...doc, sections });
+  // Filter out sections with empty content and no other data
+  const filteredSections = sections.filter(s => 
+    s.content || s.steps?.length || s.languages?.length || s.listItems?.length || s.cards?.length || s.callout || s.table
+  );
+
+  return c.json({ ...doc, sections: filteredSections });
 });
 
 export default content;
