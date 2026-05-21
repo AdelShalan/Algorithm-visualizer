@@ -4,7 +4,7 @@ export default function Nav({ breadcrumb }) {
   const location = useLocation();
 
   return (
-    <nav className="flex items-center justify-between px-8 py-4 bg-white border-b border-border sticky top-0 z-[100]">
+    <nav className="flex items-center justify-between px-10 py-5 bg-white border-b border-border sticky top-0 z-[100]">
       <Link to="/" className="font-heading font-extrabold text-[1.125rem] tracking-[-0.02em] text-ink no-underline">
         Algo<span className="text-purple">Vis</span>
       </Link>
@@ -49,7 +49,7 @@ export default function Nav({ breadcrumb }) {
         </ul>
       )}
 
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-3">
         {breadcrumb ? (
           <Link to="/algorithms" className="bg-transparent text-ink2 text-[0.75rem] font-medium px-[0.875rem] py-[0.4rem] rounded-md border border-border cursor-pointer no-underline font-body flex items-center gap-1.5">
             ← Back

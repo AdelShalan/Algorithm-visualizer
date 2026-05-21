@@ -128,7 +128,7 @@ export default function Landing() {
       </div>
 
       {/* How it works */}
-      <div className="bg-ink grid grid-cols-3">
+      <div className="bg-ink grid grid-cols-3 px-10 py-12">
         {[
           { num: '01', title: 'Pick an algorithm', desc: 'Choose from ' + categories.length + ' categories — organized by concept and complexity.' },
           { num: '02', title: 'Step through it', desc: 'Frame-by-frame control. See data structures update live at each step.' },
