@@ -271,10 +271,13 @@ export default function Docs() {
 
                   {section.type === 'related' && section.cards && (
                     <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3">
-                      {section.cards.map((card, i) => (
+                      {section.cards.map((card, i) => {
+                        const docMatch = docsList?.docs?.find(d => d.title.toLowerCase() === card.name.toLowerCase());
+                        const docLink = docMatch ? `/docs?doc=${docMatch.id}` : `/docs?doc=${card.name.toLowerCase().replace(/\s+/g, '-').replace(/'/g, '')}`;
+                        return (
                         <Link
                           key={i}
-                          to={`/docs?doc=${card.name.toLowerCase().replace(/\s+/g, '-').replace(/'/g, '')}`}
+                          to={docLink}
                           className="block p-4 bg-white border border-border rounded-lg no-underline transition-colors duration-150 hover:border-purple"
                         >
                           <div className="font-heading font-bold text-sm text-ink mb-1.5">
@@ -291,7 +294,8 @@ export default function Docs() {
                             ))}
                           </div>
                         </Link>
-                      ))}
+                      );
+                    })}
                     </div>
                   )}
 

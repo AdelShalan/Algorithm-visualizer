@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Nav from './Nav';
 import { useAlgorithmData } from '../hooks/useAlgorithmData';
@@ -22,12 +22,14 @@ export default function Home() {
   const [searchParams] = useSearchParams();
   const categories = data?.categories || [];
 
-  const initialCategory = useMemo(() => {
-    const cat = searchParams.get('category');
-    return cat && categories.find(c => c.id === cat) ? cat : null;
-  }, [searchParams, categories]);
+  const [activeCategory, setActiveCategory] = useState(null);
 
-  const [activeCategory, setActiveCategory] = useState(initialCategory);
+  useEffect(() => {
+    const cat = searchParams.get('category');
+    if (cat && categories.find(c => c.id === cat)) {
+      setActiveCategory(cat);
+    }
+  }, [searchParams, categories]);
 
   const visibleCategories = activeCategory
     ? categories.filter(c => c.id === activeCategory)

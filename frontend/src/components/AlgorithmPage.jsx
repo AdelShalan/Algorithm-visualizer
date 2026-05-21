@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
-import { useEffect, useState, useRef, useCallback, Suspense, lazy } from 'react';
+import { useEffect, useState, useRef, useCallback, useMemo, Suspense, lazy } from 'react';
 import { useAlgorithm } from '../contexts/AlgorithmContext';
-import { useAlgorithm as useAlgoApi } from '../hooks/useAlgorithmData';
+import { useAlgorithm as useAlgoApi, useAlgorithmData } from '../hooks/useAlgorithmData';
 import Nav from './Nav';
 
 // Lazy-loaded visualizers
@@ -71,6 +71,18 @@ export default function AlgorithmPage() {
   const { category, algorithm } = useParams();
   const { isPlaying, speed, setSpeed, currentStep, steps, isComplete, play, pause, stepForward, stepBackward, resetAnimation, runGenerator } = useAlgorithm();
   const { data: algoInfo, loading, error } = useAlgoApi(category, algorithm);
+  const { data: allAlgos } = useAlgorithmData();
+
+  const algorithmLookup = useMemo(() => {
+    const map = {};
+    if (!allAlgos?.categories) return map;
+    for (const cat of allAlgos.categories) {
+      for (const algo of cat.algorithms) {
+        map[algo.name.toLowerCase()] = { id: algo.id, category: cat.id };
+      }
+    }
+    return map;
+  }, [allAlgos]);
   const [activeTab, setActiveTab] = useState('info');
   const [speedIdx, setSpeedIdx] = useState(() => speedValues.indexOf(speed) !== -1 ? speedValues.indexOf(speed) : 1);
 
@@ -265,16 +277,20 @@ function InfoTab({ algoInfo, steps, currentStep, relatedAlgos, category }) {
       {relatedAlgos.length > 0 && (
         <Section title="Related algorithms">
           <div className="flex flex-col gap-[5px]">
-            {relatedAlgos.map((algo, i) => (
-              <Link
-                key={i}
-                to={`/${category}/${algo.id || algo.name.toLowerCase().replace(/\s+/g, '-')}`}
-                className="flex justify-between items-center px-2.5 py-2 border border-border rounded-[7px] cursor-pointer no-underline hover:border-purple transition-colors duration-150"
-              >
-                <span className="text-[13px] text-ink2">{algo.name}</span>
-                <span className="font-mono text-[10px] text-muted">→</span>
-              </Link>
-            ))}
+            {relatedAlgos.map((algo, i) => {
+              const found = algorithmLookup[algo.name.toLowerCase()];
+              const linkTo = found ? `/${found.category}/${found.id}` : `/${category}/${algo.name.toLowerCase().replace(/\s+/g, '-')}`;
+              return (
+                <Link
+                  key={i}
+                  to={linkTo}
+                  className="flex justify-between items-center px-2.5 py-2 border border-border rounded-[7px] cursor-pointer no-underline hover:border-purple transition-colors duration-150"
+                >
+                  <span className="text-[13px] text-ink2">{algo.name}</span>
+                  <span className="font-mono text-[10px] text-muted">→</span>
+                </Link>
+              );
+            })}
           </div>
         </Section>
       )}
