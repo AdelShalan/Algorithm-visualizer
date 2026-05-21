@@ -51,45 +51,45 @@ export default function HashLoadFactor() {
   const handleClear = useCallback(() => { setTable(Array(INITIAL_SIZE).fill(null)); setKeys([]); setTableSize(INITIAL_SIZE); setRehashing(false); setLog([]); }, []);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Input</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-          <input type="number" value={inputValue} onChange={e => setInputValue(e.target.value)} style={{ width: 70, padding: '.375rem .625rem', border: '1px solid var(--border)', borderRadius: '6px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.8125rem', color: 'var(--ink)', background: 'var(--bg)', outline: 'none' }} placeholder="Key" />
-          <button onClick={handleInsert} disabled={rehashing} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: 'none', background: 'var(--purple)', color: '#fff', cursor: rehashing ? 'not-allowed' : 'pointer', opacity: rehashing ? 0.5 : 1, fontFamily: 'Instrument Sans, sans-serif' }}>Insert</button>
-          <div style={{ flex: 1 }} />
-          <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.6875rem', color: 'var(--muted)' }}>Load: <span style={{ fontWeight: 700, color: shouldRehash ? '#e11d48' : 'var(--purple)' }}>{loadFactor.toFixed(2)}</span></span>
-          <div style={{ width: 100, height: 6, background: 'var(--border)', borderRadius: '3px', overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: `${Math.min(100, loadFactor * 100)}%`, background: shouldRehash ? '#e11d48' : loadFactor > 0.5 ? 'var(--amber)' : 'var(--purple)', borderRadius: '3px' }} />
+    <div className="flex h-full flex-col gap-5">
+      <div className="rounded-[10px] border border-border bg-white p-5">
+        <div className="mb-3 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Input</div>
+        <div className="flex items-center gap-2">
+          <input type="number" value={inputValue} onChange={e => setInputValue(e.target.value)} className="w-[70px] rounded-md border border-border bg-bg px-2.5 py-1.5 font-mono text-[.8125rem] text-ink outline-none" placeholder="Key" />
+          <button onClick={handleInsert} disabled={rehashing} className="cursor-pointer rounded-[5px] border-none bg-purple px-3 py-[.3rem] text-[.6875rem] font-body text-white" style={{ cursor: rehashing ? 'not-allowed' : 'pointer', opacity: rehashing ? 0.5 : 1 }}>Insert</button>
+          <div className="flex-1" />
+          <span className="font-mono text-[.6875rem] text-muted">Load: <span className="font-bold" style={{ color: shouldRehash ? '#e11d48' : 'var(--purple)' }}>{loadFactor.toFixed(2)}</span></span>
+          <div className="h-1.5 w-[100px] overflow-hidden rounded-sm bg-border">
+            <div className="h-full rounded-sm" style={{ width: `${Math.min(100, loadFactor * 100)}%`, background: shouldRehash ? '#e11d48' : loadFactor > 0.5 ? 'var(--amber)' : 'var(--purple)' }} />
           </div>
-          <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', color: 'var(--muted)' }}>Size: {tableSize}</span>
-          <button onClick={handleClear} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: '1px solid #fecdd3', background: '#fff1f2', color: '#e11d48', cursor: 'pointer', fontFamily: 'Instrument Sans, sans-serif' }}>Clear</button>
+          <span className="font-mono text-[.625rem] text-muted">Size: {tableSize}</span>
+          <button onClick={handleClear} className="cursor-pointer rounded-[5px] border border-[#fecdd3] bg-[#fff1f2] px-3 py-[.3rem] text-[.6875rem] font-body text-[#e11d48]">Clear</button>
         </div>
       </div>
 
-      {shouldRehash && !rehashing && <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '10px', padding: '.75rem 1.25rem', fontSize: '.8125rem', color: '#92400e', fontWeight: 500 }}>Load factor exceeds 0.7 — next insert will trigger rehashing!</div>}
-      {rehashing && <div style={{ background: 'var(--purple-light)', border: '1px solid #c4b5fd', borderRadius: '10px', padding: '.75rem 1.25rem', fontSize: '.8125rem', color: '#3c2a8a', fontWeight: 500 }}>Rehashing to table size {tableSize * 2 + 1}...</div>}
+      {shouldRehash && !rehashing && <div className="rounded-[10px] border border-[#fde68a] bg-[#fffbeb] px-5 py-3 text-[.8125rem] font-medium text-[#92400e]">Load factor exceeds 0.7 — next insert will trigger rehashing!</div>}
+      {rehashing && <div className="rounded-[10px] border border-[#c4b5fd] bg-purple-light px-5 py-3 text-[.8125rem] font-medium text-[#3c2a8a]">Rehashing to table size {tableSize * 2 + 1}...</div>}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ display: 'flex', gap: '4px' }}>
+      <div className="grid min-h-0 flex-1 grid-cols-[1fr_280px] gap-5">
+        <div className="flex items-center justify-center rounded-[10px] border border-border bg-white p-5">
+          <div className="flex gap-1">
             {table.map((key, i) => (
-              <div key={i} style={{ width: 56, height: 72, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRadius: '12px', border: key !== null ? '1px solid var(--border)' : '1px dashed var(--border)', background: key !== null ? 'var(--white)' : 'var(--surface)' }}>
-                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', color: 'var(--muted)' }}>{i}</span>
-                {key !== null ? <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '1rem', fontWeight: 700, color: 'var(--ink2)' }}>{key}</span> : <span style={{ fontSize: '.875rem', color: 'var(--muted)' }}>∅</span>}
+              <div key={i} className="flex h-[72px] w-14 flex-col items-center justify-center rounded-xl" style={{ border: key !== null ? '1px solid var(--border)' : '1px dashed var(--border)', background: key !== null ? 'var(--white)' : 'var(--surface)' }}>
+                <span className="font-mono text-[.5625rem] text-muted">{i}</span>
+                {key !== null ? <span className="font-mono text-[1rem] font-bold text-ink2">{key}</span> : <span className="text-[.875rem] text-muted">∅</span>}
               </div>
             ))}
           </div>
         </div>
 
         {log.length > 0 && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Operation log</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="flex flex-col overflow-hidden rounded-[10px] border border-border bg-white px-5 py-4">
+            <div className="mb-2 shrink-0 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Operation log</div>
+            <div ref={logRef} className="flex flex-1 flex-col gap-[3px] overflow-y-auto">
               {log.map((entry, i) => {
                 const isLast = i === log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="rounded px-2 py-[.3rem] font-mono text-[.625rem]" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>

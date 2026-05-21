@@ -77,30 +77,22 @@ export default function Sudoku() {
   useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [currentData.log]);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <div className="h-full flex flex-col gap-5">
+      <div className="bg-white border border-border rounded-[10px] px-5 py-4 flex items-center justify-between">
         <div>
-          <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.25rem' }}>Puzzle</div>
-          <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.6875rem', color: 'var(--muted)' }}>9×9 Sudoku — {puzzle.flat().filter(v => v !== 0).length} clues</span>
+          <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-1">Puzzle</div>
+          <span className="font-mono text-[0.6875rem] text-muted">9×9 Sudoku — {puzzle.flat().filter(v => v !== 0).length} clues</span>
         </div>
         <button
           onClick={handleNewPuzzle}
-          style={{
-            padding: '0.4rem 0.875rem', fontSize: '0.75rem', fontWeight: 500,
-            fontFamily: 'Instrument Sans, sans-serif',
-            background: 'var(--purple)', color: '#fff',
-            border: 'none', borderRadius: '6px', cursor: 'pointer',
-            transition: 'opacity 0.15s',
-          }}
-          onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
-          onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+          className="px-3.5 py-[0.4rem] text-[0.75rem] font-medium font-body bg-purple text-white border-none rounded-md cursor-pointer transition-opacity duration-150 hover:opacity-85"
         >
           New puzzle
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="grid grid-cols-[1fr_280px] gap-5 flex-1 min-h-0">
+        <div className="bg-white border border-border rounded-[10px] p-5 flex items-center justify-center">
           <div style={{ display: 'inline-grid', gridTemplateColumns: 'repeat(9, 44px)', gap: 0, border: '2px solid var(--ink)', borderRadius: '8px', overflow: 'hidden' }}>
             {board.flat().map((val, i) => {
               const row = Math.floor(i / 9); const col = i % 9;
@@ -117,7 +109,7 @@ export default function Sudoku() {
               else if (isTrying) { bg = 'var(--amber)'; color = '#fff'; }
               else if (isSolved) bg = '#dcfce7';
               return (
-                <div key={i} style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.875rem', fontWeight: 700, background: bg, color, borderRight: (col + 1) % 3 === 0 && col < 8 ? '2px solid var(--ink)' : '1px solid var(--border)', borderBottom: (row + 1) % 3 === 0 && row < 8 ? '2px solid var(--ink)' : '1px solid var(--border)' }}>
+                <div key={i} className="w-11 h-11 flex items-center justify-center font-mono text-[0.875rem] font-bold" style={{ background: bg, color, borderRight: (col + 1) % 3 === 0 && col < 8 ? '2px solid var(--ink)' : '1px solid var(--border)', borderBottom: (row + 1) % 3 === 0 && row < 8 ? '2px solid var(--ink)' : '1px solid var(--border)' }}>
                   {val !== 0 ? val : ''}
                 </div>
               );
@@ -126,13 +118,13 @@ export default function Sudoku() {
         </div>
 
         {currentData.log && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Call stack</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="bg-white border border-border rounded-[10px] px-5 py-4 flex flex-col overflow-hidden">
+            <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-2 flex-shrink-0">Call stack</div>
+            <div ref={logRef} className="flex-1 overflow-y-auto flex flex-col gap-[3px]">
               {currentData.log.map((entry, i) => {
                 const isLast = i === currentData.log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="font-mono text-[0.625rem] px-2 py-[0.3rem] rounded" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>
@@ -140,12 +132,12 @@ export default function Sudoku() {
         )}
       </div>
 
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '.75rem 1.25rem', textAlign: 'center', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', color: 'var(--ink2)', minHeight: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="bg-white border border-border rounded-[10px] px-5 py-3 text-center font-mono text-[0.75rem] text-ink2 min-h-[2.5rem] flex items-center justify-center">
         {currentData.type === 'try' && <span>Trying {currentData.num} at ({currentData.row}, {currentData.col})</span>}
-        {currentData.type === 'place' && <span style={{ color: '#15803d' }}>Placed {currentData.num} at ({currentData.row}, {currentData.col})</span>}
-        {currentData.type === 'backtrack' && <span style={{ color: '#e11d48' }}>Backtracking from ({currentData.row}, {currentData.col})</span>}
-        {currentData.type === 'solved' && <span style={{ color: '#15803d', fontWeight: 600 }}>Puzzle solved!</span>}
-        {currentData.type === 'idle' && <span style={{ color: 'var(--muted)' }}>Ready to solve</span>}
+        {currentData.type === 'place' && <span className="text-green-700">Placed {currentData.num} at ({currentData.row}, {currentData.col})</span>}
+        {currentData.type === 'backtrack' && <span className="text-rose-600">Backtracking from ({currentData.row}, {currentData.col})</span>}
+        {currentData.type === 'solved' && <span className="text-green-700 font-semibold">Puzzle solved!</span>}
+        {currentData.type === 'idle' && <span className="text-muted">Ready to solve</span>}
       </div>
     </div>
   );

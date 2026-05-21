@@ -56,9 +56,9 @@ for (const [key, importer] of Object.entries(visualizerImports)) {
 
 const LazyVisualizer = ({ algorithm }) => {
   const Component = LazyVisualizers[algorithm];
-  if (!Component) return <div style={{ color: 'var(--muted)', textAlign: 'center', padding: '2rem' }}>Visualizer not found</div>;
+  if (!Component) return <div className="text-muted text-center py-8">Visualizer not found</div>;
   return (
-    <Suspense fallback={<div style={{ color: 'var(--muted)', textAlign: 'center', padding: '2rem' }}>Loading visualizer...</div>}>
+    <Suspense fallback={<div className="text-muted text-center py-8">Loading visualizer...</div>}>
       <Component />
     </Suspense>
   );
@@ -85,9 +85,9 @@ export default function AlgorithmPage() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
-        <div style={{ textAlign: 'center', color: 'var(--muted)' }}>
-          <div style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.25rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.5rem' }}>Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-bg">
+        <div className="text-center text-muted">
+          <div className="font-heading text-xl font-bold text-ink mb-2">Loading...</div>
         </div>
       </div>
     );
@@ -95,10 +95,10 @@ export default function AlgorithmPage() {
 
   if (error || !algoInfo) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.25rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.5rem' }}>Algorithm not found</div>
-          <Link to="/algorithms" style={{ color: 'var(--purple)', fontSize: '0.875rem' }}>← Back to algorithms</Link>
+      <div className="min-h-screen flex items-center justify-center bg-bg">
+        <div className="text-center">
+          <div className="font-heading text-xl font-bold text-ink mb-2">Algorithm not found</div>
+          <Link to="/algorithms" className="text-purple text-sm">← Back to algorithms</Link>
         </div>
       </div>
     );
@@ -107,30 +107,22 @@ export default function AlgorithmPage() {
   const relatedAlgos = algoInfo.related?.slice(0, 3) || [];
 
   return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', background: 'var(--bg)' }}>
+    <div className="h-screen flex flex-col overflow-hidden bg-bg">
       <Nav breadcrumb={[{ label: algoInfo.category }, { label: algoInfo.name }]} />
 
-      <div style={{
-        background: 'var(--white)', borderBottom: '1px solid var(--border)',
-        padding: '1.25rem 2rem', display: 'flex', alignItems: 'flex-start',
-        justifyContent: 'space-between', gap: '1.5rem', flexShrink: 0,
-      }}>
-        <div style={{ flex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.375rem', flexWrap: 'wrap' }}>
-            <span style={{
-              fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.625rem',
-              background: 'var(--purple-light)', color: 'var(--purple)',
-              padding: '0.2rem 0.625rem', borderRadius: '4px', fontWeight: 500,
-            }}>{algoInfo.category}</span>
+      <div className="bg-white border-b border-border px-8 py-5 flex items-start justify-between gap-6 flex-shrink-0">
+        <div className="flex-1">
+          <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
+            <span className="font-mono text-[10px] bg-purple-light text-purple px-2.5 py-0.5 rounded font-medium">{algoInfo.category}</span>
           </div>
-          <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '1.5rem', letterSpacing: '-0.025em', color: 'var(--ink)', marginBottom: '0.25rem' }}>
+          <div className="font-heading font-extrabold text-2xl tracking-tight text-ink mb-1">
             {algoInfo.name}
           </div>
-          <div style={{ fontSize: '0.875rem', color: 'var(--muted)', maxWidth: '500px', lineHeight: 1.5 }}>
+          <div className="text-sm text-muted max-w-[500px] leading-relaxed">
             {algoInfo.description}
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
+        <div className="flex gap-2 flex-shrink-0">
           <ComplexityBox label="Time" value={algoInfo.complexity.worst} quality={algoInfo.complexity.worst.includes('n²') || algoInfo.complexity.worst.includes('2ⁿ') ? 'warn' : 'good'} />
           {algoInfo.stability !== '—' && (
             <ComplexityBox label="Stable" value={algoInfo.stability} quality={algoInfo.stability === 'Stable' ? 'good' : 'warn'} />
@@ -138,18 +130,14 @@ export default function AlgorithmPage() {
         </div>
       </div>
 
-      <div style={{ height: '3px', background: 'var(--border)', flexShrink: 0 }}>
-        <div style={{ height: '100%', background: 'var(--purple)', width: `${progress}%`, transition: 'width 0.3s ease', borderRadius: '2px' }} />
+      <div className="h-[3px] bg-border flex-shrink-0">
+        <div className="h-full bg-purple transition-all duration-300 rounded-sm" style={{ width: `${progress}%` }} />
       </div>
 
-      <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 320px', overflow: 'hidden' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', borderRight: '1px solid var(--border)' }}>
-          <div style={{
-            background: 'var(--white)', borderBottom: '1px solid var(--border)',
-            padding: '0.75rem 1.5rem', display: 'flex', alignItems: 'center',
-            gap: '0.75rem', flexWrap: 'wrap', flexShrink: 0,
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+      <div className="flex-1 grid grid-cols-[1fr_320px] overflow-hidden">
+        <div className="flex flex-col overflow-hidden border-r border-border">
+          <div className="bg-white border-b border-border px-6 py-3 flex items-center gap-3 flex-wrap flex-shrink-0">
+            <div className="flex items-center gap-1">
               <CtrlBtn onClick={resetAnimation} title="Reset">↺</CtrlBtn>
               <CtrlBtn onClick={stepBackward} disabled={currentStep === 0} title="Step back">⏮</CtrlBtn>
               <CtrlBtn
@@ -162,60 +150,45 @@ export default function AlgorithmPage() {
               <CtrlBtn onClick={stepForward} disabled={currentStep >= steps.length - 1} title="Step forward">⏭</CtrlBtn>
             </div>
 
-            <div style={{ width: 1, height: 22, background: 'var(--border)', margin: '0 4px' }} />
+            <div className="w-px h-[22px] bg-border mx-1" />
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginLeft: 'auto' }}>
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.625rem', color: 'var(--muted)' }}>Speed</span>
-              <div style={{ display: 'flex', gap: '2px' }}>
+            <div className="flex items-center gap-2 ml-auto">
+              <span className="font-mono text-[10px] text-muted">Speed</span>
+              <div className="flex gap-0.5">
                 {speedLabels.map((label, i) => (
                   <button
                     key={i}
                     onClick={() => handleSpeed(i)}
-                    style={{
-                      padding: '0.25rem 0.5rem', fontFamily: 'IBM Plex Mono, monospace',
-                      fontSize: '0.625rem', borderRadius: '4px',
-                      border: '1px solid var(--border)', cursor: 'pointer',
-                      background: speedIdx === i ? 'var(--purple)' : 'transparent',
-                      color: speedIdx === i ? '#fff' : 'var(--muted)',
-                      borderColor: speedIdx === i ? 'var(--purple)' : 'var(--border)',
-                      transition: 'all 0.12s',
-                    }}
+                    className={`px-2 py-1 font-mono text-[10px] rounded border border-border cursor-pointer transition-all duration-150 ${speedIdx === i ? 'bg-purple text-white border-purple' : 'bg-transparent text-muted'}`}
                   >{label}</button>
                 ))}
               </div>
               {steps.length > 0 && (
-                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', color: 'var(--muted)', marginLeft: '0.5rem', whiteSpace: 'nowrap' }}>
+                <span className="font-mono text-[11px] text-muted ml-2 whitespace-nowrap">
                   Step {currentStep + 1} / {steps.length}
-                  {isComplete && <span style={{ color: 'var(--green)', marginLeft: '0.5rem' }}>✓ Done</span>}
+                  {isComplete && <span className="text-green ml-2">✓ Done</span>}
                 </span>
               )}
             </div>
           </div>
 
-          <div style={{ flex: 1, overflow: 'auto', background: 'var(--surface)', padding: '1.5rem' }}>
+          <div className="flex-1 overflow-auto bg-surface p-6">
             <LazyVisualizer algorithm={algorithm} />
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', background: 'var(--white)' }}>
-          <div style={{ display: 'flex', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
+        <div className="flex flex-col overflow-hidden bg-white">
+          <div className="flex border-b border-border flex-shrink-0">
             {['info', 'code', 'complexity'].map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                style={{
-                  flex: 1, padding: '0.625rem 0.5rem', fontSize: '0.75rem',
-                  fontWeight: 500, color: activeTab === tab ? 'var(--purple)' : 'var(--muted)',
-                  borderBottom: activeTab === tab ? '2px solid var(--purple)' : '2px solid transparent',
-                  background: 'transparent', borderTop: 'none', borderLeft: 'none', borderRight: 'none',
-                  cursor: 'pointer', fontFamily: 'Instrument Sans, sans-serif',
-                  textAlign: 'center', textTransform: 'capitalize', transition: 'color 0.15s',
-                }}
+                className={`flex-1 py-2.5 px-2 text-xs font-medium capitalize transition-colors duration-150 font-body text-center bg-transparent border-0 border-b-2 cursor-pointer ${activeTab === tab ? 'text-purple border-b-purple' : 'text-muted border-b-transparent'}`}
               >{tab}</button>
             ))}
           </div>
 
-          <div style={{ flex: 1, overflowY: 'auto', padding: '1.25rem' }}>
+          <div className="flex-1 overflow-y-auto p-5">
             {activeTab === 'info' && <InfoTab algoInfo={algoInfo} steps={steps} currentStep={currentStep} relatedAlgos={relatedAlgos} category={category} />}
             {activeTab === 'code' && <CodeTab algoInfo={algoInfo} />}
             {activeTab === 'complexity' && <ComplexityTab algoInfo={algoInfo} />}
@@ -235,30 +208,20 @@ function CtrlBtn({ onClick, disabled, primary, title, children }) {
       title={title}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{
-        width: 34, height: 34, borderRadius: '7px',
-        border: primary ? 'none' : '1px solid var(--border)',
-        background: primary ? 'var(--purple)' : hovered ? 'var(--bg)' : 'var(--white)',
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        color: primary ? '#fff' : hovered ? 'var(--purple)' : 'var(--ink2)',
-        fontSize: '14px', opacity: disabled ? 0.35 : 1,
-        transition: 'all 0.15s',
-        borderColor: hovered && !primary ? 'var(--purple)' : 'var(--border)',
-      }}
+      className={`w-[34px] h-[34px] rounded-[7px] flex items-center justify-center text-[14px] transition-all duration-150 ${
+        primary
+          ? 'border-none bg-purple text-white'
+          : `border border-border ${hovered ? 'bg-bg text-purple border-purple' : 'bg-white text-ink2'}`
+      } ${disabled ? 'cursor-not-allowed opacity-35' : 'cursor-pointer'}`}
     >{children}</button>
   );
 }
 
 function ComplexityBox({ label, value, quality }) {
   return (
-    <div style={{
-      display: 'flex', flexDirection: 'column', alignItems: 'center',
-      background: 'var(--surface)', border: '1px solid var(--border)',
-      borderRadius: '8px', padding: '0.5rem 0.875rem', minWidth: '72px',
-    }}>
-      <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.5625rem', color: 'var(--muted)', marginBottom: '0.1875rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{label}</span>
-      <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.875rem', fontWeight: 500, color: quality === 'good' ? '#15803d' : quality === 'warn' ? '#c2410c' : 'var(--ink)' }}>{value}</span>
+    <div className="flex flex-col items-center bg-surface border border-border rounded-lg px-3.5 py-2 min-w-[72px]">
+      <span className="font-mono text-[9px] text-muted mb-0.75 uppercase tracking-wider">{label}</span>
+      <span className={`font-mono text-sm font-medium ${quality === 'good' ? 'text-green-600' : quality === 'warn' ? 'text-orange-700' : 'text-ink'}`}>{value}</span>
     </div>
   );
 }
@@ -268,22 +231,17 @@ function InfoTab({ algoInfo, steps, currentStep, relatedAlgos, category }) {
     <div>
       {algoInfo.overview && (
         <Section title="How it works">
-          <p style={{ fontSize: '0.8125rem', color: 'var(--ink2)', lineHeight: 1.65 }}>{algoInfo.overview}</p>
+          <p className="text-[13px] text-ink2 leading-relaxed">{algoInfo.overview}</p>
         </Section>
       )}
 
       {algoInfo.steps?.length > 0 && (
         <Section title="Step by step">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <div className="flex flex-col gap-2">
             {algoInfo.steps.map((step, i) => (
-              <div key={i} style={{ display: 'flex', gap: '0.625rem', alignItems: 'flex-start' }}>
-                <span style={{
-                  flexShrink: 0, width: 20, height: 20, borderRadius: '50%',
-                  background: 'var(--purple-light)', color: 'var(--purple)',
-                  fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.625rem',
-                  fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 1,
-                }}>{i + 1}</span>
-                <p style={{ fontSize: '0.75rem', color: 'var(--ink2)', lineHeight: 1.55, margin: 0 }}>{step}</p>
+              <div key={i} className="flex gap-2.5 items-start">
+                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-purple-light text-purple font-mono text-[10px] font-semibold flex items-center justify-center mt-0.5">{i + 1}</span>
+                <p className="text-xs text-ink2 leading-snug m-0">{step}</p>
               </div>
             ))}
           </div>
@@ -292,13 +250,13 @@ function InfoTab({ algoInfo, steps, currentStep, relatedAlgos, category }) {
 
       {steps.length > 0 && (
         <Section title="Progress">
-          <div style={{ background: 'var(--bg)', borderRadius: '8px', padding: '0.875rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>Steps completed</span>
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.75rem', color: 'var(--purple)' }}>{currentStep + 1} / {steps.length}</span>
+          <div className="bg-bg rounded-lg p-3.5">
+            <div className="flex justify-between mb-2">
+              <span className="text-xs text-muted">Steps completed</span>
+              <span className="font-mono text-xs text-purple">{currentStep + 1} / {steps.length}</span>
             </div>
-            <div style={{ height: '5px', background: 'var(--border)', borderRadius: '3px', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${((currentStep + 1) / steps.length) * 100}%`, background: 'var(--purple)', borderRadius: '3px', transition: 'width 0.3s' }} />
+            <div className="h-[5px] bg-border rounded-sm overflow-hidden">
+              <div className="h-full bg-purple rounded-sm transition-all duration-300" style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }} />
             </div>
           </div>
         </Section>
@@ -306,21 +264,15 @@ function InfoTab({ algoInfo, steps, currentStep, relatedAlgos, category }) {
 
       {relatedAlgos.length > 0 && (
         <Section title="Related algorithms">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+          <div className="flex flex-col gap-[5px]">
             {relatedAlgos.map((algo, i) => (
               <Link
                 key={i}
                 to={`/${category}/${algo.id || algo.name.toLowerCase().replace(/\s+/g, '-')}`}
-                style={{
-                  display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                  padding: '0.5rem 0.625rem', border: '1px solid var(--border)', borderRadius: '7px',
-                  cursor: 'pointer', textDecoration: 'none',
-                }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--purple)'}
-                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+                className="flex justify-between items-center px-2.5 py-2 border border-border rounded-[7px] cursor-pointer no-underline hover:border-purple transition-colors duration-150"
               >
-                <span style={{ fontSize: '0.8125rem', color: 'var(--ink2)' }}>{algo.name}</span>
-                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.625rem', color: 'var(--muted)' }}>→</span>
+                <span className="text-[13px] text-ink2">{algo.name}</span>
+                <span className="font-mono text-[10px] text-muted">→</span>
               </Link>
             ))}
           </div>
@@ -347,15 +299,15 @@ function CodeTab({ algoInfo }) {
           <div
             ref={codeRef}
             onWheel={handleWheel}
-            style={{ background: '#111110', borderRadius: '8px', padding: '1rem', fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', lineHeight: 1.8, color: '#9a9891', overflowX: 'auto', whiteSpace: 'pre' }}
+            className="bg-[#111110] rounded-lg p-4 font-mono text-[11px] leading-[1.8] text-[#9a9891] overflow-x-auto whitespace-pre"
           >
             {algoInfo.code}
           </div>
         ) : (
-          <div style={{ background: '#111110', borderRadius: '8px', padding: '1rem', fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', lineHeight: 1.8, color: '#6b7280' }}>
-            <div style={{ color: '#9a9891' }}>// Code examples for {algoInfo.name}</div>
-            <div style={{ color: '#9a9891', marginTop: '0.5rem' }}>// Coming soon — implementations in</div>
-            <div style={{ color: '#9a9891' }}>// JavaScript, Python, and Java.</div>
+          <div className="bg-[#111110] rounded-lg p-4 font-mono text-[11px] leading-[1.8] text-gray-500">
+            <div className="text-[#9a9891]">// Code examples for {algoInfo.name}</div>
+            <div className="text-[#9a9891] mt-2">// Coming soon — implementations in</div>
+            <div className="text-[#9a9891]">// JavaScript, Python, and Java.</div>
           </div>
         )}
       </Section>
@@ -367,23 +319,23 @@ function ComplexityTab({ algoInfo }) {
   return (
     <div>
       <Section title="Complexity analysis">
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.75rem' }}>
+        <table className="w-full border-collapse text-xs">
           <thead>
             <tr>
               {['Case', 'Complexity'].map(h => (
-                <th key={h} style={{ textAlign: 'left', fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.5625rem', color: 'var(--muted)', padding: '0.375rem 0.5rem', borderBottom: '1px solid var(--border)', fontWeight: 400, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{h}</th>
+                <th key={h} className="text-left font-mono text-[9px] text-muted py-1.5 px-2 border-b border-border font-normal uppercase tracking-wider">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td style={{ padding: '0.5rem', borderBottom: '1px solid var(--border)', fontFamily: 'IBM Plex Mono, monospace', color: 'var(--ink2)' }}>Time</td>
-              <td style={{ padding: '0.5rem', borderBottom: '1px solid var(--border)', fontFamily: 'IBM Plex Mono, monospace', color: 'var(--ink)', fontWeight: 500 }}>{algoInfo.complexity.worst}</td>
+              <td className="py-2 px-2 border-b border-border font-mono text-ink2">Time</td>
+              <td className="py-2 px-2 border-b border-border font-mono text-ink font-medium">{algoInfo.complexity.worst}</td>
             </tr>
             {algoInfo.stability !== '—' && (
               <tr>
-                <td style={{ padding: '0.5rem', borderBottom: '1px solid var(--border)', fontFamily: 'IBM Plex Mono, monospace', color: 'var(--ink2)' }}>Stability</td>
-                <td style={{ padding: '0.5rem', borderBottom: '1px solid var(--border)', fontFamily: 'IBM Plex Mono, monospace', fontWeight: 500, color: algoInfo.stability === 'Stable' ? '#15803d' : '#c2410c' }}>{algoInfo.stability}</td>
+                <td className="py-2 px-2 border-b border-border font-mono text-ink2">Stability</td>
+                <td className={`py-2 px-2 border-b border-border font-mono font-medium ${algoInfo.stability === 'Stable' ? 'text-green-600' : 'text-orange-700'}`}>{algoInfo.stability}</td>
               </tr>
             )}
           </tbody>
@@ -391,8 +343,8 @@ function ComplexityTab({ algoInfo }) {
       </Section>
 
       <Section title="What this means">
-        <div style={{ background: 'var(--purple-light)', borderLeft: '3px solid var(--purple)', borderRadius: '0 6px 6px 0', padding: '0.625rem 0.875rem' }}>
-          <p style={{ fontSize: '0.75rem', color: '#3c2a8a', lineHeight: 1.6 }}>
+        <div className="bg-purple-light border-l-[3px] border-purple rounded-r-lg px-3.5 py-2.5">
+          <p className="text-xs text-[#3c2a8a] leading-relaxed">
             <strong>Time complexity {algoInfo.complexity.worst}</strong> describes how the running time grows as the input size increases. Use the visualizer to see this in action.
           </p>
         </div>
@@ -403,8 +355,8 @@ function ComplexityTab({ algoInfo }) {
 
 function Section({ title, children }) {
   return (
-    <div style={{ marginBottom: '1.5rem' }}>
-      <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '0.875rem', color: 'var(--ink)', marginBottom: '0.5rem' }}>{title}</div>
+    <div className="mb-6">
+      <div className="font-heading font-bold text-sm text-ink mb-2">{title}</div>
       {children}
     </div>
   );

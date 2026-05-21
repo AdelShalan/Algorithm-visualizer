@@ -190,28 +190,28 @@ export default function RedBlack() {
   const redNodes = allNodes.filter(n => n.color === 'red').length;
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Input</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-          <input type="number" value={inputValue} onChange={e => setInputValue(e.target.value)} style={{ width: 80, padding: '.375rem .625rem', border: '1px solid var(--border)', borderRadius: '6px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.8125rem', color: 'var(--ink)', background: 'var(--bg)', outline: 'none' }} placeholder="Value" />
-          <button onClick={handleInsert} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: 'none', background: 'var(--purple)', color: '#fff', cursor: 'pointer', fontFamily: 'Instrument Sans, sans-serif' }}>Insert</button>
-          <div style={{ flex: 1 }} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><div style={{ width: 10, height: 10, borderRadius: '50%', background: '#1e293b' }} /><span style={{ fontSize: '.625rem', color: 'var(--muted)' }}>Black ({blackNodes})</span></div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><div style={{ width: 10, height: 10, borderRadius: '50%', background: '#ef4444' }} /><span style={{ fontSize: '.625rem', color: 'var(--muted)' }}>Red ({redNodes})</span></div>
+    <div className="flex h-full flex-col gap-5">
+      <div className="rounded-[10px] border border-border bg-white p-5">
+        <div className="mb-3 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Input</div>
+        <div className="flex items-center gap-2">
+          <input type="number" value={inputValue} onChange={e => setInputValue(e.target.value)} className="w-[80px] rounded-md border border-border bg-bg px-2.5 py-1.5 font-mono text-[.8125rem] text-ink outline-none" placeholder="Value" />
+          <button onClick={handleInsert} className="cursor-pointer rounded-[5px] border-none bg-purple px-3 py-[.3rem] text-[.6875rem] font-body text-white">Insert</button>
+          <div className="flex-1" />
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-[#1e293b]" /><span className="text-[.625rem] text-muted">Black ({blackNodes})</span></div>
+            <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-[#ef4444]" /><span className="text-[.625rem] text-muted">Red ({redNodes})</span></div>
           </div>
-          <button onClick={handleRandom} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: '1px solid var(--border)', background: 'var(--white)', color: 'var(--ink2)', cursor: 'pointer', fontFamily: 'Instrument Sans, sans-serif' }}>Random</button>
-          <button onClick={handleClear} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: '1px solid #fecdd3', background: '#fff1f2', color: '#e11d48', cursor: 'pointer', fontFamily: 'Instrument Sans, sans-serif' }}>Clear</button>
+          <button onClick={handleRandom} className="cursor-pointer rounded-[5px] border border-border bg-white px-3 py-[.3rem] text-[.6875rem] font-body text-ink2">Random</button>
+          <button onClick={handleClear} className="cursor-pointer rounded-[5px] border border-[#fecdd3] bg-[#fff1f2] px-3 py-[.3rem] text-[.6875rem] font-body text-[#e11d48]">Clear</button>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '1rem' }}>Red-Black Tree</div>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+      <div className="grid min-h-0 flex-1 grid-cols-[1fr_280px] gap-5">
+        <div className="flex flex-col rounded-[10px] border border-border bg-white p-5">
+          <div className="mb-4 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Red-Black Tree</div>
+          <div className="flex flex-1 items-center justify-center overflow-hidden">
             {root ? (
-              <svg viewBox={viewBox} preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%' }}>
+              <svg viewBox={viewBox} preserveAspectRatio="xMidYMid meet" className="h-full w-full">
                 {edges.map((e, i) => (
                   <line key={i} x1={e.x1} y1={e.y1} x2={e.x2} y2={e.y2} stroke="var(--border)" strokeWidth={2} />
                 ))}
@@ -226,30 +226,30 @@ export default function RedBlack() {
                 })}
               </svg>
             ) : (
-              <div style={{ textAlign: 'center', color: 'var(--muted)' }}>
-                <p style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '.25rem' }}>Empty Red-Black tree</p>
-                <p style={{ fontSize: '.75rem' }}>Insert values to see the tree</p>
+              <div className="text-center text-muted">
+                <p className="mb-1 text-[1.125rem] font-semibold">Empty Red-Black tree</p>
+                <p className="text-[.75rem]">Insert values to see the tree</p>
               </div>
             )}
           </div>
         </div>
 
         {log.length > 0 && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Operation log</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="flex flex-col overflow-hidden rounded-[10px] border border-border bg-white px-5 py-4">
+            <div className="mb-2 shrink-0 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Operation log</div>
+            <div ref={logRef} className="flex flex-1 flex-col gap-[3px] overflow-y-auto">
               {log.map((entry, i) => {
                 const isLast = i === log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="rounded px-2 py-[.3rem] font-mono text-[.625rem]" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>
             {violations.length > 0 && (
-              <div style={{ marginTop: '.75rem', borderTop: '1px solid var(--border)', paddingTop: '.5rem' }}>
-                <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: '#e11d48', marginBottom: '.25rem' }}>Violations</div>
+              <div className="mt-3 border-t border-border pt-2">
+                <div className="mb-1 font-mono text-[.5625rem] uppercase tracking-[.08em] text-[#e11d48]">Violations</div>
                 {violations.map((v, i) => (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', color: '#e11d48', padding: '.2rem 0' }}>{v}</div>
+                  <div key={i} className="font-mono text-[.5625rem] text-[#e11d48] py-0.5">{v}</div>
                 ))}
               </div>
             )}

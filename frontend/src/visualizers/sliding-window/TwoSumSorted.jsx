@@ -20,21 +20,21 @@ export default function TwoSumSorted() {
   useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [currentData.log]);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Input</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', color: 'var(--ink2)' }}>Target:</span>
-            <input type="number" value={target} onChange={e => setTarget(parseInt(e.target.value) || 0)} style={{ width: 70, padding: '.375rem .625rem', border: '1px solid var(--border)', borderRadius: '6px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.8125rem', color: 'var(--ink)', background: 'var(--bg)', outline: 'none' }} />
+    <div className="flex h-full flex-col gap-5">
+      <div className="rounded-[10px] border border-border bg-white p-5">
+        <div className="mb-3 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Input</div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[.75rem] text-ink2">Target:</span>
+            <input type="number" value={target} onChange={e => setTarget(parseInt(e.target.value) || 0)} className="w-[70px] rounded-md border border-border bg-bg px-2.5 py-1.5 font-mono text-[.8125rem] text-ink outline-none" />
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ display: 'flex', gap: 8 }}>
+      <div className="grid min-h-0 flex-1 grid-cols-[1fr_280px] gap-5">
+        <div className="flex flex-col gap-4 rounded-[10px] border border-border bg-white p-5">
+          <div className="flex flex-1 items-center justify-center">
+            <div className="flex gap-2">
               {safeArray.map((val, i) => {
                 const isLeft = currentData.left === i;
                 const isRight = currentData.right === i;
@@ -46,10 +46,10 @@ export default function TwoSumSorted() {
                 else if (isRight) { bg = 'var(--purple-light)'; border = '2px solid var(--purple)'; opacity = 1; }
                 else if (between) { bg = 'var(--purple-light)'; border = '2px solid var(--purple)'; opacity = 1; }
                 return (
-                  <div key={i} style={{ width: 64, height: 80, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRadius: '16px', border, background: bg, opacity }}>
-                    <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '1.125rem', fontWeight: 700, color: 'var(--ink)' }}>{val}</span>
-                    {isLeft && <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', color: '#7c3aed', fontWeight: 600 }}>left</span>}
-                    {isRight && <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', color: 'var(--purple)', fontWeight: 600 }}>right</span>}
+                  <div key={i} className="flex h-20 w-16 flex-col items-center justify-center rounded-2xl" style={{ border, background: bg, opacity }}>
+                    <span className="font-mono text-[1.125rem] font-bold text-ink">{val}</span>
+                    {isLeft && <span className="font-mono text-[.625rem] font-semibold text-[#7c3aed]">left</span>}
+                    {isRight && <span className="font-mono text-[.625rem] font-semibold text-purple">right</span>}
                   </div>
                 );
               })}
@@ -57,15 +57,15 @@ export default function TwoSumSorted() {
           </div>
 
           {currentData.type === 'found' && (
-            <div style={{ textAlign: 'center', padding: '.75rem', background: 'var(--bg)', borderRadius: '10px' }}>
-              <span style={{ fontFamily: 'Instrument Sans, sans-serif', fontSize: '.875rem', color: 'var(--ink2)' }}>
-                Found: <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontWeight: 700, color: 'var(--purple)' }}>{safeArray[currentData.left]}</span> + <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontWeight: 700, color: '#7c3aed' }}>{safeArray[currentData.right]}</span> = <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontWeight: 700, color: '#15803d' }}>{target}</span>
+            <div className="rounded-[10px] bg-bg px-6 py-3 text-center">
+              <span className="font-body text-[.875rem] text-ink2">
+                Found: <span className="font-mono font-bold text-purple">{safeArray[currentData.left]}</span> + <span className="font-mono font-bold text-[#7c3aed]">{safeArray[currentData.right]}</span> = <span className="font-mono font-bold text-[#15803d]">{target}</span>
               </span>
             </div>
           )}
 
           {currentData.sum !== undefined && currentData.type !== 'found' && currentData.type !== 'init' && currentData.type !== 'not-found' && (
-            <div style={{ textAlign: 'center', padding: '.5rem', background: 'var(--bg)', borderRadius: '8px', fontFamily: 'Instrument Sans, sans-serif', fontSize: '.75rem', color: 'var(--ink2)' }}>
+            <div className="rounded-lg bg-bg px-4 py-2 text-center font-body text-[.75rem] text-ink2">
               {safeArray[currentData.left]} + {safeArray[currentData.right]} = {currentData.sum}
               {currentData.type === 'too-small' && ' < target → move left pointer right'}
               {currentData.type === 'too-large' && ' > target → move right pointer left'}
@@ -74,13 +74,13 @@ export default function TwoSumSorted() {
         </div>
 
         {currentData.log && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Window log</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="flex flex-col overflow-hidden rounded-[10px] border border-border bg-white px-5 py-4">
+            <div className="mb-2 shrink-0 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Window log</div>
+            <div ref={logRef} className="flex flex-1 flex-col gap-[3px] overflow-y-auto">
               {currentData.log.map((entry, i) => {
                 const isLast = i === currentData.log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="rounded px-2 py-[.3rem] font-mono text-[.625rem]" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>

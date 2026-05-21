@@ -49,29 +49,29 @@ export default function DCMergeSort() {
   };
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Array</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem', flex: 1 }}>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.8125rem', color: 'var(--ink2)' }}>n =</span>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '1rem', fontWeight: 500, color: 'var(--purple)', minWidth: '2ch', textAlign: 'center' }}>{size}</span>
-            <button onClick={() => handleSizeChange(-2)} style={{ width: 28, height: 28, borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--white)', color: 'var(--ink2)', cursor: 'pointer', fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
-            <button onClick={() => handleSizeChange(2)} style={{ width: 28, height: 28, borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--white)', color: 'var(--ink2)', cursor: 'pointer', fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
+    <div className="flex h-full flex-col gap-5">
+      <div className="rounded-[10px] border border-border bg-white p-5">
+        <div className="mb-3 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Array</div>
+        <div className="flex items-center gap-3">
+          <div className="flex flex-1 items-center gap-2">
+            <span className="font-mono text-[.8125rem] text-ink2">n =</span>
+            <span className="min-w-[2ch] text-center font-mono text-[1rem] font-medium text-purple">{size}</span>
+            <button onClick={() => handleSizeChange(-2)} className="flex h-7 w-7 items-center justify-center rounded-md border border-border bg-white text-[14px] text-ink2 cursor-pointer">−</button>
+            <button onClick={() => handleSizeChange(2)} className="flex h-7 w-7 items-center justify-center rounded-md border border-border bg-white text-[14px] text-ink2 cursor-pointer">+</button>
           </div>
-          <button onClick={handleShuffle} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--ink2)', fontFamily: 'Instrument Sans, sans-serif' }}>Shuffle</button>
+          <button onClick={handleShuffle} className="cursor-pointer border border-border bg-transparent px-3 py-[.3rem] text-[.6875rem] font-body text-ink2">Shuffle</button>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', overflow: 'hidden' }}>
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '1rem' }}>Array</div>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', flexShrink: 0 }}>
+      <div className="grid min-h-0 flex-1 grid-cols-[1fr_280px] gap-5">
+        <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-hidden">
+          <div className="flex flex-col rounded-[10px] border border-border bg-white p-5">
+            <div className="mb-4 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Array</div>
+            <div className="flex shrink-0 justify-center gap-2">
               {safeArray.map((value, i) => {
                 const hl = getBoxStyle(i);
                 return (
-                  <div key={i} style={{ width: 48, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '6px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', fontWeight: 600, background: hl.bg, color: hl.text, border: `1px solid ${hl.border}` }}>
+                  <div key={i} className="flex h-9 w-12 items-center justify-center rounded-md font-mono text-[.75rem] font-semibold" style={{ background: hl.bg, color: hl.text, border: `1px solid ${hl.border}` }}>
                     {value}
                   </div>
                 );
@@ -79,14 +79,14 @@ export default function DCMergeSort() {
             </div>
           </div>
 
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '1rem' }}>Divide and merge phases</div>
-            <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: '12px', minHeight: 0 }}>
+          <div className="flex min-h-0 flex-1 flex-col rounded-[10px] border border-border bg-white p-5">
+            <div className="mb-4 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Divide and merge phases</div>
+            <div className="flex min-h-0 flex-1 items-end justify-center gap-3">
               {safeArray.map((value, i) => {
                 const height = (value / maxVal) * 100;
                 return (
-                  <div key={i} style={{ width: 48, height: `${height}%`, background: getBarBg(i), borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <span style={{ color: '#fff', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', fontWeight: 700 }}>{value}</span>
+                  <div key={i} className="flex w-12 items-center justify-center rounded-xl" style={{ height: `${height}%`, background: getBarBg(i) }}>
+                    <span className="font-mono text-[.75rem] font-bold text-white">{value}</span>
                   </div>
                 );
               })}
@@ -95,13 +95,13 @@ export default function DCMergeSort() {
         </div>
 
         {currentData.log && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Execution trace</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="flex flex-col overflow-hidden rounded-[10px] border border-border bg-white px-5 py-4">
+            <div className="mb-2 shrink-0 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Execution trace</div>
+            <div ref={logRef} className="flex flex-1 flex-col gap-[3px] overflow-y-auto">
               {currentData.log.map((entry, i) => {
                 const isLast = i === currentData.log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="rounded px-2 py-[.3rem] font-mono text-[.625rem]" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>

@@ -35,40 +35,40 @@ export default function HashChaining() {
   }, []);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Input</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-          <input type="number" value={inputValue} onChange={e => setInputValue(e.target.value)} style={{ width: 70, padding: '.375rem .625rem', border: '1px solid var(--border)', borderRadius: '6px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.8125rem', color: 'var(--ink)', background: 'var(--bg)', outline: 'none' }} placeholder="Key" />
-          <button onClick={handleInsert} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: 'none', background: 'var(--purple)', color: '#fff', cursor: 'pointer', fontFamily: 'Instrument Sans, sans-serif' }}>Insert</button>
-          <div style={{ flex: 1 }} />
-          <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.6875rem', color: 'var(--muted)' }}>Load factor: <span style={{ fontWeight: 700, color: 'var(--purple)' }}>{(keys.length / TABLE_SIZE).toFixed(2)}</span></span>
-          <button onClick={handleRandom} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: '1px solid var(--border)', background: 'var(--white)', color: 'var(--ink2)', cursor: 'pointer', fontFamily: 'Instrument Sans, sans-serif' }}>Random</button>
-          <button onClick={handleClear} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: '1px solid #fecdd3', background: '#fff1f2', color: '#e11d48', cursor: 'pointer', fontFamily: 'Instrument Sans, sans-serif' }}>Clear</button>
+    <div className="flex h-full flex-col gap-5">
+      <div className="rounded-[10px] border border-border bg-white p-5">
+        <div className="mb-3 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Input</div>
+        <div className="flex items-center gap-2">
+          <input type="number" value={inputValue} onChange={e => setInputValue(e.target.value)} className="w-[70px] rounded-md border border-border bg-bg px-2.5 py-1.5 font-mono text-[.8125rem] text-ink outline-none" placeholder="Key" />
+          <button onClick={handleInsert} className="cursor-pointer rounded-[5px] border-none bg-purple px-3 py-[.3rem] text-[.6875rem] font-body text-white">Insert</button>
+          <div className="flex-1" />
+          <span className="font-mono text-[.6875rem] text-muted">Load factor: <span className="font-bold text-purple">{(keys.length / TABLE_SIZE).toFixed(2)}</span></span>
+          <button onClick={handleRandom} className="cursor-pointer rounded-[5px] border border-border bg-white px-3 py-[.3rem] text-[.6875rem] font-body text-ink2">Random</button>
+          <button onClick={handleClear} className="cursor-pointer rounded-[5px] border border-[#fecdd3] bg-[#fff1f2] px-3 py-[.3rem] text-[.6875rem] font-body text-[#e11d48]">Clear</button>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: '16px', overflow: 'auto', paddingTop: '2rem' }}>
+      <div className="grid min-h-0 flex-1 grid-cols-[1fr_280px] gap-5">
+        <div className="flex items-start justify-center gap-4 overflow-auto rounded-[10px] border border-border bg-white p-5 pt-8">
           {table.map((bucket, i) => (
-            <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <div style={{ width: 52, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px 8px 0 0', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', fontWeight: 700, border: '2px solid', borderColor: highlight === i ? 'var(--purple)' : 'var(--border)', background: highlight === i ? 'var(--purple-light)' : 'var(--bg)', color: highlight === i ? 'var(--purple)' : 'var(--ink2)' }}>{i}</div>
+            <div key={i} className="flex flex-col items-center">
+              <div className="flex h-9 w-[52px] items-center justify-center rounded-t-lg border-2 font-mono text-[.75rem] font-bold" style={{ borderColor: highlight === i ? 'var(--purple)' : 'var(--border)', background: highlight === i ? 'var(--purple-light)' : 'var(--bg)', color: highlight === i ? 'var(--purple)' : 'var(--ink2)' }}>{i}</div>
               {bucket.map((key, j) => (
-                <div key={`${key}-${j}`} style={{ width: 52, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--white)', border: '2px solid var(--border)', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', fontWeight: 700, color: 'var(--ink2)', borderTop: 'none' }}>{key}</div>
+                <div key={`${key}-${j}`} className="flex h-9 w-[52px] items-center justify-center border-2 border-t-0 border-border bg-white font-mono text-[.75rem] font-bold text-ink2">{key}</div>
               ))}
-              {bucket.length === 0 && <div style={{ width: 52, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--surface)', border: '2px dashed var(--border)', fontSize: '.75rem', color: 'var(--muted)', borderTop: 'none' }}>∅</div>}
+              {bucket.length === 0 && <div className="flex h-9 w-[52px] items-center justify-center border-2 border-t-0 border-dashed border-border bg-surface text-[.75rem] text-muted">∅</div>}
             </div>
           ))}
         </div>
 
         {log.length > 0 && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Operation log</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="flex flex-col overflow-hidden rounded-[10px] border border-border bg-white px-5 py-4">
+            <div className="mb-2 shrink-0 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Operation log</div>
+            <div ref={logRef} className="flex flex-1 flex-col gap-[3px] overflow-y-auto">
               {log.map((entry, i) => {
                 const isLast = i === log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="rounded px-2 py-[.3rem] font-mono text-[.625rem]" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>

@@ -17,16 +17,16 @@ export default function LongestUniqueSubstring() {
   useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [currentData.log]);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Input</div>
-        <input value={text} onChange={e => setText(e.target.value.toLowerCase())} style={{ width: '100%', padding: '.375rem .625rem', border: '1px solid var(--border)', borderRadius: '6px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.8125rem', color: 'var(--ink)', background: 'var(--bg)', outline: 'none' }} />
+    <div className="flex h-full flex-col gap-5">
+      <div className="rounded-[10px] border border-border bg-white p-5">
+        <div className="mb-3 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Input</div>
+        <input value={text} onChange={e => setText(e.target.value.toLowerCase())} className="w-full rounded-md border border-border bg-bg px-2.5 py-1.5 font-mono text-[.8125rem] text-ink outline-none" />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ display: 'flex', gap: 6 }}>
+      <div className="grid min-h-0 flex-1 grid-cols-[1fr_280px] gap-5">
+        <div className="flex flex-col gap-4 rounded-[10px] border border-border bg-white p-5">
+          <div className="flex flex-1 items-center justify-center">
+            <div className="flex gap-1.5">
               {text.split('').map((ch, i) => {
                 const inWindow = currentData.window && i >= currentData.left && i <= (currentData.right ?? i);
                 const isRight = currentData.right === i;
@@ -39,28 +39,28 @@ export default function LongestUniqueSubstring() {
                 else if (isRight) { bg = 'var(--purple)'; border = '2px solid var(--purple)'; color = '#fff'; }
                 else if (isLeft) { bg = '#f3e8ff'; border = '2px solid #a855f7'; color = '#7c3aed'; }
                 else if (inWindow) { bg = 'var(--purple-light)'; border = '2px solid var(--purple)'; color = 'var(--purple)'; }
-                return <div key={i} style={{ width: 48, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '16px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '1.125rem', fontWeight: 700, background: bg, color, border }}>{ch}</div>;
+                return <div key={i} className="flex h-14 w-12 items-center justify-center rounded-2xl font-mono text-[1.125rem] font-bold" style={{ background: bg, color, border }}>{ch}</div>;
               })}
             </div>
           </div>
 
           {currentData.type === 'complete' && (
-            <div style={{ textAlign: 'center', padding: '.75rem', background: 'var(--bg)', borderRadius: '10px' }}>
-              <span style={{ fontFamily: 'Instrument Sans, sans-serif', fontSize: '.875rem', color: 'var(--ink2)' }}>
-                Longest unique substring: <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontWeight: 700, color: 'var(--purple)', fontSize: '1rem' }}>"{currentData.result}"</span> ({currentData.maxLen} chars)
+            <div className="rounded-[10px] bg-bg px-6 py-3 text-center">
+              <span className="font-body text-[.875rem] text-ink2">
+                Longest unique substring: <span className="font-mono text-[1rem] font-bold text-purple">"{currentData.result}"</span> ({currentData.maxLen} chars)
               </span>
             </div>
           )}
         </div>
 
         {currentData.log && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Window log</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="flex flex-col overflow-hidden rounded-[10px] border border-border bg-white px-5 py-4">
+            <div className="mb-2 shrink-0 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Window log</div>
+            <div ref={logRef} className="flex flex-1 flex-col gap-[3px] overflow-y-auto">
               {currentData.log.map((entry, i) => {
                 const isLast = i === currentData.log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="rounded px-2 py-[.3rem] font-mono text-[.625rem]" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>

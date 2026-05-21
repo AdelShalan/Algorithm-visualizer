@@ -27,23 +27,23 @@ export default function Dijkstra() {
   }, [currentData.log]);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Graph</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.8125rem', color: 'var(--ink2)' }}>Source:</span>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '1rem', fontWeight: 500, color: 'var(--purple)' }}>{source}</span>
+    <div className="h-full flex flex-col gap-5">
+      <div className="bg-white border border-border rounded-[10px] px-5 py-4">
+        <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-3">Graph</div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[0.8125rem] text-ink2">Source:</span>
+            <span className="font-mono text-base font-medium text-purple">{source}</span>
           </div>
-          <div style={{ flex: 1 }} />
-          <button onClick={handleNewGraph} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--ink2)', fontFamily: 'Instrument Sans, sans-serif' }}>New Graph</button>
+          <div className="flex-1" />
+          <button onClick={handleNewGraph} className="px-3 py-1 text-[0.6875rem] rounded-sm border border-border bg-transparent cursor-pointer text-ink2 font-body">New Graph</button>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', gap: '1.5rem', overflow: 'hidden' }}>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg viewBox={`0 0 ${CANVAS_SIZE} ${CANVAS_SIZE}`} style={{ width: '100%', height: '100%' }}>
+      <div className="grid grid-cols-[1fr_280px] gap-5 flex-1 min-h-0">
+        <div className="bg-white border border-border rounded-[10px] p-5 flex gap-6 overflow-hidden">
+          <div className="flex-1 flex items-center justify-center">
+            <svg viewBox={`0 0 ${CANVAS_SIZE} ${CANVAS_SIZE}`} className="w-full h-full">
               {graph.edges.map((edge, i) => {
                 const from = graph.nodes[edge.from]; const to = graph.nodes[edge.to];
                 const isShortest = currentData.type === 'complete' && (prev[edge.to] === edge.from || prev[edge.from] === edge.to);
@@ -73,25 +73,25 @@ export default function Dijkstra() {
             </svg>
           </div>
 
-          <div style={{ width: 180, display: 'flex', flexDirection: 'column', gap: '4px', overflowY: 'auto' }}>
-            <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '.8125rem', color: 'var(--ink)', marginBottom: '.5rem' }}>Distances</div>
+          <div className="w-[180px] flex flex-col gap-1 overflow-y-auto">
+            <div className="font-heading font-bold text-[0.8125rem] text-ink mb-2">Distances</div>
             {dist.map((d, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '.375rem .5rem', borderRadius: '6px', background: 'var(--bg)' }}>
-                <span style={{ fontSize: '.75rem', color: 'var(--ink2)' }}>Node {i}</span>
-                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', fontWeight: 500, color: d === Infinity ? 'var(--muted)' : 'var(--purple)' }}>{d === Infinity ? '∞' : d}</span>
+              <div key={i} className="flex justify-between px-2 py-1.5 rounded-md bg-bg">
+                <span className="text-sm text-ink2">Node {i}</span>
+                <span className="font-mono text-sm font-medium" style={{ color: d === Infinity ? 'var(--muted)' : 'var(--purple)' }}>{d === Infinity ? '∞' : d}</span>
               </div>
             ))}
           </div>
         </div>
 
         {currentData.log && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Execution trace</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="bg-white border border-border rounded-[10px] px-4 py-3 flex flex-col overflow-hidden">
+            <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-2 flex-shrink-0">Execution trace</div>
+            <div ref={logRef} className="flex-1 overflow-y-auto flex flex-col gap-[3px]">
               {currentData.log.map((entry, i) => {
                 const isLast = i === currentData.log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="font-mono text-[0.625rem] px-2 py-1 rounded-sm" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>

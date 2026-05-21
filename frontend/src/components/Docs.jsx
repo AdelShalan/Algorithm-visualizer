@@ -59,78 +59,45 @@ export default function Docs() {
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, []);
 
+  if (docsLoading || docLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-bg">
+        <div className="text-center text-muted">Loading docs...</div>
+      </div>
+    );
+  }
+
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column' }}>
+    <div className="min-h-screen bg-bg flex flex-col">
       <Nav />
 
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+      <div className="flex-1 flex overflow-hidden">
         {/* Left sidebar — fixed, never scrolls */}
-        <aside style={{
-          position: 'fixed',
-          left: 0,
-          top: '57px',
-          bottom: 0,
-          width: '260px',
-          background: 'var(--white)',
-          borderRight: '1px solid var(--border)',
-          overflowY: 'auto',
-          flexShrink: 0,
-        }}>
-          <div style={{ padding: '1.25rem' }}>
-            <div style={{ marginBottom: '1rem' }}>
+        <aside className="fixed left-0 top-[57px] bottom-0 w-[260px] bg-white border-r border-border overflow-y-auto flex-shrink-0">
+          <div className="p-5">
+            <div className="mb-4">
               <input
                 type="text"
                 placeholder="Search docs..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.5rem 0.75rem',
-                  border: '1px solid var(--border)',
-                  borderRadius: '6px',
-                  fontSize: '0.8125rem',
-                  fontFamily: 'Instrument Sans, sans-serif',
-                  background: 'var(--surface)',
-                  outline: 'none',
-                }}
+                className="w-full py-2 px-3 border border-border rounded-lg text-sm font-body bg-surface outline-none"
               />
             </div>
 
             {sidebar.map(section => (
-              <div key={section.label} style={{ marginBottom: '1.25rem' }}>
-                <div style={{
-                  fontFamily: 'Syne, sans-serif',
-                  fontWeight: 700,
-                  fontSize: '0.6875rem',
-                  color: 'var(--muted)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  marginBottom: '0.5rem',
-                }}>
+              <div key={section.label} className="mb-5">
+                <div className="font-heading font-bold text-sm text-muted uppercase tracking-wider mb-2">
                   {section.label}
                 </div>
-                <ul style={{ listStyle: 'none', padding: 0 }}>
+                <ul className="list-none p-0">
                   {section.links.map(link => {
                     const isActive = activeDoc === link.id;
                     return (
-                      <li key={link.id} style={{ marginBottom: '2px' }}>
+                      <li key={link.id} className="mb-0.5">
                         <button
                           onClick={() => navigateToDoc(link.id)}
-                          style={{
-                            display: 'block',
-                            width: '100%',
-                            textAlign: 'left',
-                            padding: '0.375rem 0.625rem',
-                            fontSize: '0.8125rem',
-                            fontFamily: 'Instrument Sans, sans-serif',
-                            color: isActive ? 'var(--purple)' : 'var(--ink2)',
-                            background: isActive ? 'var(--purple-light)' : 'transparent',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            fontWeight: isActive ? 600 : 400,
-                            transition: 'all 0.12s',
-                          }}
+                          className={`block w-full text-left py-1.5 px-2.5 text-sm font-body rounded transition-all duration-120 border-none cursor-pointer ${isActive ? 'text-purple font-semibold bg-purple-light' : 'text-ink2 font-normal bg-transparent'}`}
                         >
                           {link.label}
                         </button>
@@ -144,50 +111,23 @@ export default function Docs() {
         </aside>
 
         {/* Main content */}
-        <main style={{ flex: 1, overflowY: 'auto', padding: '2rem 3rem', marginLeft: '260px', marginRight: '200px' }}>
+        <main className="flex-1 overflow-y-auto py-8 px-12 ml-[260px] mr-[200px]">
           {currentDoc ? (
             <article>
               {/* Header */}
-              <header style={{ marginBottom: '2rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '0.75rem' }}>
-                  <span style={{
-                    fontFamily: 'IBM Plex Mono, monospace',
-                    fontSize: '0.625rem',
-                    background: 'var(--purple-light)',
-                    color: 'var(--purple)',
-                    padding: '0.2rem 0.625rem',
-                    borderRadius: '4px',
-                    fontWeight: 500,
-                  }}>
+              <header className="mb-8">
+                <div className="flex items-center gap-2.5 mb-3">
+                  <span className="font-mono text-[10px] bg-purple-light text-purple px-2.5 py-0.5 rounded font-medium">
                     {currentDoc.tag}
                   </span>
                 </div>
-                <h1 style={{
-                  fontFamily: 'Syne, sans-serif',
-                  fontWeight: 800,
-                  fontSize: '2rem',
-                  letterSpacing: '-0.03em',
-                  color: 'var(--ink)',
-                  marginBottom: '0.5rem',
-                }}>
+                <h1 className="font-heading font-extrabold text-3xl tracking-tight text-ink mb-2">
                   {currentDoc.title}
                 </h1>
-                <p style={{
-                  fontSize: '1rem',
-                  color: 'var(--ink2)',
-                  lineHeight: 1.6,
-                  maxWidth: '640px',
-                  marginBottom: '1rem',
-                }}>
+                <p className="text-base text-ink2 leading-relaxed max-w-[640px] mb-4">
                   {currentDoc.description}
                 </p>
-                <div style={{
-                  display: 'flex',
-                  gap: '1.25rem',
-                  fontSize: '0.75rem',
-                  color: 'var(--muted)',
-                  fontFamily: 'IBM Plex Mono, monospace',
-                }}>
+                <div className="flex gap-5 text-xs text-muted font-mono">
                   <span>{currentDoc.readTime}</span>
                   <span>{currentDoc.difficulty}</span>
                   <span>Updated {currentDoc.updated}</span>
@@ -196,39 +136,16 @@ export default function Docs() {
               </header>
 
               {/* TOC */}
-              <div style={{
-                background: 'var(--white)',
-                border: '1px solid var(--border)',
-                borderRadius: '8px',
-                padding: '1rem 1.25rem',
-                marginBottom: '2rem',
-              }}>
-                <div style={{
-                  fontFamily: 'Syne, sans-serif',
-                  fontWeight: 700,
-                  fontSize: '0.75rem',
-                  color: 'var(--ink)',
-                  marginBottom: '0.625rem',
-                }}>
+              <div className="bg-white border border-border rounded-lg px-5 py-4 mb-8">
+                <div className="font-heading font-bold text-sm text-ink mb-2.5">
                   On this page
                 </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <div className="flex flex-wrap gap-2">
                   {sections.map(section => (
                     <button
                       key={section.id}
                       onClick={() => scrollToSection(section.id)}
-                      style={{
-                        padding: '0.25rem 0.625rem',
-                        fontSize: '0.6875rem',
-                        fontFamily: 'IBM Plex Mono, monospace',
-                        color: activeSection === section.id ? 'var(--purple)' : 'var(--muted)',
-                        background: activeSection === section.id ? 'var(--purple-light)' : 'transparent',
-                        border: '1px solid',
-                        borderColor: activeSection === section.id ? 'var(--purple)' : 'var(--border)',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                        transition: 'all 0.12s',
-                      }}
+                      className={`py-1 px-2.5 text-xs font-mono rounded border cursor-pointer transition-all duration-120 ${activeSection === section.id ? 'text-purple bg-purple-light border-purple' : 'text-muted bg-transparent border-border'}`}
                     >
                       {section.title}
                     </button>
@@ -241,83 +158,30 @@ export default function Docs() {
                 <section
                   key={section.id}
                   id={section.id}
-                  style={{
-                    marginBottom: '2.5rem',
-                    scrollMarginTop: '80px',
-                  }}
+                  className="mb-10 scroll-mt-20"
                 >
-                  <h2 style={{
-                    fontFamily: 'Syne, sans-serif',
-                    fontWeight: 700,
-                    fontSize: '1.25rem',
-                    color: 'var(--ink)',
-                    marginBottom: '1rem',
-                    paddingBottom: '0.5rem',
-                    borderBottom: '1px solid var(--border)',
-                  }}>
+                  <h2 className="font-heading font-bold text-xl text-ink mb-4 pb-2 border-b border-border">
                     {section.title}
                   </h2>
 
                   {section.type === 'text' && (
                     <>
                       {section.content && (
-                        <div style={{
-                          fontSize: '0.875rem',
-                          color: 'var(--ink2)',
-                          lineHeight: 1.7,
-                          marginBottom: '1rem',
-                          whiteSpace: 'pre-line',
-                        }} dangerouslySetInnerHTML={{ __html: section.content }} />
+                        <div className="text-sm text-ink2 leading-relaxed mb-4 whitespace-pre-line" dangerouslySetInnerHTML={{ __html: section.content }} />
                       )}
 
                       {section.steps && (
-                        <div style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '0.75rem',
-                          marginBottom: '1rem',
-                        }}>
+                        <div className="flex flex-col gap-3 mb-4">
                           {section.steps.map((step, i) => (
-                            <div key={i} style={{
-                              display: 'flex',
-                              gap: '0.75rem',
-                              alignItems: 'flex-start',
-                              padding: '0.75rem',
-                              background: 'var(--surface)',
-                              borderRadius: '6px',
-                              border: '1px solid var(--border)',
-                            }}>
-                              <span style={{
-                                flexShrink: 0,
-                                width: 24,
-                                height: 24,
-                                borderRadius: '50%',
-                                background: 'var(--purple)',
-                                color: '#fff',
-                                fontFamily: 'IBM Plex Mono, monospace',
-                                fontSize: '0.6875rem',
-                                fontWeight: 600,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              }}>
+                            <div key={i} className="flex gap-3 items-start p-3 bg-surface rounded-lg border border-border">
+                              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple text-white font-mono text-xs font-bold flex items-center justify-center">
                                 {i + 1}
                               </span>
                               <div>
-                                <div style={{
-                                  fontFamily: 'Syne, sans-serif',
-                                  fontWeight: 600,
-                                  fontSize: '0.8125rem',
-                                  color: 'var(--ink)',
-                                  marginBottom: '0.25rem',
-                                }}>
+                                <div className="font-heading font-semibold text-sm text-ink mb-1">
                                   {step.title}
                                 </div>
-                                <div style={{
-                                  fontSize: '0.75rem',
-                                  color: 'var(--ink2)',
-                                  lineHeight: 1.55,
-                                }}>
+                                <div className="text-xs text-ink2 leading-normal">
                                   {step.text}
                                 </div>
                               </div>
@@ -327,31 +191,12 @@ export default function Docs() {
                       )}
 
                       {section.table && (
-                        <div style={{
-                          overflowX: 'auto',
-                          marginBottom: '1rem',
-                          border: '1px solid var(--border)',
-                          borderRadius: '8px',
-                        }}>
-                          <table style={{
-                            width: '100%',
-                            borderCollapse: 'collapse',
-                            fontSize: '0.8125rem',
-                          }}>
+                        <div className="overflow-x-auto mb-4 border border-border rounded-lg">
+                          <table className="w-full border-collapse text-sm">
                             <thead>
-                              <tr style={{ background: 'var(--surface)' }}>
+                              <tr className="bg-surface">
                                 {section.table.headers.map((h, i) => (
-                                  <th key={i} style={{
-                                    textAlign: 'left',
-                                    fontFamily: 'IBM Plex Mono, monospace',
-                                    fontSize: '0.625rem',
-                                    color: 'var(--muted)',
-                                    padding: '0.625rem 0.75rem',
-                                    fontWeight: 500,
-                                    textTransform: 'uppercase',
-                                    letterSpacing: '0.04em',
-                                    borderBottom: '1px solid var(--border)',
-                                  }}>
+                                  <th key={i} className="text-left font-mono text-[10px] text-muted py-2.5 px-3 font-medium uppercase tracking-wider border-b border-border">
                                     {h}
                                   </th>
                                 ))}
@@ -362,17 +207,8 @@ export default function Docs() {
                                 <tr key={i}>
                                   {row.cells.map((cell, j) => {
                                     const classes = row.classes || [];
-  if (docsLoading || docLoading) {
-    return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
-        <div style={{ textAlign: 'center', color: 'var(--muted)' }}>Loading docs...</div>
-      </div>
-    );
-  }
-
-  return (
-                                      <td key={j} style={{
-                                        padding: '0.625rem 0.75rem',
+                                    return (
+                                      <td key={j} className="py-2.5 px-3" style={{
                                         borderBottom: i < section.table.rows.length - 1 ? '1px solid var(--border)' : 'none',
                                         fontFamily: classes.includes('mono') ? 'IBM Plex Mono, monospace' : 'Instrument Sans, sans-serif',
                                         color: classes.includes('good') ? '#15803d' : classes.includes('bad') ? '#c2410c' : classes.includes('ok') ? '#0d9488' : 'var(--ink)',
@@ -390,27 +226,19 @@ export default function Docs() {
                       )}
 
                       {section.callout && (
-                        <div style={{
+                        <div className="rounded-r-lg py-3.5 px-4 mb-4" style={{
                           borderLeft: `3px solid ${section.callout.type === 'warning' ? '#f59e0b' : section.callout.type === 'success' ? '#16a34a' : 'var(--purple)'}`,
                           background: section.callout.type === 'warning' ? '#fffbeb' : section.callout.type === 'success' ? '#f0fdf4' : 'var(--purple-light)',
-                          borderRadius: '0 6px 6px 0',
-                          padding: '0.875rem 1rem',
-                          marginBottom: '1rem',
                         }}>
-                          <div style={{
-                            fontFamily: 'Syne, sans-serif',
-                            fontWeight: 700,
-                            fontSize: '0.8125rem',
+                          <div className="font-heading font-bold text-sm mb-1.5" style={{
                             color: section.callout.type === 'warning' ? '#92400e' : section.callout.type === 'success' ? '#166534' : '#3c2a8a',
-                            marginBottom: '0.375rem',
                           }}>
                             {section.callout.title}
                           </div>
                           <div
+                            className="text-xs leading-relaxed"
                             style={{
-                              fontSize: '0.75rem',
                               color: section.callout.type === 'warning' ? '#78350f' : section.callout.type === 'success' ? '#14532d' : '#3c2a8a',
-                              lineHeight: 1.6,
                             }}
                             dangerouslySetInnerHTML={{ __html: section.callout.body }}
                           />
@@ -418,21 +246,9 @@ export default function Docs() {
                       )}
 
                       {section.tags && (
-                        <div style={{
-                          display: 'flex',
-                          flexWrap: 'wrap',
-                          gap: '0.375rem',
-                          marginBottom: '1rem',
-                        }}>
+                        <div className="flex flex-wrap gap-1.5 mb-4">
                           {section.tags.map((tag, i) => (
-                            <span key={i} style={{
-                              fontFamily: 'IBM Plex Mono, monospace',
-                              fontSize: '0.625rem',
-                              background: 'var(--purple-light)',
-                              color: 'var(--purple)',
-                              padding: '0.2rem 0.5rem',
-                              borderRadius: '4px',
-                            }}>
+                            <span key={i} className="font-mono text-[10px] bg-purple-light text-purple px-2 py-0.5 rounded">
                               {tag}
                             </span>
                           ))}
@@ -440,17 +256,9 @@ export default function Docs() {
                       )}
 
                       {section.listItems && (
-                        <ul style={{
-                          paddingLeft: '1.25rem',
-                          marginBottom: '1rem',
-                        }}>
+                        <ul className="pl-5 mb-4">
                           {section.listItems.map((item, i) => (
-                            <li key={i} style={{
-                              fontSize: '0.8125rem',
-                              color: 'var(--ink2)',
-                              lineHeight: 1.6,
-                              marginBottom: '0.375rem',
-                            }} dangerouslySetInnerHTML={{ __html: item }} />
+                            <li key={i} className="text-sm text-ink2 leading-relaxed mb-1.5" dangerouslySetInnerHTML={{ __html: item }} />
                           ))}
                         </ul>
                       )}
@@ -462,54 +270,22 @@ export default function Docs() {
                   )}
 
                   {section.type === 'related' && section.cards && (
-                    <div style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-                      gap: '0.75rem',
-                    }}>
+                    <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3">
                       {section.cards.map((card, i) => (
                         <Link
                           key={i}
                           to={`/docs?doc=${card.name.toLowerCase().replace(/\s+/g, '-').replace(/'/g, '')}`}
-                          style={{
-                            display: 'block',
-                            padding: '1rem',
-                            background: 'var(--white)',
-                            border: '1px solid var(--border)',
-                            borderRadius: '8px',
-                            textDecoration: 'none',
-                            transition: 'border-color 0.15s',
-                          }}
-                          onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--purple)'}
-                          onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+                          className="block p-4 bg-white border border-border rounded-lg no-underline transition-colors duration-150 hover:border-purple"
                         >
-                          <div style={{
-                            fontFamily: 'Syne, sans-serif',
-                            fontWeight: 700,
-                            fontSize: '0.875rem',
-                            color: 'var(--ink)',
-                            marginBottom: '0.375rem',
-                          }}>
+                          <div className="font-heading font-bold text-sm text-ink mb-1.5">
                             {card.name}
                           </div>
-                          <div style={{
-                            fontFamily: 'IBM Plex Mono, monospace',
-                            fontSize: '0.625rem',
-                            color: 'var(--muted)',
-                            marginBottom: '0.625rem',
-                          }}>
+                          <div className="font-mono text-[10px] text-muted mb-2.5">
                             {card.cx}
                           </div>
-                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
+                          <div className="flex flex-wrap gap-1.5">
                             {card.tags.map((tag, j) => (
-                              <span key={j} style={{
-                                fontFamily: 'IBM Plex Mono, monospace',
-                                fontSize: '0.5625rem',
-                                padding: '0.15rem 0.4rem',
-                                borderRadius: '3px',
-                                background: tag.bg,
-                                color: tag.color,
-                              }}>
+                              <span key={j} className="font-mono text-[9px] px-1.5 py-0.5 rounded-sm" style={{ background: tag.bg, color: tag.color }}>
                                 {tag.text}
                               </span>
                             ))}
@@ -520,54 +296,22 @@ export default function Docs() {
                   )}
 
                   {section.compareGrid && (
-                    <div style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                      gap: '1rem',
-                      marginBottom: '1rem',
-                    }}>
+                    <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4 mb-4">
                       {section.compareGrid.map((item, i) => (
-                        <div key={i} style={{
-                          padding: '1rem',
-                          background: 'var(--white)',
-                          border: '1px solid var(--border)',
-                          borderRadius: '8px',
-                        }}>
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem',
-                            marginBottom: '0.625rem',
-                          }}>
-                            <span style={{
-                              fontFamily: 'Syne, sans-serif',
-                              fontWeight: 700,
-                              fontSize: '0.875rem',
-                              color: 'var(--ink)',
-                            }}>
+                        <div key={i} className="p-4 bg-white border border-border rounded-lg">
+                          <div className="flex items-center gap-2 mb-2.5">
+                            <span className="font-heading font-bold text-sm text-ink">
                               {item.title}
                             </span>
                             {item.tag && (
-                              <span style={{
-                                fontFamily: 'IBM Plex Mono, monospace',
-                                fontSize: '0.5625rem',
-                                padding: '0.15rem 0.4rem',
-                                borderRadius: '3px',
-                                background: item.tagColor,
-                                color: item.tagTextColor,
-                              }}>
+                              <span className="font-mono text-[9px] px-1.5 py-0.5 rounded-sm" style={{ background: item.tagColor, color: item.tagTextColor }}>
                                 {item.tag}
                               </span>
                             )}
                           </div>
-                          <ul style={{ paddingLeft: '1rem', margin: 0 }}>
+                          <ul className="pl-4 m-0">
                             {item.pros.map((pro, j) => (
-                              <li key={j} style={{
-                                fontSize: '0.75rem',
-                                color: 'var(--ink2)',
-                                lineHeight: 1.55,
-                                marginBottom: '0.25rem',
-                              }}>
+                              <li key={j} className="text-xs text-ink2 leading-normal mb-1">
                                 {pro}
                               </li>
                             ))}
@@ -580,23 +324,11 @@ export default function Docs() {
               ))}
             </article>
           ) : (
-            <div style={{
-              textAlign: 'center',
-              padding: '4rem 2rem',
-            }}>
-              <div style={{
-                fontFamily: 'Syne, sans-serif',
-                fontWeight: 700,
-                fontSize: '1.25rem',
-                color: 'var(--ink)',
-                marginBottom: '0.5rem',
-              }}>
+            <div className="text-center py-16 px-8">
+              <div className="font-heading font-bold text-xl text-ink mb-2">
                 Select an algorithm
               </div>
-              <div style={{
-                fontSize: '0.875rem',
-                color: 'var(--muted)',
-              }}>
+              <div className="text-sm text-muted">
                 Choose a topic from the sidebar to get started.
               </div>
             </div>
@@ -605,26 +337,8 @@ export default function Docs() {
 
         {/* Right TOC — fixed, always visible */}
         {currentDoc && (
-          <aside style={{
-            position: 'fixed',
-            right: 0,
-            top: '57px',
-            bottom: 0,
-            width: '200px',
-            borderLeft: '1px solid var(--border)',
-            background: 'var(--white)',
-            overflowY: 'auto',
-            padding: '1.5rem 1rem',
-          }}>
-            <div style={{
-              fontFamily: 'Syne, sans-serif',
-              fontWeight: 700,
-              fontSize: '0.6875rem',
-              color: 'var(--muted)',
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-              marginBottom: '0.75rem',
-            }}>
+          <aside className="fixed right-0 top-[57px] bottom-0 w-[200px] border-l border-border bg-white overflow-y-auto py-6 px-4">
+            <div className="font-heading font-bold text-xs text-muted uppercase tracking-wider mb-3">
               Contents
             </div>
             <nav>
@@ -636,18 +350,7 @@ export default function Docs() {
                     e.preventDefault();
                     scrollToSection(section.id);
                   }}
-                  style={{
-                    display: 'block',
-                    padding: '0.25rem 0',
-                    fontSize: '0.75rem',
-                    fontFamily: 'Instrument Sans, sans-serif',
-                    color: activeSection === section.id ? 'var(--purple)' : 'var(--muted)',
-                    textDecoration: 'none',
-                    borderLeft: activeSection === section.id ? '2px solid var(--purple)' : '2px solid transparent',
-                    paddingLeft: activeSection === section.id ? '0.625rem' : '0.75rem',
-                    marginBottom: '0.375rem',
-                    transition: 'all 0.12s',
-                  }}
+                  className={`block py-1 text-sm font-body no-underline mb-1.5 transition-all duration-120 ${activeSection === section.id ? 'text-purple border-l-2 border-purple pl-2.5' : 'text-muted border-l-2 border-transparent pl-3'}`}
                 >
                   {section.title}
                 </a>
@@ -673,61 +376,27 @@ function CodeBlock({ languages }) {
   };
 
   return (
-    <div style={{
-      background: 'var(--code-bg)',
-      borderRadius: '8px',
-      overflow: 'hidden',
-      marginBottom: '1rem',
-    }}>
+    <div className="bg-[var(--code-bg)] rounded-lg overflow-hidden mb-4">
       {/* Header */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0.625rem 1rem',
-        borderBottom: '1px solid #2a2a28',
-      }}>
-        <div style={{ display: 'flex', gap: '0.375rem' }}>
+      <div className="flex items-center justify-between py-2.5 px-4 border-b border-[#2a2a28]">
+        <div className="flex gap-1.5">
           {languages.map((l, i) => (
             <button
               key={i}
               onClick={() => setActiveLang(i)}
-              style={{
-                padding: '0.25rem 0.625rem',
-                fontSize: '0.6875rem',
-                fontFamily: 'IBM Plex Mono, monospace',
-                color: activeLang === i ? '#fff' : '#6b7280',
-                background: activeLang === i ? 'var(--code-hl)' : 'transparent',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-                transition: 'all 0.12s',
-              }}
+              className={`py-1 px-2.5 text-xs font-mono rounded border-none cursor-pointer transition-all duration-120 ${activeLang === i ? 'text-white bg-[var(--code-hl)]' : 'text-gray-500 bg-transparent'}`}
             >
               {l.lang}
             </button>
           ))}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-          <span style={{
-            fontFamily: 'IBM Plex Mono, monospace',
-            fontSize: '0.625rem',
-            color: '#6b7280',
-          }}>
+        <div className="flex items-center gap-2.5">
+          <span className="font-mono text-[10px] text-gray-500">
             {lang.filename}
           </span>
           <button
             onClick={handleCopy}
-            style={{
-              padding: '0.2rem 0.5rem',
-              fontSize: '0.625rem',
-              fontFamily: 'IBM Plex Mono, monospace',
-              color: copied ? '#16a34a' : '#6b7280',
-              background: 'transparent',
-              border: '1px solid #2a2a28',
-              borderRadius: '3px',
-              cursor: 'pointer',
-            }}
+            className={`py-0.5 px-2 text-[10px] font-mono border border-[#2a2a28] rounded cursor-pointer bg-transparent ${copied ? 'text-green-600' : 'text-gray-500'}`}
           >
             {copied ? 'Copied!' : 'Copy'}
           </button>
@@ -735,15 +404,7 @@ function CodeBlock({ languages }) {
       </div>
 
       {/* Code */}
-      <pre style={{
-        padding: '1rem',
-        margin: 0,
-        fontFamily: 'IBM Plex Mono, monospace',
-        fontSize: '0.75rem',
-        lineHeight: 1.7,
-        color: '#9a9891',
-        overflowX: 'auto',
-      }}>
+      <pre className="p-4 m-0 font-mono text-xs leading-relaxed text-[#9a9891] overflow-x-auto">
         <code>{lang.code}</code>
       </pre>
     </div>

@@ -28,6 +28,8 @@ opencode.json
 .playwright
 .playwright-mcp
 .claude
+AGENTS.md
+REFACTOR.md
 
 # Build/test artifacts
 *.png
@@ -35,3 +37,6 @@ opencode.json
 *.jpeg
 .vite/
 test-results/
+
+# Environment
+.env

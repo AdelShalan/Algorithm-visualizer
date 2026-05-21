@@ -20,26 +20,26 @@ export default function ZAlgorithm() {
   const concat = pattern + '$' + text;
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Input</div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', color: 'var(--ink2)', width: 50 }}>Text:</span>
-            <input value={text} onChange={e => setText(e.target.value.toUpperCase())} style={{ flex: 1, padding: '.375rem .625rem', border: '1px solid var(--border)', borderRadius: '6px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.8125rem', color: 'var(--ink)', background: 'var(--bg)', outline: 'none' }} />
+    <div className="flex h-full flex-col gap-5">
+      <div className="rounded-[10px] border border-border bg-white p-5">
+        <div className="mb-3 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Input</div>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2">
+            <span className="w-[50px] font-mono text-[.75rem] text-ink2">Text:</span>
+            <input value={text} onChange={e => setText(e.target.value.toUpperCase())} className="flex-1 rounded-md border border-border bg-bg px-2.5 py-1.5 font-mono text-[.8125rem] text-ink outline-none" />
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', color: 'var(--ink2)', width: 50 }}>Pattern:</span>
-            <input value={pattern} onChange={e => setPattern(e.target.value.toUpperCase())} style={{ flex: 1, padding: '.375rem .625rem', border: '1px solid var(--border)', borderRadius: '6px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.8125rem', color: 'var(--ink)', background: 'var(--bg)', outline: 'none' }} />
+          <div className="flex items-center gap-2">
+            <span className="w-[50px] font-mono text-[.75rem] text-ink2">Pattern:</span>
+            <input value={pattern} onChange={e => setPattern(e.target.value.toUpperCase())} className="flex-1 rounded-md border border-border bg-bg px-2.5 py-1.5 font-mono text-[.8125rem] text-ink outline-none" />
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '1.25rem', overflowY: 'auto' }}>
+      <div className="grid min-h-0 flex-1 grid-cols-[1fr_280px] gap-5">
+        <div className="flex flex-col gap-5 overflow-y-auto rounded-[10px] border border-border bg-white p-5">
           <div>
-            <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '.8125rem', color: 'var(--ink)', marginBottom: '.5rem' }}>Concatenated string</div>
-            <div style={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+            <div className="mb-2 font-heading text-[.8125rem] font-bold text-ink">Concatenated string</div>
+            <div className="flex flex-wrap gap-0.5">
               {concat.split('').map((ch, i) => {
                 const isPattern = i < pattern.length;
                 const isSep = ch === '$';
@@ -52,15 +52,15 @@ export default function ZAlgorithm() {
                 else if (inZBox) { bg = 'var(--purple-light)'; color = 'var(--purple)'; }
                 else if (isSep) { bg = '#fef2f2'; color = '#b91c1c'; }
                 else if (isPattern) { bg = '#f3e8ff'; color = '#7c3aed'; }
-                return <div key={i} style={{ width: 32, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', fontWeight: 700, background: bg, color, border }}>{ch}</div>;
+                return <div key={i} className="flex h-10 w-8 items-center justify-center rounded-lg font-mono text-[.75rem] font-bold" style={{ background: bg, color, border }}>{ch}</div>;
               })}
             </div>
           </div>
 
           {currentData.z.length > 0 && (
             <div>
-              <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '.8125rem', color: 'var(--ink)', marginBottom: '.5rem' }}>Z-array</div>
-              <div style={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+              <div className="mb-2 font-heading text-[.8125rem] font-bold text-ink">Z-array</div>
+              <div className="flex flex-wrap gap-0.5">
                 {currentData.z.map((val, i) => {
                   const isCurrent = currentData.type === 'compute' && currentData.i === i;
                   const isMatch = val === pattern.length;
@@ -68,7 +68,7 @@ export default function ZAlgorithm() {
                   if (isMatch) { bg = '#f0fdf4'; color = '#15803d'; border = '2px solid #86efac'; }
                   else if (isCurrent) { bg = '#fef3c7'; color = '#92400e'; border = '2px solid var(--amber)'; }
                   else if (val > 0) { bg = 'var(--purple-light)'; color = 'var(--purple)'; border = '1px solid var(--purple)'; }
-                  return <div key={i} style={{ width: 32, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', fontWeight: 600, background: bg, color, border }}>{val}</div>;
+                  return <div key={i} className="flex h-10 w-8 items-center justify-center rounded-lg font-mono text-[.75rem] font-semibold" style={{ background: bg, color, border }}>{val}</div>;
                 })}
               </div>
             </div>
@@ -76,13 +76,13 @@ export default function ZAlgorithm() {
         </div>
 
         {currentData.log && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Pattern matching log</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="flex flex-col overflow-hidden rounded-[10px] border border-border bg-white px-5 py-4">
+            <div className="mb-2 shrink-0 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Pattern matching log</div>
+            <div ref={logRef} className="flex flex-1 flex-col gap-[3px] overflow-y-auto">
               {currentData.log.map((entry, i) => {
                 const isLast = i === currentData.log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="rounded px-2 py-[.3rem] font-mono text-[.625rem]" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>

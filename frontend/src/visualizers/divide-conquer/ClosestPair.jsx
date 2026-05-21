@@ -27,16 +27,16 @@ export default function ClosestPair() {
   useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [currentData.log]);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Points</div>
-        <button onClick={handleShuffle} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--ink2)', fontFamily: 'Instrument Sans, sans-serif' }}>New Points</button>
+    <div className="flex h-full flex-col gap-5">
+      <div className="rounded-[10px] border border-border bg-white p-5">
+        <div className="mb-3 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Points</div>
+        <button onClick={handleShuffle} className="cursor-pointer border border-border bg-transparent px-3 py-[.3rem] text-[.6875rem] font-body text-ink2">New Points</button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '.75rem' }}>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg viewBox={`0 0 ${CANVAS_SIZE} ${CANVAS_SIZE}`} style={{ width: '100%', height: '100%', maxWidth: 500, maxHeight: 500 }}>
+      <div className="grid min-h-0 flex-1 grid-cols-[1fr_280px] gap-5">
+        <div className="flex flex-col gap-3 rounded-[10px] border border-border bg-white p-5">
+          <div className="flex flex-1 items-center justify-center">
+            <svg viewBox={`0 0 ${CANVAS_SIZE} ${CANVAS_SIZE}`} className="h-full w-full max-w-[500px] max-h-[500px]">
               {currentData.type === 'split' && (
                 <line x1={currentData.midPoint.x} y1={0} x2={currentData.midPoint.x} y2={CANVAS_SIZE} stroke="var(--amber)" strokeWidth={2} strokeDasharray="4 4" />
               )}
@@ -51,21 +51,21 @@ export default function ClosestPair() {
             </svg>
           </div>
           {currentData.dist !== undefined && currentData.dist !== Infinity && (
-            <div style={{ textAlign: 'center', padding: '.5rem', background: 'var(--bg)', borderRadius: '8px' }}>
-              <span style={{ fontFamily: 'Instrument Sans, sans-serif', fontSize: '.75rem', color: 'var(--muted)' }}>Closest distance: </span>
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontWeight: 700, fontSize: '1rem', color: 'var(--purple)' }}>{currentData.dist.toFixed(2)}</span>
+            <div className="rounded-lg bg-bg px-4 py-2 text-center">
+              <span className="font-body text-[.75rem] text-muted">Closest distance: </span>
+              <span className="font-mono text-[1rem] font-bold text-purple">{currentData.dist.toFixed(2)}</span>
             </div>
           )}
         </div>
 
         {currentData.log && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Execution trace</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="flex flex-col overflow-hidden rounded-[10px] border border-border bg-white px-5 py-4">
+            <div className="mb-2 shrink-0 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Execution trace</div>
+            <div ref={logRef} className="flex flex-1 flex-col gap-[3px] overflow-y-auto">
               {currentData.log.map((entry, i) => {
                 const isLast = i === currentData.log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="rounded px-2 py-[.3rem] font-mono text-[.625rem]" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>

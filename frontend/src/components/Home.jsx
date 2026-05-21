@@ -37,41 +37,41 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
-        <div style={{ textAlign: 'center', color: 'var(--muted)' }}>Loading algorithms...</div>
+      <div className="min-h-screen flex items-center justify-center bg-bg">
+        <div className="text-center text-muted">Loading algorithms...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.25rem', fontWeight: 700, color: 'var(--ink)', marginBottom: '0.5rem' }}>Failed to load</div>
-          <p style={{ color: 'var(--muted)' }}>{error.message}</p>
+      <div className="min-h-screen flex items-center justify-center bg-bg">
+        <div className="text-center">
+          <div className="font-heading text-xl font-bold text-ink mb-2">Failed to load</div>
+          <p className="text-muted">{error.message}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
+    <div className="min-h-screen bg-bg">
       <Nav />
 
-      <div style={{ background: 'var(--white)', borderBottom: '1px solid var(--border)', padding: '2.5rem 2.5rem 0' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', color: 'var(--muted)', marginBottom: '1.25rem' }}>
-          <Link to="/" style={{ color: 'var(--muted)', textDecoration: 'none' }}>Home</Link>
+      <div className="bg-white border-b border-border pt-10 px-10 pb-0">
+        <div className="flex items-center gap-2 font-mono text-xs text-muted mb-5">
+          <Link to="/" className="text-muted no-underline">Home</Link>
           <span>/</span>
           <span>Algorithms</span>
         </div>
-        <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '2.25rem', letterSpacing: '-0.03em', marginBottom: '0.5rem', color: 'var(--ink)' }}>
+        <h1 className="font-heading font-extrabold text-4xl tracking-tight mb-2 text-ink">
           All algorithms
         </h1>
-        <p style={{ color: 'var(--ink2)', fontSize: '0.9375rem', maxWidth: '540px', lineHeight: 1.6, marginBottom: '2rem' }}>
+        <p className="text-ink2 text-sm max-w-[540px] leading-relaxed mb-8">
           {totalAlgorithms} interactive visualizations, organized by category. Step through any algorithm frame by frame.
         </p>
 
-        <div style={{ display: 'flex', gap: 0, overflowX: 'auto' }}>
+        <div className="flex gap-0 overflow-x-auto">
           <TabBtn label={`All (${totalAlgorithms})`} active={!activeCategory} onClick={() => setActiveCategory(null)} />
           {categories.map(c => (
             <TabBtn key={c.id} label={c.name} active={activeCategory === c.id} onClick={() => setActiveCategory(c.id === activeCategory ? null : c.id)} />
@@ -79,23 +79,14 @@ export default function Home() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', minHeight: 'calc(100vh - 240px)' }}>
-        <div style={{
-          background: 'var(--white)', borderRight: '1px solid var(--border)',
-          padding: '1.5rem', position: 'sticky', top: '61px',
-          height: 'calc(100vh - 61px)', overflowY: 'auto',
-        }}>
-          <div style={{ position: 'relative', marginBottom: '1.75rem' }}>
-            <span style={{ position: 'absolute', left: '0.625rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)', fontSize: '14px' }}>⌕</span>
+      <div className="grid grid-cols-[240px_1fr] min-h-[calc(100vh-240px)]">
+        <div className="bg-white border-r border-border p-6 sticky top-[61px] h-[calc(100vh-61px)] overflow-y-auto">
+          <div className="relative mb-7">
+            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted text-sm">⌕</span>
             <input
               type="text"
               placeholder="Search algorithms…"
-              style={{
-                width: '100%', padding: '0.5rem 0.75rem 0.5rem 2rem',
-                border: '1px solid var(--border)', borderRadius: '8px',
-                fontSize: '0.8125rem', fontFamily: 'Instrument Sans, sans-serif',
-                background: 'var(--bg)', color: 'var(--ink)', outline: 'none',
-              }}
+              className="w-full py-2 px-3 pl-8 border border-border rounded-lg text-sm font-body bg-bg text-ink outline-none"
               onChange={e => {
                 const q = e.target.value.toLowerCase();
                 document.querySelectorAll('[data-algo-card]').forEach(card => {
@@ -107,9 +98,9 @@ export default function Home() {
             />
           </div>
 
-          <div style={{ marginBottom: '1.75rem' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.625rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '0.75rem' }}>Category</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+          <div className="mb-7">
+            <div className="font-mono text-[10px] tracking-widest uppercase text-muted mb-3">Category</div>
+            <div className="flex flex-col gap-0.5">
               {categories.map(cat => {
                 const cfg = categoryConfig[cat.id] || {};
                 const isActive = activeCategory === cat.id;
@@ -117,24 +108,13 @@ export default function Home() {
                   <div
                     key={cat.id}
                     onClick={() => setActiveCategory(isActive ? null : cat.id)}
-                    style={{
-                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      padding: '0.4rem 0.5rem', borderRadius: '6px', cursor: 'pointer',
-                      background: isActive ? 'var(--purple-light)' : 'transparent',
-                      transition: 'background 0.15s',
-                    }}
-                    onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'var(--bg)'; }}
-                    onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
+                    className={`flex items-center justify-between px-2 py-1 rounded-md cursor-pointer transition-colors duration-150 ${isActive ? 'bg-purple-light' : 'bg-transparent hover:bg-bg'}`}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: cfg.dot || '#999', flexShrink: 0 }} />
-                      <span style={{ fontSize: '0.8125rem', color: isActive ? 'var(--purple)' : 'var(--ink2)', fontWeight: isActive ? 500 : 400 }}>{cat.name}</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: cfg.dot || '#999' }} />
+                      <span className={`text-sm ${isActive ? 'text-purple font-medium' : 'text-ink2 font-normal'}`}>{cat.name}</span>
                     </div>
-                    <span style={{
-                      fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.625rem',
-                      color: 'var(--muted)', background: isActive ? 'var(--white)' : 'var(--bg)',
-                      padding: '1px 6px', borderRadius: '4px',
-                    }}>{cat.algorithms.length}</span>
+                    <span className={`font-mono text-[10px] px-1.5 py-0.5 rounded ${isActive ? 'bg-white text-muted' : 'bg-bg text-muted'}`}>{cat.algorithms.length}</span>
                   </div>
                 );
               })}
@@ -142,9 +122,9 @@ export default function Home() {
           </div>
         </div>
 
-        <div style={{ padding: '1.5rem 2rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', color: 'var(--muted)' }}>
+        <div className="px-8 py-6">
+          <div className="flex items-center justify-between mb-5">
+            <span className="font-mono text-xs text-muted">
               Showing {visibleCategories.reduce((s, c) => s + c.algorithms.length, 0)} algorithms
             </span>
           </div>
@@ -152,19 +132,14 @@ export default function Home() {
           {visibleCategories.map(category => {
             const cfg = categoryConfig[category.id] || {};
             return (
-              <div key={category.id} style={{ marginBottom: '2.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--border)' }}>
-                  <div style={{
-                    width: 32, height: 32, borderRadius: '8px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.75rem', fontWeight: 500,
-                    background: cfg.bg || '#f5f5f5', color: cfg.text || '#333', flexShrink: 0,
-                  }}>{cfg.label || '?'}</div>
-                  <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1rem', color: 'var(--ink)' }}>{category.name}</span>
-                  <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', color: 'var(--muted)', marginLeft: 'auto' }}>{category.algorithms.length} algorithms</span>
+              <div key={category.id} className="mb-10">
+                <div className="flex items-center gap-3 mb-4 pb-3 border-b border-border">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center font-mono text-sm font-medium flex-shrink-0" style={{ background: cfg.bg || '#f5f5f5', color: cfg.text || '#333' }}>{cfg.label || '?'}</div>
+                  <span className="font-heading font-bold text-base text-ink">{category.name}</span>
+                  <span className="font-mono text-xs text-muted ml-auto">{category.algorithms.length} algorithms</span>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '10px' }}>
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-2.5">
                   {category.algorithms.map(algo => (
                     <AlgoCard key={algo.id} category={category} algo={algo} cfg={cfg} />
                   ))}
@@ -182,17 +157,7 @@ function TabBtn({ label, active, onClick }) {
   return (
     <button
       onClick={onClick}
-      style={{
-        padding: '0.75rem 1.25rem', fontSize: '0.875rem', fontWeight: 500,
-        color: active ? 'var(--purple)' : 'var(--muted)',
-        borderBottom: active ? '2px solid var(--purple)' : '2px solid transparent',
-        borderTop: 'none', borderLeft: 'none', borderRight: 'none',
-        background: 'transparent',
-        cursor: 'pointer', fontFamily: 'Instrument Sans, sans-serif', whiteSpace: 'nowrap',
-        transition: 'color 0.15s',
-      }}
-      onMouseEnter={e => { if (!active) e.currentTarget.style.color = 'var(--ink2)'; }}
-      onMouseLeave={e => { if (!active) e.currentTarget.style.color = 'var(--muted)'; }}
+      className={`px-5 py-3 text-sm font-medium font-body whitespace-nowrap transition-colors duration-150 border-0 bg-transparent cursor-pointer border-b-2 ${active ? 'text-purple border-b-purple' : 'text-muted border-b-transparent hover:text-ink2'}`}
     >
       {label}
     </button>
@@ -204,7 +169,7 @@ function AlgoCard({ category, algo, cfg }) {
   return (
     <Link
       to={`/${category.id}/${algo.id}`}
-      style={{ textDecoration: 'none', display: 'block' }}
+      className="no-underline block"
       data-algo-card
       data-algo-name={algo.name}
       data-algo-desc={algo.description}
@@ -212,36 +177,28 @@ function AlgoCard({ category, algo, cfg }) {
       <div
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        className="bg-white rounded-[10px] p-4 cursor-pointer relative overflow-hidden transition-all duration-[180ms]"
         style={{
-          background: 'var(--white)', border: hovered ? `1px solid ${cfg.cardTop}` : '1px solid var(--border)',
-          borderRadius: '10px', padding: '1rem', cursor: 'pointer',
+          border: hovered ? `1px solid ${cfg.cardTop}` : '1px solid var(--border)',
           transform: hovered ? 'translateY(-1px)' : 'none',
-          transition: 'all 0.18s', position: 'relative', overflow: 'hidden',
         }}
       >
-        <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: '2.5px',
-          background: cfg.cardTop, opacity: hovered ? 1 : 0, transition: 'opacity 0.18s',
-          borderRadius: '10px 10px 0 0',
-        }} />
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '0.625rem' }}>
-          <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '0.9375rem', color: 'var(--ink)', lineHeight: 1.2 }}>
+        <div
+          className="absolute top-0 left-0 right-0 h-[2.5px] rounded-t-[10px] transition-opacity duration-[180ms]"
+          style={{ background: cfg.cardTop, opacity: hovered ? 1 : 0 }}
+        />
+        <div className="flex items-start justify-between mb-2.5">
+          <div className="font-heading font-bold text-sm text-ink leading-tight">
             {algo.name}
           </div>
-            <span style={{
-              fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.625rem',
-              padding: '0.2rem 0.5rem', borderRadius: '4px', whiteSpace: 'nowrap',
-              flexShrink: 0, marginLeft: '0.5rem', marginTop: '1px',
-              background: cfg.bg, color: cfg.text,
-            }}>{algo.complexity.worst}</span>
+            <span className="font-mono text-[10px] px-2 py-0.5 rounded whitespace-nowrap flex-shrink-0 ml-2 mt-0.5" style={{ background: cfg.bg, color: cfg.text }}>{algo.complexity.worst}</span>
         </div>
-        <div style={{ fontSize: '0.75rem', color: 'var(--muted)', lineHeight: 1.5, marginBottom: '0.75rem' }}>
+        <div className="text-xs text-muted leading-normal mb-3">
           {algo.description}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div className="flex items-center justify-between">
           {algo.stability !== '—' && (
-            <span style={{
-              fontSize: '0.6875rem', fontWeight: 500, padding: '0.2rem 0.6rem', borderRadius: '4px',
+            <span className="text-xs font-medium px-2.5 py-0.5 rounded" style={{
               background: algo.stability === 'Stable' ? '#f0fdf4' : '#eff6ff',
               color: algo.stability === 'Stable' ? '#15803d' : '#1d4ed8',
             }}>{algo.stability}</span>

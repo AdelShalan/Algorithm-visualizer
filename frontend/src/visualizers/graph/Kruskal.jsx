@@ -25,21 +25,21 @@ export default function Kruskal() {
   const isMSTEdge = (edge) => mst?.some(e => (e.from === edge.from && e.to === edge.to) || (e.from === edge.to && e.to === edge.from));
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Graph</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem' }}>
-          <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.6875rem', color: 'var(--muted)' }}>{NODE_COUNT} nodes, {graph.edges.length} edges</span>
-          <div style={{ flex: 1 }} />
-          <button onClick={handleNewGraph} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--ink2)', fontFamily: 'Instrument Sans, sans-serif' }}>New Graph</button>
+    <div className="h-full flex flex-col gap-5">
+      <div className="bg-white border border-border rounded-[10px] px-5 py-4">
+        <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-3">Graph</div>
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-[0.6875rem] text-muted">{NODE_COUNT} nodes, {graph.edges.length} edges</span>
+          <div className="flex-1" />
+          <button onClick={handleNewGraph} className="px-3 py-1 text-[0.6875rem] rounded-sm border border-border bg-transparent cursor-pointer text-ink2 font-body">New Graph</button>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-          <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '1rem', flexShrink: 0 }}>Minimum spanning tree</div>
-          <div style={{ flex: 1, minHeight: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg viewBox={`0 0 ${CANVAS_SIZE} ${CANVAS_SIZE}`} style={{ width: '100%', height: '100%' }}>
+      <div className="grid grid-cols-[1fr_280px] gap-5 flex-1 min-h-0">
+        <div className="bg-white border border-border rounded-[10px] p-5 flex flex-col overflow-hidden">
+          <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-4 flex-shrink-0">Minimum spanning tree</div>
+          <div className="flex-1 min-h-0 flex items-center justify-center">
+            <svg viewBox={`0 0 ${CANVAS_SIZE} ${CANVAS_SIZE}`} className="w-full h-full">
               {graph.edges.map((edge, i) => {
                 const from = graph.nodes[edge.from]; const to = graph.nodes[edge.to];
                 const inMST = isMSTEdge(edge);
@@ -63,13 +63,13 @@ export default function Kruskal() {
         </div>
 
         {currentData.log && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>MST construction log</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="bg-white border border-border rounded-[10px] px-4 py-3 flex flex-col overflow-hidden">
+            <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-2 flex-shrink-0">MST construction log</div>
+            <div ref={logRef} className="flex-1 overflow-y-auto flex flex-col gap-[3px]">
               {currentData.log.map((entry, i) => {
                 const isLast = i === currentData.log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="font-mono text-[0.625rem] px-2 py-1 rounded-sm" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>
@@ -77,13 +77,13 @@ export default function Kruskal() {
         )}
       </div>
 
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '.75rem 1.25rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <span style={{ fontSize: '.75rem', color: 'var(--muted)' }}>MST weight:</span>
-        <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '1.125rem', fontWeight: 700, color: 'var(--purple)' }}>{mst?.reduce((sum, e) => sum + e.weight, 0) ?? 0}</span>
-        <span style={{ width: 1, height: 16, background: 'var(--border)' }} />
-        <span style={{ fontSize: '.75rem', color: 'var(--muted)' }}>Edges:</span>
-        <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', fontWeight: 500, color: 'var(--ink)' }}>{mst?.length ?? 0}</span>
-        <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', color: 'var(--muted)' }}>/{NODE_COUNT - 1}</span>
+      <div className="bg-white border border-border rounded-[10px] px-5 py-3 flex items-center gap-4">
+        <span className="text-sm text-muted">MST weight:</span>
+        <span className="font-mono text-lg font-bold text-purple">{mst?.reduce((sum, e) => sum + e.weight, 0) ?? 0}</span>
+        <span className="w-px h-4 bg-border" />
+        <span className="text-sm text-muted">Edges:</span>
+        <span className="font-mono text-sm font-medium text-ink">{mst?.length ?? 0}</span>
+        <span className="font-mono text-sm text-muted">/{NODE_COUNT - 1}</span>
       </div>
     </div>
   );

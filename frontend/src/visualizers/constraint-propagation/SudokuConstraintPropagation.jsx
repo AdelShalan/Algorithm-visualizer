@@ -69,31 +69,23 @@ export default function SudokuConstraintPropagation() {
   useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [currentData.log]);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <div className="flex h-full flex-col gap-5">
+      <div className="flex items-center justify-between rounded-[10px] border border-border bg-white p-5">
         <div>
-          <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.25rem' }}>Puzzle</div>
-          <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.6875rem', color: 'var(--muted)' }}>9×9 Sudoku — {puzzle.flat().filter(v => v !== 0).length} clues — CP + Backtracking</span>
+          <div className="mb-1 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Puzzle</div>
+          <span className="font-mono text-[.6875rem] text-muted">9×9 Sudoku — {puzzle.flat().filter(v => v !== 0).length} clues — CP + Backtracking</span>
         </div>
         <button
           onClick={handleNewPuzzle}
-          style={{
-            padding: '0.4rem 0.875rem', fontSize: '0.75rem', fontWeight: 500,
-            fontFamily: 'Instrument Sans, sans-serif',
-            background: 'var(--purple)', color: '#fff',
-            border: 'none', borderRadius: '6px', cursor: 'pointer',
-            transition: 'opacity 0.15s',
-          }}
-          onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
-          onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+          className="rounded-md border-none bg-purple px-3.5 py-1 text-[.75rem] font-medium font-body text-white cursor-pointer transition-opacity duration-150 hover:opacity-85"
         >
           New puzzle
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ display: 'inline-grid', gridTemplateColumns: 'repeat(9, 44px)', gap: 0, border: '2px solid var(--ink)', borderRadius: '8px', overflow: 'hidden' }}>
+      <div className="grid min-h-0 flex-1 grid-cols-[1fr_280px] gap-5">
+        <div className="flex items-center justify-center rounded-[10px] border border-border bg-white p-5">
+          <div className="inline-grid overflow-hidden rounded-lg border-2 border-ink" style={{ gridTemplateColumns: 'repeat(9, 44px)' }}>
             {board.flat().map((val, i) => {
               const row = Math.floor(i / 9); const col = i % 9;
               const isGiven = givenMask[row][col];
@@ -120,11 +112,11 @@ export default function SudokuConstraintPropagation() {
               const showCandidates = !isGiven && cellCandidates && cellCandidates.size > 1 && val === 0;
 
               return (
-                <div key={i} style={{ width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.875rem', fontWeight: 700, background: bg, color, borderRight: (col + 1) % 3 === 0 && col < 8 ? '2px solid var(--ink)' : '1px solid var(--border)', borderBottom: (row + 1) % 3 === 0 && row < 8 ? '2px solid var(--ink)' : '1px solid var(--border)' }}>
+                <div key={i} className="flex h-11 w-11 items-center justify-center font-mono text-[.875rem] font-bold" style={{ background: bg, color, borderRight: (col + 1) % 3 === 0 && col < 8 ? '2px solid var(--ink)' : '1px solid var(--border)', borderBottom: (row + 1) % 3 === 0 && row < 8 ? '2px solid var(--ink)' : '1px solid var(--border)' }}>
                   {val !== 0 ? val : (showCandidates ? (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: 'repeat(3, 1fr)', width: '100%', height: '100%', padding: '2px' }}>
+                    <div className="grid h-full w-full grid-cols-3 grid-rows-3 p-0.5">
                       {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => (
-                        <span key={n} style={{ fontSize: '0.5rem', fontWeight: 400, color: cellCandidates.has(n) ? 'var(--ink2)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{n}</span>
+                        <span key={n} className="flex items-center justify-center text-[0.5rem] font-normal" style={{ color: cellCandidates.has(n) ? 'var(--ink2)' : 'transparent' }}>{n}</span>
                       ))}
                     </div>
                   ) : '')}
@@ -135,13 +127,13 @@ export default function SudokuConstraintPropagation() {
         </div>
 
         {currentData.log && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Propagation log</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="flex flex-col overflow-hidden rounded-[10px] border border-border bg-white px-5 py-4">
+            <div className="mb-2 shrink-0 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Propagation log</div>
+            <div ref={logRef} className="flex flex-1 flex-col gap-[3px] overflow-y-auto">
               {currentData.log.map((entry, i) => {
                 const isLast = i === currentData.log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="rounded px-2 py-[.3rem] font-mono text-[.625rem]" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>
@@ -149,15 +141,15 @@ export default function SudokuConstraintPropagation() {
         )}
       </div>
 
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '.75rem 1.25rem', textAlign: 'center', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', color: 'var(--ink2)', minHeight: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        {currentData.type === 'naked-single' && <span style={{ color: '#15803d' }}>Naked single: ({currentData.row}, {currentData.col}) = {currentData.num}</span>}
+      <div className="flex min-h-[2.5rem] items-center justify-center rounded-[10px] border border-border bg-white px-5 py-3 text-center font-mono text-[.75rem] text-ink2">
+        {currentData.type === 'naked-single' && <span className="text-[#15803d]">Naked single: ({currentData.row}, {currentData.col}) = {currentData.num}</span>}
         {currentData.type === 'try' && <span>Trying {currentData.num} at ({currentData.row}, {currentData.col})</span>}
-        {currentData.type === 'eliminate' && <span style={{ color: '#92400e' }}>Eliminated {currentData.num} from ({currentData.row}, {currentData.col})</span>}
-        {currentData.type === 'guess' && <span style={{ color: '#1e40af' }}>Guessing at ({currentData.row}, {currentData.col}): {currentData.values?.join(', ')}</span>}
-        {currentData.type === 'backtrack' && <span style={{ color: '#e11d48' }}>Backtracked from ({currentData.row}, {currentData.col})</span>}
-        {currentData.type === 'contradiction' && <span style={{ color: '#991b1b' }}>Contradiction at ({currentData.row}, {currentData.col})</span>}
-        {currentData.type === 'solved' && <span style={{ color: '#15803d', fontWeight: 600 }}>Puzzle solved!</span>}
-        {currentData.type === 'idle' && <span style={{ color: 'var(--muted)' }}>Ready to solve</span>}
+        {currentData.type === 'eliminate' && <span className="text-[#92400e]">Eliminated {currentData.num} from ({currentData.row}, {currentData.col})</span>}
+        {currentData.type === 'guess' && <span className="text-[#1e40af]">Guessing at ({currentData.row}, {currentData.col}): {currentData.values?.join(', ')}</span>}
+        {currentData.type === 'backtrack' && <span className="text-[#e11d48]">Backtracked from ({currentData.row}, {currentData.col})</span>}
+        {currentData.type === 'contradiction' && <span className="text-[#991b1b]">Contradiction at ({currentData.row}, {currentData.col})</span>}
+        {currentData.type === 'solved' && <span className="font-semibold text-[#15803d]">Puzzle solved!</span>}
+        {currentData.type === 'idle' && <span className="text-muted">Ready to solve</span>}
       </div>
     </div>
   );

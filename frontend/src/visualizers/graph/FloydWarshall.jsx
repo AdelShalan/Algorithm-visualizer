@@ -23,25 +23,25 @@ export default function FloydWarshall() {
   }, [currentData.log]);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Matrix</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem' }}>
-          <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.6875rem', color: 'var(--muted)' }}>{SIZE}×{SIZE} distance matrix</span>
-          <div style={{ flex: 1 }} />
-          <button onClick={handleNewMatrix} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--ink2)', fontFamily: 'Instrument Sans, sans-serif' }}>New Matrix</button>
+    <div className="h-full flex flex-col gap-5">
+      <div className="bg-white border border-border rounded-[10px] px-5 py-4">
+        <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-3">Matrix</div>
+        <div className="flex items-center gap-3">
+          <span className="font-mono text-[0.6875rem] text-muted">{SIZE}×{SIZE} distance matrix</span>
+          <div className="flex-1" />
+          <button onClick={handleNewMatrix} className="px-3 py-1 text-[0.6875rem] rounded-sm border border-border bg-transparent cursor-pointer text-ink2 font-body">New Matrix</button>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '1rem' }}>All-pairs shortest paths</div>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <div className="grid grid-cols-[1fr_280px] gap-5 flex-1 min-h-0">
+        <div className="bg-white border border-border rounded-[10px] p-5 flex flex-col">
+          <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-4">All-pairs shortest paths</div>
+          <div className="flex-1 flex items-center justify-center">
+            <div className="flex flex-col gap-1.5">
               {dist.map((row, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', fontWeight: 700, color: 'var(--muted)', width: '2rem' }}>N{i}</span>
-                  <div style={{ display: 'flex', gap: '4px' }}>
+                <div key={i} className="flex items-center gap-3">
+                  <span className="font-mono text-sm font-bold text-muted w-8">N{i}</span>
+                  <div className="flex gap-1">
                     {row.map((val, j) => {
                       const isUpdating = currentData.type === 'update' && currentData.i === i && currentData.j === j;
                       const isChecking = currentData.type === 'check' && currentData.i === i && currentData.j === j;
@@ -51,7 +51,7 @@ export default function FloydWarshall() {
                       else if (isChecking) { bg = '#fffbeb'; color = '#92400e'; border = '2px solid var(--amber)'; }
                       else if (isK) { bg = 'var(--purple-light)'; color = 'var(--purple)'; border = 'none'; }
                       return (
-                        <div key={j} style={{ width: 64, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', fontWeight: 600, background: bg, color, border }}>
+                        <div key={j} className="w-16 h-12 flex items-center justify-center rounded-lg font-mono text-sm font-semibold" style={{ background: bg, color, border }}>
                           {val === Infinity ? '∞' : val}
                         </div>
                       );
@@ -59,19 +59,19 @@ export default function FloydWarshall() {
                   </div>
                 </div>
               ))}
-              {currentData.k !== undefined && <div style={{ textAlign: 'center', marginTop: '1rem', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', color: 'var(--muted)' }}>Intermediate vertex: <span style={{ fontWeight: 700, color: 'var(--purple)' }}>k = {currentData.k}</span></div>}
+              {currentData.k !== undefined && <div className="text-center mt-4 font-mono text-sm text-muted">Intermediate vertex: <span className="font-bold text-purple">k = {currentData.k}</span></div>}
             </div>
           </div>
         </div>
 
         {currentData.log && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Execution trace</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="bg-white border border-border rounded-[10px] px-4 py-3 flex flex-col overflow-hidden">
+            <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-2 flex-shrink-0">Execution trace</div>
+            <div ref={logRef} className="flex-1 overflow-y-auto flex flex-col gap-[3px]">
               {currentData.log.map((entry, i) => {
                 const isLast = i === currentData.log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="font-mono text-[0.625rem] px-2 py-1 rounded-sm" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>

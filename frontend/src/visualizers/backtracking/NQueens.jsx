@@ -14,21 +14,21 @@ export default function NQueens() {
   useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [currentData.log]);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Input</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.8125rem', color: 'var(--ink2)' }}>N =</span>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '1rem', fontWeight: 500, color: 'var(--purple)' }}>{n}</span>
-            <button onClick={() => setN(p => Math.max(4, p - 1))} style={{ width: 28, height: 28, borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--white)', color: 'var(--ink2)', cursor: 'pointer', fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
-            <button onClick={() => setN(p => Math.min(8, p + 1))} style={{ width: 28, height: 28, borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--white)', color: 'var(--ink2)', cursor: 'pointer', fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
+    <div className="h-full flex flex-col gap-5">
+      <div className="bg-white border border-border rounded-[10px] px-5 py-4">
+        <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-3">Input</div>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[0.8125rem] text-ink2">N =</span>
+            <span className="font-mono text-base font-medium text-purple">{n}</span>
+            <button onClick={() => setN(p => Math.max(4, p - 1))} className="w-7 h-7 rounded-md border border-border bg-white text-ink2 cursor-pointer text-[14px] flex items-center justify-center">−</button>
+            <button onClick={() => setN(p => Math.min(8, p + 1))} className="w-7 h-7 rounded-md border border-border bg-white text-ink2 cursor-pointer text-[14px] flex items-center justify-center">+</button>
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="grid grid-cols-[1fr_280px] gap-5 flex-1 min-h-0">
+        <div className="bg-white border border-border rounded-[10px] p-5 flex items-center justify-center">
           <div style={{ display: 'inline-grid', gridTemplateColumns: `repeat(${n}, 60px)`, gap: 0, border: '2px solid var(--border)', borderRadius: '8px', overflow: 'hidden' }}>
             {Array.from({ length: n * n }, (_, i) => {
               const row = Math.floor(i / n); const col = i % n;
@@ -45,8 +45,8 @@ export default function NQueens() {
               else if (isBacktracking) bg = '#fee2e2';
               else if (hasQueen) bg = 'var(--purple)';
               return (
-                <div key={i} style={{ width: 60, height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', background: bg }}>
-                  {hasQueen && <span style={{ color: '#fff', fontSize: '1.5rem', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>♛</span>}
+                <div key={i} className="w-[60px] h-[60px] flex items-center justify-center" style={{ background: bg }}>
+                  {hasQueen && <span className="text-white text-[1.5rem]" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>♛</span>}
                 </div>
               );
             })}
@@ -54,13 +54,13 @@ export default function NQueens() {
         </div>
 
         {currentData.log && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Search log</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="bg-white border border-border rounded-[10px] px-5 py-4 flex flex-col overflow-hidden">
+            <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-2 flex-shrink-0">Search log</div>
+            <div ref={logRef} className="flex-1 overflow-y-auto flex flex-col gap-[3px]">
               {currentData.log.map((entry, i) => {
                 const isLast = i === currentData.log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="font-mono text-[0.625rem] px-2 py-[0.3rem] rounded" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>

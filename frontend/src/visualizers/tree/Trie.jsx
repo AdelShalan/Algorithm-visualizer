@@ -121,23 +121,23 @@ export default function Trie() {
   const isOnPath = (pos) => searchPath.length > pos.depth && searchPath[pos.depth] === pos.char;
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Input</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem', flexWrap: 'wrap' }}>
-          <input type="text" value={inputValue} onChange={e => setInputValue(e.target.value)} style={{ width: 110, padding: '.375rem .625rem', border: '1px solid var(--border)', borderRadius: '6px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.8125rem', color: 'var(--ink)', background: 'var(--bg)', outline: 'none' }} placeholder="Insert word" />
-          <button onClick={handleInsert} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: 'none', background: 'var(--purple)', color: '#fff', cursor: 'pointer', fontFamily: 'Instrument Sans, sans-serif' }}>Insert</button>
-          <input type="text" value={searchValue} onChange={e => setSearchValue(e.target.value)} style={{ width: 110, padding: '.375rem .625rem', border: '1px solid var(--border)', borderRadius: '6px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.8125rem', color: 'var(--ink)', background: 'var(--bg)', outline: 'none' }} placeholder="Search word" />
-          <button onClick={handleSearch} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: '1px solid var(--border)', background: 'var(--white)', color: 'var(--ink2)', cursor: 'pointer', fontFamily: 'Instrument Sans, sans-serif' }}>Search</button>
-          <div style={{ flex: 1 }} />
-          <button onClick={handleRandom} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: '1px solid var(--border)', background: 'var(--white)', color: 'var(--ink2)', cursor: 'pointer', fontFamily: 'Instrument Sans, sans-serif' }}>Random</button>
-          <button onClick={handleClear} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: '1px solid #fecdd3', background: '#fff1f2', color: '#e11d48', cursor: 'pointer', fontFamily: 'Instrument Sans, sans-serif' }}>Clear</button>
+    <div className="flex h-full flex-col gap-5">
+      <div className="rounded-[10px] border border-border bg-white p-5">
+        <div className="mb-3 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Input</div>
+        <div className="flex flex-wrap items-center gap-2">
+          <input type="text" value={inputValue} onChange={e => setInputValue(e.target.value)} className="w-[110px] rounded-md border border-border bg-bg px-2.5 py-1.5 font-mono text-[.8125rem] text-ink outline-none" placeholder="Insert word" />
+          <button onClick={handleInsert} className="cursor-pointer rounded-[5px] border-none bg-purple px-3 py-[.3rem] text-[.6875rem] font-body text-white">Insert</button>
+          <input type="text" value={searchValue} onChange={e => setSearchValue(e.target.value)} className="w-[110px] rounded-md border border-border bg-bg px-2.5 py-1.5 font-mono text-[.8125rem] text-ink outline-none" placeholder="Search word" />
+          <button onClick={handleSearch} className="cursor-pointer rounded-[5px] border border-border bg-white px-3 py-[.3rem] text-[.6875rem] font-body text-ink2">Search</button>
+          <div className="flex-1" />
+          <button onClick={handleRandom} className="cursor-pointer rounded-[5px] border border-border bg-white px-3 py-[.3rem] text-[.6875rem] font-body text-ink2">Random</button>
+          <button onClick={handleClear} className="cursor-pointer rounded-[5px] border border-[#fecdd3] bg-[#fff1f2] px-3 py-[.3rem] text-[.6875rem] font-body text-[#e11d48]">Clear</button>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-          <svg viewBox={viewBox} preserveAspectRatio="xMidYMid meet" style={{ width: '100%', height: '100%' }}>
+      <div className="grid min-h-0 flex-1 grid-cols-[1fr_280px] gap-5">
+        <div className="flex items-center justify-center overflow-hidden rounded-[10px] border border-border bg-white p-5">
+          <svg viewBox={viewBox} preserveAspectRatio="xMidYMid meet" className="h-full w-full">
             {edges.map((e, i) => {
               const onPath = searchPath.length > e.parentDepth && searchPath[e.parentDepth] === positions.find(p => p.x === e.x2 && p.y === e.y2)?.char;
               return <line key={i} x1={e.x1} y1={e.y1} x2={e.x2} y2={e.y2} stroke={onPath ? 'var(--purple)' : 'var(--border)'} strokeWidth={onPath ? 2 : 1.5} />;
@@ -160,13 +160,13 @@ export default function Trie() {
         </div>
 
         {log.length > 0 && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Operation log</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="flex flex-col overflow-hidden rounded-[10px] border border-border bg-white px-5 py-4">
+            <div className="mb-2 shrink-0 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Operation log</div>
+            <div ref={logRef} className="flex flex-1 flex-col gap-[3px] overflow-y-auto">
               {log.map((entry, i) => {
                 const isLast = i === log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="rounded px-2 py-[.3rem] font-mono text-[.625rem]" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>
@@ -175,15 +175,15 @@ export default function Trie() {
       </div>
 
       {found !== null && (
-        <div style={{ background: found ? '#f0fdf4' : '#fff1f2', border: `1px solid ${found ? '#86efac' : '#fecdd3'}`, borderRadius: '10px', padding: '.75rem 1.25rem', textAlign: 'center', fontFamily: 'Instrument Sans, sans-serif', fontSize: '.8125rem', fontWeight: 600, color: found ? '#15803d' : '#e11d48' }}>
+        <div className="rounded-[10px] px-5 py-3 text-center font-body text-[.8125rem] font-semibold" style={{ background: found ? '#f0fdf4' : '#fff1f2', border: `1px solid ${found ? '#86efac' : '#fecdd3'}`, color: found ? '#15803d' : '#e11d48' }}>
           "{searchValue}" {found ? 'found' : 'not found'} in trie
         </div>
       )}
 
       {words.length > 0 && (
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '.75rem 1.25rem', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '.75rem', fontWeight: 600, color: 'var(--muted)' }}>Words:</span>
-          {words.map((w, i) => <span key={i} style={{ padding: '.2rem .5rem', borderRadius: '4px', background: 'var(--bg)', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.6875rem', color: 'var(--ink2)', fontWeight: 500 }}>{w}</span>)}
+        <div className="flex flex-wrap items-center gap-2 rounded-[10px] border border-border bg-white px-5 py-3">
+          <span className="text-[.75rem] font-semibold text-muted">Words:</span>
+          {words.map((w, i) => <span key={i} className="rounded bg-bg px-2 py-0.5 font-mono text-[.6875rem] font-medium text-ink2">{w}</span>)}
         </div>
       )}
     </div>

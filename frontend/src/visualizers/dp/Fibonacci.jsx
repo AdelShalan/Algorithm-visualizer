@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAlgorithm } from '../../contexts/AlgorithmContext';
 import { generateSteps } from '../../algorithms/dp/fibonacci';
 
@@ -15,59 +15,59 @@ export default function Fibonacci() {
   useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [currentData.log]);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Input</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.8125rem', color: 'var(--ink2)' }}>n =</span>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '1rem', fontWeight: 500, color: 'var(--purple)' }}>{n}</span>
-            <button onClick={() => setN(p => Math.max(3, p - 1))} style={{ width: 28, height: 28, borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--white)', color: 'var(--ink2)', cursor: 'pointer', fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
-            <button onClick={() => setN(p => Math.min(15, p + 1))} style={{ width: 28, height: 28, borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--white)', color: 'var(--ink2)', cursor: 'pointer', fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
+    <div className="h-full flex flex-col gap-5">
+      <div className="bg-white border border-border rounded-[10px] px-5 py-4">
+        <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-3">Input</div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[0.8125rem] text-ink2">n =</span>
+            <span className="font-mono text-base font-medium text-purple">{n}</span>
+            <button onClick={() => setN(p => Math.max(3, p - 1))} className="w-7 h-7 rounded-md border border-border bg-white text-ink2 cursor-pointer text-[14px] flex items-center justify-center">−</button>
+            <button onClick={() => setN(p => Math.min(15, p + 1))} className="w-7 h-7 rounded-md border border-border bg-white text-ink2 cursor-pointer text-[14px] flex items-center justify-center">+</button>
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-          <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '.8125rem', color: 'var(--ink)', marginBottom: '.75rem' }}>Recursion Tree</div>
-          <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+      <div className="grid grid-cols-[1fr_280px] gap-5 flex-1 min-h-0">
+        <div className="bg-white border border-border rounded-[10px] p-5 flex flex-col overflow-hidden">
+          <div className="font-heading font-bold text-[0.8125rem] text-ink mb-3">Recursion Tree</div>
+          <div className="flex-1 overflow-y-auto flex flex-col gap-[2px]">
             {steps.slice(0, currentStep + 1).map((step, i) => {
               const isCurrent = i === currentStep;
               const color = step.type === 'base' ? '#22c55e' : step.type === 'memo-hit' ? 'var(--amber)' : step.type === 'compute' ? 'var(--purple)' : step.type === 'complete' ? '#22c55e' : '#8b5cf6';
               return (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '.25rem .5rem', borderRadius: '5px', background: isCurrent ? 'var(--purple-light)' : 'transparent', paddingLeft: `${(step.depth ?? 0) * 20 + 8}px` }}>
-                  <div style={{ width: 6, height: 6, borderRadius: '50%', flexShrink: 0, background: color }} />
-                  <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.6875rem', color: 'var(--ink2)' }}>
-                    fib({step.i}){step.value !== undefined && <span style={{ color: 'var(--muted)' }}> → {step.value}</span>}
+                <div key={i} className="flex items-center gap-2 px-2 py-1 rounded-[5px]" style={{ background: isCurrent ? 'var(--purple-light)' : 'transparent', paddingLeft: `${(step.depth ?? 0) * 20 + 8}px` }}>
+                  <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
+                  <span className="font-mono text-[0.6875rem] text-ink2">
+                    fib({step.i}){step.value !== undefined && <span className="text-muted"> → {step.value}</span>}
                   </span>
-                  {step.type === 'memo-hit' && <span style={{ fontSize: '.625rem', color: 'var(--amber)', fontWeight: 500 }}>(cached)</span>}
+                  {step.type === 'memo-hit' && <span className="text-[0.625rem] text-amber font-medium">(cached)</span>}
                 </div>
               );
             })}
           </div>
         </div>
 
-        <div style={{ width: 180, display: 'flex', flexDirection: 'column' }}>
-          <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '.8125rem', color: 'var(--ink)', marginBottom: '.75rem' }}>Memo Table</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <div className="w-[180px] flex flex-col">
+          <div className="font-heading font-bold text-[0.8125rem] text-ink mb-3">Memo Table</div>
+          <div className="flex flex-col gap-1">
             {Object.entries(currentData.memo ?? {}).map(([k, v]) => (
-              <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '.375rem .5rem', borderRadius: '6px', background: 'var(--bg)' }}>
-                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.6875rem', color: 'var(--ink2)' }}>fib({k})</span>
-                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.6875rem', fontWeight: 700, color: 'var(--purple)' }}>{v}</span>
+              <div key={k} className="flex justify-between px-2 py-1.5 rounded-md bg-bg">
+                <span className="font-mono text-[0.6875rem] text-ink2">fib({k})</span>
+                <span className="font-mono text-[0.6875rem] font-bold text-purple">{v}</span>
               </div>
             ))}
           </div>
         </div>
 
         {currentData.log && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Execution trace</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="bg-white border border-border rounded-[10px] px-5 py-4 flex flex-col overflow-hidden">
+            <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-2 flex-shrink-0">Execution trace</div>
+            <div ref={logRef} className="flex-1 overflow-y-auto flex flex-col gap-[3px]">
               {currentData.log.map((entry, i) => {
                 const isLast = i === currentData.log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="font-mono text-[0.625rem] px-2 py-[0.3rem] rounded" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>

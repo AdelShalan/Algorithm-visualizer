@@ -15,39 +15,39 @@ export default function Permutations() {
   useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [currentData.log]);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Input</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.8125rem', color: 'var(--ink2)' }}>N =</span>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '1rem', fontWeight: 500, color: 'var(--purple)' }}>{n}</span>
-            <button onClick={() => setN(p => Math.max(2, p - 1))} style={{ width: 28, height: 28, borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--white)', color: 'var(--ink2)', cursor: 'pointer', fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
-            <button onClick={() => setN(p => Math.min(6, p + 1))} style={{ width: 28, height: 28, borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--white)', color: 'var(--ink2)', cursor: 'pointer', fontSize: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
+    <div className="h-full flex flex-col gap-5">
+      <div className="bg-white border border-border rounded-[10px] px-5 py-4">
+        <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-3">Input</div>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[0.8125rem] text-ink2">N =</span>
+            <span className="font-mono text-base font-medium text-purple">{n}</span>
+            <button onClick={() => setN(p => Math.max(2, p - 1))} className="w-7 h-7 rounded-md border border-border bg-white text-ink2 cursor-pointer text-[14px] flex items-center justify-center">−</button>
+            <button onClick={() => setN(p => Math.min(6, p + 1))} className="w-7 h-7 rounded-md border border-border bg-white text-ink2 cursor-pointer text-[14px] flex items-center justify-center">+</button>
           </div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', gap: '1.5rem', overflow: 'hidden' }}>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '.8125rem', color: 'var(--ink)', marginBottom: '.75rem' }}>Building permutations</div>
-            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+      <div className="grid grid-cols-[1fr_280px] gap-5 flex-1 min-h-0">
+        <div className="bg-white border border-border rounded-[10px] p-5 flex gap-6 overflow-hidden">
+          <div className="flex-1">
+            <div className="font-heading font-bold text-[0.8125rem] text-ink mb-3">Building permutations</div>
+            <div className="flex gap-1.5 flex-wrap">
               {currentData.current.map((val, i) => (
-                <span key={i} style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--purple)', color: '#fff', borderRadius: '8px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', fontWeight: 700 }}>{val}</span>
+                <span key={i} className="w-9 h-9 flex items-center justify-center bg-purple text-white rounded-lg font-mono text-[0.75rem] font-bold">{val}</span>
               ))}
               {currentData.remaining.map((val, i) => (
-                <span key={`r-${i}`} style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', color: 'var(--muted)', borderRadius: '8px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.75rem', fontWeight: 600 }}>{val}</span>
+                <span key={`r-${i}`} className="w-9 h-9 flex items-center justify-center bg-bg text-muted rounded-lg font-mono text-[0.75rem] font-semibold">{val}</span>
               ))}
             </div>
           </div>
 
-          <div style={{ width: 220, overflowY: 'auto' }}>
-            <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '.8125rem', color: 'var(--ink)', marginBottom: '.75rem' }}>Permutations ({currentData.perms?.length ?? 0})</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <div className="w-[220px] overflow-y-auto">
+            <div className="font-heading font-bold text-[0.8125rem] text-ink mb-3">Permutations ({currentData.perms?.length ?? 0})</div>
+            <div className="flex flex-col gap-1">
               {currentData.perms?.map((perm, i) => (
-                <div key={i} style={{ display: 'flex', gap: '4px', padding: '.375rem .5rem', background: 'var(--bg)', borderRadius: '6px' }}>
-                  {perm.map((val, j) => <span key={j} style={{ width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f0fdf4', color: '#15803d', borderRadius: '4px', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', fontWeight: 700 }}>{val}</span>)}
+                <div key={i} className="flex gap-1 px-2 py-1.5 bg-bg rounded-md">
+                  {perm.map((val, j) => <span key={j} className="w-7 h-7 flex items-center justify-center bg-green-50 text-green-700 rounded font-mono text-[0.625rem] font-bold">{val}</span>)}
                 </div>
               ))}
             </div>
@@ -55,13 +55,13 @@ export default function Permutations() {
         </div>
 
         {currentData.log && (
-          <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Search log</div>
-            <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+          <div className="bg-white border border-border rounded-[10px] px-5 py-4 flex flex-col overflow-hidden">
+            <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-2 flex-shrink-0">Search log</div>
+            <div ref={logRef} className="flex-1 overflow-y-auto flex flex-col gap-[3px]">
               {currentData.log.map((entry, i) => {
                 const isLast = i === currentData.log.length - 1;
                 return (
-                  <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  <div key={i} className="font-mono text-[0.625rem] px-2 py-[0.3rem] rounded" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                 );
               })}
             </div>

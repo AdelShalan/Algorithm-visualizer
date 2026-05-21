@@ -37,88 +37,64 @@ export default function Landing() {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)' }}>
-        <div style={{ textAlign: 'center', color: 'var(--muted)' }}>Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-bg">
+        <div className="text-center text-muted">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg)' }}>
+    <div className="min-h-screen flex flex-col bg-bg">
       <Nav />
 
       {/* Main content (pushes footer down) */}
-      <div style={{ flex: 1 }}>
+      <div className="flex-1">
       {/* Hero */}
-      <div style={{
-        padding: '5rem 2.5rem 4rem', background: 'var(--white)',
-        borderBottom: '1px solid var(--border)', position: 'relative', overflow: 'hidden',
-      }}>
+      <div className="px-[2.5rem] pt-[5rem] pb-[4rem] bg-white border-b border-border relative overflow-hidden">
         {/* Dot grid background */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)',
-          backgroundSize: '32px 32px', opacity: 0.4, pointerEvents: 'none',
-        }} />
+        <div
+          className="absolute inset-0 opacity-40 pointer-events-none"
+          style={{
+            backgroundImage: 'linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)',
+            backgroundSize: '32px 32px',
+          }}
+        />
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 420px', gap: '3rem', alignItems: 'center', maxWidth: '1100px', position: 'relative' }}>
+        <div className="grid grid-cols-[1fr_420px] gap-12 items-center max-w-[1100px] relative">
           <div>
             {/* Badge */}
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.375rem',
-              background: 'var(--purple-light)', color: 'var(--purple)',
-              fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', fontWeight: 500,
-              padding: '0.3125rem 0.875rem', borderRadius: '999px', marginBottom: '1.5rem',
-              letterSpacing: '0.02em',
-            }}>
-              <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--purple)', display: 'inline-block' }} />
+            <div className="inline-flex items-center gap-1.5 bg-purple-light text-purple font-mono text-[0.6875rem] font-medium px-[0.875rem] py-[0.3125rem] rounded-full mb-6 tracking-[0.02em]">
+              <span className="w-[5px] h-[5px] rounded-full bg-purple inline-block" />
               Interactive algorithm learning
             </div>
 
-            <h1 style={{
-              fontFamily: 'Syne, sans-serif', fontWeight: 800,
-              fontSize: 'clamp(2.5rem, 4vw, 3.625rem)', lineHeight: 1.05,
-              letterSpacing: '-0.03em', color: 'var(--ink)', marginBottom: '1.25rem',
-            }}>
+            <h1 className="font-heading font-extrabold text-[clamp(2.5rem,4vw,3.625rem)] leading-[1.05] tracking-[-0.03em] text-ink mb-5">
               Algorithms click<br />
-              <span style={{ color: 'var(--purple)' }}>when you see them.</span>
+              <span className="text-purple">when you see them.</span>
             </h1>
 
-            <p style={{ color: 'var(--ink2)', fontSize: '1rem', lineHeight: 1.7, maxWidth: '480px', marginBottom: '2.25rem' }}>
+            <p className="text-ink2 text-[1rem] leading-[1.7] max-w-[480px] mb-[2.25rem]">
               Step through sorting, graphs, DP, and more — frame by frame. Watch the call stack, memo table, and data structures update in real time.
             </p>
 
-            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-              <Link to="/algorithms" style={{
-                background: 'var(--purple)', color: '#fff', fontSize: '0.9375rem',
-                fontWeight: 500, padding: '0.75rem 2rem', borderRadius: '8px',
-                border: 'none', cursor: 'pointer', fontFamily: 'Instrument Sans, sans-serif',
-                textDecoration: 'none', display: 'inline-block',
-              }}>
+            <div className="flex gap-3 items-center flex-wrap">
+              <Link to="/algorithms" className="bg-purple text-white text-[0.9375rem] font-medium px-8 py-3 rounded-lg border-none cursor-pointer font-body no-underline inline-block">
                 Explore algorithms →
               </Link>
-              <Link to={`/sorting/bubble-sort`} style={{
-                background: 'transparent', color: 'var(--ink)', fontSize: '0.9375rem',
-                fontWeight: 500, padding: '0.75rem 1.5rem', borderRadius: '8px',
-                border: '1px solid var(--border)', cursor: 'pointer',
-                fontFamily: 'Instrument Sans, sans-serif', textDecoration: 'none', display: 'inline-block',
-              }}>
+              <Link to={`/sorting/bubble-sort`} className="bg-transparent text-ink text-[0.9375rem] font-medium px-6 py-3 rounded-lg border border-border cursor-pointer font-body no-underline inline-block">
                 Watch a demo
               </Link>
             </div>
 
-            <div style={{
-              display: 'flex', gap: '2rem', marginTop: '3rem',
-              paddingTop: '2rem', borderTop: '1px solid var(--border)',
-            }}>
+            <div className="flex gap-8 mt-12 pt-8 border-t border-border">
               {[
                 { val: totalAlgorithms + '+', label: 'algorithms' },
                 { val: categories.length, label: 'categories' },
                 { val: 'Free', label: 'to start' },
               ].map(s => (
                 <div key={s.label}>
-                  <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1.375rem', color: 'var(--ink)', marginBottom: '0.125rem' }}>{s.val}</div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>{s.label}</div>
+                  <div className="font-heading font-bold text-[1.375rem] text-ink mb-0.5">{s.val}</div>
+                  <div className="text-[0.75rem] text-muted">{s.label}</div>
                 </div>
               ))}
             </div>
@@ -130,18 +106,18 @@ export default function Landing() {
       </div>
 
       {/* Category cards */}
-      <div style={{ padding: '3rem 2.5rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '1.25rem' }}>
+      <div className="px-[2.5rem] py-12">
+        <div className="font-mono text-[0.6875rem] text-muted tracking-[0.08em] uppercase mb-5">
           Browse by category
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+        <div className="grid grid-cols-4 gap-3">
           {featuredCategories.map(cat => {
             const catData = categories.find(c => c.id === cat.id);
             return (
               <Link
                 key={cat.id}
                 to={`/algorithms?category=${cat.id}`}
-                style={{ textDecoration: 'none', display: 'block' }}
+                className="no-underline block"
               >
                 <CategoryCard cat={cat} count={catData?.algorithms.length || 0} borderColor={cat.borderColor} />
               </Link>
@@ -152,19 +128,16 @@ export default function Landing() {
       </div>
 
       {/* How it works */}
-      <div style={{
-        background: 'var(--ink)', display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-      }}>
+      <div className="bg-ink grid grid-cols-3">
         {[
           { num: '01', title: 'Pick an algorithm', desc: 'Choose from ' + categories.length + ' categories — organized by concept and complexity.' },
           { num: '02', title: 'Step through it', desc: 'Frame-by-frame control. See data structures update live at each step.' },
           { num: '03', title: 'Change the input', desc: 'Adjust size, values, or mode — watch complexity change in real time.' },
         ].map((item, i) => (
-          <div key={i} style={{ padding: '2rem', borderRight: i < 2 ? '1px solid #2a2a28' : 'none' }}>
-            <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', color: '#5a5955', marginBottom: '1.25rem' }}>{item.num}</div>
-            <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1.125rem', color: '#f7f5f0', marginBottom: '0.5rem' }}>{item.title}</div>
-            <div style={{ fontSize: '0.8125rem', color: '#6b6965', lineHeight: 1.65 }}>{item.desc}</div>
+          <div key={i} className="p-8" style={{ borderRight: i < 2 ? '1px solid #2a2a28' : 'none' }}>
+            <div className="font-mono text-[0.6875rem] text-[#5a5955] mb-5">{item.num}</div>
+            <div className="font-heading font-bold text-[1.125rem] text-[#f7f5f0] mb-2">{item.title}</div>
+            <div className="text-[0.8125rem] text-[#6b6965] leading-[1.65]">{item.desc}</div>
           </div>
         ))}
       </div>
@@ -178,29 +151,25 @@ function CategoryCard({ cat, count, borderColor }) {
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      className="bg-white rounded-xl p-5 cursor-pointer relative overflow-hidden transition-all duration-200"
       style={{
-        background: 'var(--white)', border: hovered ? `1px solid ${borderColor}` : '1px solid var(--border)',
-        borderRadius: '12px', padding: '1.25rem', cursor: 'pointer',
+        border: hovered ? `1px solid ${borderColor}` : '1px solid var(--border)',
         transform: hovered ? 'translateY(-2px)' : 'none',
-        transition: 'all 0.2s', position: 'relative', overflow: 'hidden',
       }}
     >
-      <div style={{
-        position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
-        borderRadius: '12px 12px 0 0', background: borderColor,
-        opacity: hovered ? 1 : 0, transition: 'opacity 0.2s',
-      }} />
-      <div style={{
-        display: 'inline-block', fontFamily: 'IBM Plex Mono, monospace',
-        fontSize: '0.625rem', padding: '0.2rem 0.6rem', borderRadius: '4px',
-        marginBottom: '0.875rem', fontWeight: 500,
-        background: cat.chipBg, color: cat.chipColor,
-      }}>{cat.chip}</div>
-      <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '1rem', color: 'var(--ink)', marginBottom: '0.25rem' }}>{cat.name}</div>
-      <div style={{ fontSize: '0.75rem', color: 'var(--muted)', lineHeight: 1.5 }}>{cat.desc}</div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.875rem', paddingTop: '0.875rem', borderTop: '1px solid var(--border)' }}>
-        <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.625rem', color: 'var(--muted)' }}>{count} algorithms</span>
-        <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>→</span>
+      <div
+        className="absolute top-0 left-0 right-0 h-[3px] rounded-t-xl transition-opacity duration-200"
+        style={{ background: borderColor, opacity: hovered ? 1 : 0 }}
+      />
+      <div
+        className="inline-block font-mono text-[0.625rem] px-[0.6rem] py-[0.2rem] rounded mb-[0.875rem] font-medium"
+        style={{ background: cat.chipBg, color: cat.chipColor }}
+      >{cat.chip}</div>
+      <div className="font-heading font-bold text-[1rem] text-ink mb-1">{cat.name}</div>
+      <div className="text-[0.75rem] text-muted leading-[1.5]">{cat.desc}</div>
+      <div className="flex items-center justify-between mt-[0.875rem] pt-[0.875rem] border-t border-border">
+        <span className="font-mono text-[0.625rem] text-muted">{count} algorithms</span>
+        <span className="text-[0.75rem] text-muted">→</span>
       </div>
     </div>
   );
@@ -232,7 +201,7 @@ function DemoCard() {
         { h: 80, state: 'active' }, { h: 60, state: 'default' }, { h: 95, state: 'default' },
         { h: 70, state: 'default' }, { h: 40, state: 'default' },
       ],
-      log: <>Comparing <span style={{ color: 'var(--purple)', fontWeight: 500 }}>arr[2]=45</span> and <span style={{ color: 'var(--purple)', fontWeight: 500 }}>arr[3]=80</span> — no swap needed.</>,
+      log: <>Comparing <span className="text-purple font-medium">arr[2]=45</span> and <span className="text-purple font-medium">arr[3]=80</span> — no swap needed.</>,
       stats: { step: '4', comparisons: '3', swaps: '1' },
       statLabels: ['step', 'comparisons', 'swaps'],
     },
@@ -283,20 +252,18 @@ function DemoCard() {
   ];
 
   return (
-    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '16px', overflow: 'hidden' }}>
-      <div style={{ padding: '0.875rem 1rem', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', color: 'var(--muted)' }}>{cards[active].label}</span>
-        <div style={{ display: 'flex', gap: '6px' }}>
+    <div className="bg-surface border border-border rounded-2xl overflow-hidden">
+      <div className="px-4 py-[0.875rem] border-b border-border flex items-center justify-between">
+        <span className="font-mono text-[0.6875rem] text-muted">{cards[active].label}</span>
+        <div className="flex gap-[6px]">
           {cards.map((c, i) => (
             <button
               key={i}
               onClick={() => handleDotClick(i)}
+              className="w-[7px] h-[7px] rounded-full border-none p-0 cursor-pointer transition-all duration-300"
               style={{
-                width: 7, height: 7, borderRadius: '50%',
                 background: i === active ? 'var(--purple)' : '#e2dfd8',
                 opacity: i === active ? 0.8 : 1,
-                border: 'none', padding: 0, cursor: 'pointer',
-                transition: 'all 0.3s',
               }}
             />
           ))}
@@ -304,21 +271,21 @@ function DemoCard() {
       </div>
 
       {/* Slider viewport */}
-      <div style={{ overflow: 'hidden' }}>
-        <div style={{
-          display: 'flex',
-          width: `${cards.length * 100}%`,
-          transform: `translateX(-${active * (100 / cards.length)}%)`,
-          transition: 'transform 0.5s ease',
-        }}>
+      <div className="overflow-hidden">
+        <div
+          className="flex transition-transform duration-500 ease"
+          style={{
+            width: `${cards.length * 100}%`,
+            transform: `translateX(-${active * (100 / cards.length)}%)`,
+          }}
+        >
           {cards.map((card) => (
             <div key={card.id} style={{ width: `${100 / cards.length}%`, flexShrink: 0 }}>
-              <div style={{ padding: '1.5rem 1rem' }}>
+              <div className="px-4 pt-6 pb-4">
                 {card.type === 'bars' ? (
-                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: '5px', height: '120px', paddingBottom: '4px', marginBottom: '1rem' }}>
+                  <div className="flex items-end gap-[5px] h-[120px] pb-1 mb-4">
                     {card.bars.map((bar, i) => (
-                      <div key={i} style={{
-                        flex: 1, borderRadius: '3px 3px 0 0',
+                      <div key={i} className="flex-1 rounded-t-[3px]" style={{
                         height: `${bar.h}px`,
                         background: bar.state === 'sorted' ? '#86efac'
                           : bar.state === 'active' ? 'var(--purple)'
@@ -328,8 +295,8 @@ function DemoCard() {
                     ))}
                   </div>
                 ) : (
-                  <div style={{ height: '120px', marginBottom: '1rem', position: 'relative' }}>
-                    <svg width="100%" height="100%" viewBox="0 0 400 130" style={{ overflow: 'visible' }}>
+                  <div className="h-[120px] mb-4 relative">
+                    <svg width="100%" height="100%" viewBox="0 0 400 130" className="overflow-visible">
                       {card.edges.map((edge, i) => {
                         const fromNode = card.nodes.find(n => n.id === edge.from);
                         const toNode = card.nodes.find(n => n.id === edge.to);
@@ -346,7 +313,8 @@ function DemoCard() {
                               x={(fromNode.x + toNode.x) / 2}
                               y={(fromNode.y + toNode.y) / 2 - 6}
                               textAnchor="middle"
-                              style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.55rem', fill: edge.relaxing ? 'var(--purple)' : 'var(--muted)', fontWeight: edge.relaxing ? 600 : 400 }}
+                              className="font-mono text-[0.55rem]"
+                              style={{ fill: edge.relaxing ? 'var(--purple)' : 'var(--muted)', fontWeight: edge.relaxing ? 600 : 400 }}
                             >{edge.w}</text>
                           </g>
                         );
@@ -362,13 +330,15 @@ function DemoCard() {
                           <text
                             x={node.x} y={node.y + 1}
                             textAnchor="middle" dominantBaseline="central"
-                            style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.625rem', fontWeight: 600, fill: node.default ? 'var(--ink2)' : '#fff' }}
+                            className="font-mono text-[0.625rem] font-semibold"
+                            style={{ fill: node.default ? 'var(--ink2)' : '#fff' }}
                           >{node.id}</text>
                           {node.dist !== Infinity && (
                             <text
                               x={node.x} y={node.y + 22}
                               textAnchor="middle"
-                              style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.5rem', fill: node.visited ? '#15803d' : node.active ? 'var(--purple)' : 'var(--muted)' }}
+                              className="font-mono text-[0.5rem]"
+                              style={{ fill: node.visited ? '#15803d' : node.active ? 'var(--purple)' : 'var(--muted)' }}
                             >{node.dist === 0 ? '0' : node.dist}</text>
                           )}
                         </g>
@@ -376,9 +346,9 @@ function DemoCard() {
                     </svg>
                   </div>
                 )}
-                <div style={{ borderTop: '1px solid var(--border)', paddingTop: '0.75rem' }}>
-                  <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.5625rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.375rem' }}>Step log</div>
-                  <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.6875rem', color: 'var(--ink2)', lineHeight: 1.5 }}>
+                <div className="border-t border-border pt-3">
+                  <div className="font-mono text-[0.5625rem] text-muted uppercase tracking-[0.08em] mb-1.5">Step log</div>
+                  <div className="font-mono text-[0.6875rem] text-ink2 leading-[1.5]">
                     {card.log}
                   </div>
                 </div>
@@ -388,9 +358,9 @@ function DemoCard() {
         </div>
       </div>
 
-      <div style={{ padding: '0.625rem 1rem', borderTop: '1px solid var(--border)', background: 'var(--white)', display: 'flex', gap: '0.75rem', fontFamily: 'IBM Plex Mono, monospace', fontSize: '0.625rem', color: 'var(--muted)' }}>
+      <div className="px-4 py-[0.625rem] border-t border-border bg-white flex gap-3 font-mono text-[0.625rem] text-muted">
         {cards[active].statLabels.map((label, i) => (
-          <span key={i}>{label}: <span style={{ color: 'var(--purple)' }}>{Object.values(cards[active].stats)[i]}</span></span>
+          <span key={i}>{label}: <span className="text-purple">{Object.values(cards[active].stats)[i]}</span></span>
         ))}
       </div>
     </div>

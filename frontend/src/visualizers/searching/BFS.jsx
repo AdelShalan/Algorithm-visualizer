@@ -35,25 +35,25 @@ export default function BFS() {
   }, [currentData.log]);
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem' }}>
-        <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.75rem' }}>Graph</div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.8125rem', color: 'var(--ink2)' }}>Start:</span>
-            <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '1rem', fontWeight: 500, color: 'var(--purple)' }}>{startNode}</span>
+    <div className="h-full flex flex-col gap-5">
+      <div className="bg-white border border-border rounded-[10px] px-5 py-4">
+        <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-3">Graph</div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[0.8125rem] text-ink2">Start:</span>
+            <span className="font-mono text-base font-medium text-purple">{startNode}</span>
           </div>
-          <div style={{ flex: 1 }} />
-          <button onClick={handleNewGraph} style={{ padding: '.3rem .75rem', fontSize: '.6875rem', borderRadius: '5px', border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--ink2)', fontFamily: 'Instrument Sans, sans-serif' }}>New Graph</button>
-          <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', color: 'var(--muted)' }}>Click a node to set start</span>
+          <div className="flex-1" />
+          <button onClick={handleNewGraph} className="px-3 py-1 text-[0.6875rem] rounded-sm border border-border bg-transparent cursor-pointer text-ink2 font-body">New Graph</button>
+          <span className="font-mono text-[0.625rem] text-muted">Click a node to set start</span>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '1.25rem', flex: 1, minHeight: 0 }}>
-        <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-          <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '1rem', flexShrink: 0 }}>BFS traversal</div>
-          <div style={{ flex: 1, minHeight: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg ref={svgRef} viewBox={`0 0 ${CANVAS_SIZE} ${CANVAS_SIZE}`} style={{ width: '100%', height: '100%' }}>
+      <div className="grid grid-cols-[1fr_280px] gap-5 flex-1 min-h-0">
+        <div className="bg-white border border-border rounded-[10px] p-5 flex flex-col overflow-hidden">
+          <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-4 flex-shrink-0">BFS traversal</div>
+          <div className="flex-1 min-h-0 flex items-center justify-center">
+            <svg ref={svgRef} viewBox={`0 0 ${CANVAS_SIZE} ${CANVAS_SIZE}`} className="w-full h-full">
               {graph.edges.map((edge, i) => {
                 const from = graph.nodes[edge.from]; const to = graph.nodes[edge.to];
                 const isExplored = currentData.type === 'explore' && ((currentData.from === edge.from && currentData.to === edge.to) || (currentData.from === edge.to && currentData.to === edge.from));
@@ -82,15 +82,15 @@ export default function BFS() {
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', overflow: 'hidden' }}>
+        <div className="flex flex-col gap-5 overflow-hidden">
           {currentData.log && (
-            <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', overflow: 'hidden', flex: 1 }}>
-              <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.5625rem', letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '.5rem', flexShrink: 0 }}>Traversal log</div>
-              <div ref={logRef} style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+            <div className="bg-white border border-border rounded-[10px] px-4 py-3 flex flex-col overflow-hidden flex-1">
+              <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-2 flex-shrink-0">Traversal log</div>
+              <div ref={logRef} className="flex-1 overflow-y-auto flex flex-col gap-[3px]">
                 {currentData.log.map((entry, i) => {
                   const isLast = i === currentData.log.length - 1;
                   return (
-                    <div key={i} style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', padding: '.3rem .5rem', borderRadius: '4px', color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                    <div key={i} className="font-mono text-[0.625rem] px-2 py-1 rounded-sm" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
                   );
                 })}
               </div>
@@ -98,11 +98,11 @@ export default function BFS() {
           )}
 
           {currentData.queue && currentData.queue.length > 0 && (
-            <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: '10px', padding: '.75rem 1.25rem', display: 'flex', alignItems: 'center', gap: '.75rem' }}>
-              <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: '.625rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.06em' }}>Queue</span>
-              <div style={{ display: 'flex', gap: '4px' }}>
+            <div className="bg-white border border-border rounded-[10px] px-5 py-3 flex items-center gap-3">
+              <span className="font-mono text-[0.625rem] text-muted uppercase tracking-[0.06em]">Queue</span>
+              <div className="flex gap-1">
                 {currentData.queue.map((n, i) => (
-                  <span key={i} style={{ padding: '.2rem .5rem', borderRadius: '4px', background: 'var(--purple-light)', color: 'var(--purple)', fontFamily: 'IBM Plex Mono, monospace', fontSize: '.6875rem', fontWeight: 500 }}>{n}</span>
+                  <span key={i} className="px-2 py-1 rounded-sm bg-purple-light text-purple font-mono text-[0.6875rem] font-medium">{n}</span>
                 ))}
               </div>
             </div>
