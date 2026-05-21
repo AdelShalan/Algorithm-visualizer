@@ -47,7 +47,7 @@ export default function AVL() {
     const val = parseInt(inputValue);
     if (isNaN(val)) return;
     const result = insert(root, val);
-    setRoot(result.node); setSteps(result.steps); setInputValue('');
+    setRoot(result.node); setSteps(prev => [...prev, ...result.steps]); setInputValue('');
   }, [root, inputValue, insert]);
 
   const handleClear = useCallback(() => { setRoot(null); setSteps([]); }, []);
