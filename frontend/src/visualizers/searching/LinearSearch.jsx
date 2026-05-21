@@ -1,30 +1,13 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAlgorithm } from '../../contexts/AlgorithmContext';
 import { generateRandomArray } from '../../utils/helpers';
+import { generateSteps } from '../../algorithms/searching/LinearSearch';
 
 export default function LinearSearch() {
   const { startAnimation, setGenerator } = useAlgorithm();
   const [size, setSize] = useState(25);
   const [array, setArray] = useState(() => generateRandomArray(25, 1, 100));
   const [target, setTarget] = useState(42);
-
-  const generateSteps = useCallback((arr, tgt) => {
-    const steps = [];
-    const log = [];
-    log.push(`Searching for ${tgt} in array of ${arr.length} elements`);
-    for (let i = 0; i < arr.length; i++) {
-      log.push(`Checking arr[${i}] = ${arr[i]} — ${arr[i] === tgt ? 'found!' : 'not a match'}`);
-      steps.push({ type: 'check', index: i, array: [...arr], found: arr[i] === tgt, log: [...log] });
-      if (arr[i] === tgt) {
-        log.push(`Target ${tgt} found at index ${i} ✓`);
-        steps.push({ type: 'found', index: i, array: [...arr], log: [...log] });
-        return steps;
-      }
-    }
-    log.push(`Target ${tgt} not found in array`);
-    steps.push({ type: 'not-found', array: [...arr], log: [...log] });
-    return steps;
-  }, []);
 
   const handleRun = useCallback(() => {
     startAnimation(generateSteps(array, target));

@@ -1,41 +1,12 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAlgorithm } from '../../contexts/AlgorithmContext';
+import { generateSteps } from '../../algorithms/backtracking/n-queens.js';
 
 export default function NQueens() {
   const { setGenerator } = useAlgorithm();
   const [n, setN] = useState(4);
 
-  const createGenerator = useCallback((size) => {
-    return function* () {
-      const log = [];
-      const board = Array(size).fill(-1);
-      function isValid(row, col) {
-        for (let r = 0; r < row; r++) {
-          const c = board[r];
-          if (c === col || Math.abs(c - col) === Math.abs(r - row)) return false;
-        }
-        return true;
-      }
-      function* solve(row) {
-        if (row === size) { log.push(`Solution found!`); yield { type: 'solution', board: [...board], log: [...log] }; return true; }
-        for (let col = 0; col < size; col++) {
-          log.push(`Try queen at (${row}, ${col})`);
-          yield { type: 'try', row, col, board: [...board], log: [...log] };
-          if (isValid(row, col)) {
-            board[row] = col; log.push(`Place queen at (${row}, ${col})`); yield { type: 'place', row, col, board: [...board], log: [...log] };
-            if (yield* solve(row + 1)) return true;
-            board[row] = -1; log.push(`Backtrack from row ${row}`); yield { type: 'backtrack', row, col, board: [...board], log: [...log] };
-          } else { log.push(`Conflict at (${row}, ${col})`); yield { type: 'conflict', row, col, board: [...board], log: [...log] }; }
-        }
-        return false;
-      }
-      yield* solve(0);
-      log.push(`Search complete`);
-      yield { type: 'done', board: [...board], log: [...log] };
-    };
-  }, []);
-
-  useEffect(() => { setGenerator(() => createGenerator(n)()); }, [n, createGenerator, setGenerator]);
+  useEffect(() => { setGenerator(() => generateSteps(n)); }, [n, setGenerator]);
 
   const { currentStep, steps } = useAlgorithm();
   const currentData = steps?.[currentStep] || { type: 'idle', board: Array(n).fill(-1), log: [] };

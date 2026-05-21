@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAlgorithm } from '../../contexts/AlgorithmContext';
+import { generateSteps } from '../../algorithms/constraint-propagation/sudoku-constraint-propagation.js';
 
 function shuffle(arr) {
   const a = [...arr];
@@ -44,206 +45,15 @@ function generatePuzzle(clues = 35) {
   return puzzle;
 }
 
-function getPeers(row, col) {
-  const peers = [];
-  for (let i = 0; i < 9; i++) {
-    if (i !== col) peers.push([row, i]);
-    if (i !== row) peers.push([i, col]);
-  }
-  const br = Math.floor(row / 3) * 3;
-  const bc = Math.floor(col / 3) * 3;
-  for (let r = br; r < br + 3; r++) {
-    for (let c = bc; c < bc + 3; c++) {
-      if (r !== row || c !== col) peers.push([r, c]);
-    }
-  }
-  return peers;
-}
-
-function cloneCandidates(cands) {
-  return cands.map(row => row.map(set => new Set(set)));
-}
-
-function cloneBoard(b) {
-  return b.map(r => [...r]);
-}
-
 export default function SudokuConstraintPropagation() {
   const { setGenerator, resetAnimation } = useAlgorithm();
   const [puzzle, setPuzzle] = useState(() => generatePuzzle(35));
   const [puzzleKey, setPuzzleKey] = useState(0);
 
-  const createGenerator = useCallback((p) => {
-    return function* () {
-      const log = [];
-
-      // Initialize board and candidates
-      const board = p.map(r => [...r]);
-      const candidates = Array.from({ length: 9 }, () =>
-        Array.from({ length: 9 }, () => new Set([1, 2, 3, 4, 5, 6, 7, 8, 9]))
-      );
-      for (let r = 0; r < 9; r++) {
-        for (let c = 0; c < 9; c++) {
-          if (p[r][c] !== 0) {
-            candidates[r][c] = new Set([p[r][c]]);
-          }
-        }
-      }
-
-      // Helper: eliminate a value from a cell's candidates
-      function* eliminate(cands, row, col, val, sourceRow, sourceCol) {
-        if (cands[row][col].has(val)) {
-          cands[row][col].delete(val);
-          log.push(`Eliminate ${val} from (${row}, ${col})`);
-          yield {
-            type: 'eliminate', row, col, num: val,
-            sourceRow, sourceCol,
-            board: cloneBoard(board),
-            candidates: cloneCandidates(cands),
-            log: [...log],
-          };
-          if (cands[row][col].size === 0) {
-            log.push(`Contradiction at (${row}, ${col})`);
-            yield {
-              type: 'contradiction', row, col,
-              board: cloneBoard(board),
-              candidates: cloneCandidates(cands),
-              log: [...log],
-            };
-            return false;
-          }
-        }
-        return true;
-      }
-
-      // Constraint propagation: naked singles only
-      function* propagate(cands) {
-        let changed = true;
-        while (changed) {
-          changed = false;
-          for (let r = 0; r < 9; r++) {
-            for (let c = 0; c < 9; c++) {
-              // Skip already-solved cells
-              if (board[r][c] !== 0) continue;
-              if (cands[r][c].size === 1) {
-                const val = [...cands[r][c]][0];
-                board[r][c] = val;
-                log.push(`Naked single: (${r}, ${c}) = ${val}`);
-                yield {
-                  type: 'naked-single', row: r, col: c, num: val,
-                  board: cloneBoard(board),
-                  candidates: cloneCandidates(cands),
-                  log: [...log],
-                };
-                // Eliminate from peers
-                for (const [pr, pc] of getPeers(r, c)) {
-                  if (board[pr][pc] !== 0) continue;
-                  const ok = yield* eliminate(cands, pr, pc, val, r, c);
-                  if (!ok) return false;
-                  changed = true;
-                }
-              }
-            }
-          }
-        }
-        return true;
-      }
-
-      function* search(cands) {
-        // Phase 1: propagate constraints
-        const propOk = yield* propagate(cands);
-        if (!propOk) return false;
-
-        // Check if solved
-        let solved = true;
-        for (let r = 0; r < 9; r++) {
-          for (let c = 0; c < 9; c++) {
-            if (board[r][c] === 0) { solved = false; break; }
-          }
-          if (!solved) break;
-        }
-        if (solved) {
-          log.push('Puzzle solved!');
-          yield {
-            type: 'solved',
-            board: cloneBoard(board),
-            candidates: cloneCandidates(cands),
-            log: [...log],
-          };
-          return true;
-        }
-
-        // Phase 2: find cell with fewest candidates (MRV)
-        let minCell = null;
-        let minCount = 10;
-        for (let r = 0; r < 9; r++) {
-          for (let c = 0; c < 9; c++) {
-            if (board[r][c] !== 0) continue;
-            const size = cands[r][c].size;
-            if (size > 1 && size < minCount) {
-              minCount = size;
-              minCell = [r, c];
-            }
-          }
-        }
-
-        if (!minCell) return false;
-        const [mr, mc] = minCell;
-        const values = shuffle([...cands[mr][mc]]);
-
-        log.push(`MRV: (${mr}, ${mc}) has ${minCount} candidates [${values.join(', ')}]`);
-        yield {
-          type: 'guess', row: mr, col: mc, values,
-          board: cloneBoard(board),
-          candidates: cloneCandidates(cands),
-          log: [...log],
-        };
-
-        for (const val of values) {
-          // Save state
-          const savedCands = cloneCandidates(cands);
-          const savedBoard = cloneBoard(board);
-
-          // Try this value
-          cands[mr][mc] = new Set([val]);
-          board[mr][mc] = val;
-          log.push(`Try ${val} at (${mr}, ${mc})`);
-          yield {
-            type: 'try', row: mr, col: mc, num: val,
-            board: cloneBoard(board),
-            candidates: cloneCandidates(cands),
-            log: [...log],
-          };
-
-          if (yield* search(cands)) return true;
-
-          // Restore state
-          log.push(`Backtrack from (${mr}, ${mc})`);
-          yield {
-            type: 'backtrack', row: mr, col: mc, num: val,
-            board: savedBoard,
-            candidates: savedCands,
-            log: [...log],
-          };
-          for (let r = 0; r < 9; r++) {
-            for (let c = 0; c < 9; c++) {
-              cands[r][c] = savedCands[r][c];
-              board[r][c] = savedBoard[r][c];
-            }
-          }
-        }
-
-        return false;
-      }
-
-      yield* search(candidates);
-    };
-  }, []);
-
   useEffect(() => {
     resetAnimation();
-    setGenerator(() => createGenerator(puzzle)());
-  }, [puzzleKey, puzzle, createGenerator, setGenerator, resetAnimation]);
+    setGenerator(() => generateSteps(puzzle));
+  }, [puzzleKey, puzzle, setGenerator, resetAnimation]);
 
   const handleNewPuzzle = useCallback(() => {
     setPuzzle(generatePuzzle(35));

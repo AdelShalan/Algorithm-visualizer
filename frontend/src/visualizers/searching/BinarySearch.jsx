@@ -1,13 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAlgorithm } from '../../contexts/AlgorithmContext';
-
-function generateSortedArray(size, min, max) {
-  const arr = [];
-  for (let i = 0; i < size; i++) {
-    arr.push(min + Math.floor((max - min) * (i / size)) + Math.floor(Math.random() * 5));
-  }
-  return [...new Set(arr)].slice(0, size);
-}
+import { generateSteps, generateSortedArray } from '../../algorithms/searching/BinarySearch';
 
 export default function BinarySearch() {
   const { startAnimation, setGenerator } = useAlgorithm();

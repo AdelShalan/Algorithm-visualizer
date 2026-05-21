@@ -1,44 +1,16 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAlgorithm } from '../../contexts/AlgorithmContext';
+import { generateSteps } from '../../algorithms/string/rabin-karp.js';
 
 const TEXT = 'ABABDABACDABABCABAB';
 const PATTERN = 'ABABC';
-const PRIME = 101;
-const BASE = 256;
 
 export default function RabinKarp() {
   const { startAnimation, setGenerator } = useAlgorithm();
   const [text, setText] = useState(TEXT);
   const [pattern, setPattern] = useState(PATTERN);
 
-  const generateSteps = useCallback((txt, pat) => {
-    const steps = [];
-    const log = [];
-    const m = pat.length; const n = txt.length;
-    let hashPat = 0; let hashTxt = 0; let h = 1;
-    for (let i = 0; i < m - 1; i++) h = (h * BASE) % PRIME;
-    for (let i = 0; i < m; i++) { hashPat = (BASE * hashPat + pat.charCodeAt(i)) % PRIME; hashTxt = (BASE * hashTxt + txt.charCodeAt(i)) % PRIME; }
-    log.push(`Pattern hash: ${hashPat}, Initial window hash: ${hashTxt}`);
-    steps.push({ type: 'init', hashPat, hashTxt, textHash: hashTxt, log: [...log] });
-    for (let i = 0; i <= n - m; i++) {
-      log.push(`Slide window to index ${i}, hash=${hashTxt}`);
-      steps.push({ type: 'slide', start: i, hashPat, hashTxt, textHash: hashTxt, log: [...log] });
-      if (hashPat === hashTxt) {
-        let match = true;
-        for (let j = 0; j < m; j++) {
-          steps.push({ type: 'verify', start: i, j, hashPat, hashTxt, log: [...log] });
-          if (txt[i + j] !== pat[j]) { match = false; log.push(`Hash match but char mismatch at ${j}`); steps.push({ type: 'hash-collision', start: i, j, hashPat, hashTxt, log: [...log] }); break; }
-        }
-        if (match) { log.push(`Match found at index ${i}!`); steps.push({ type: 'match', start: i, hashPat, hashTxt, log: [...log] }); }
-      }
-      if (i < n - m) { hashTxt = (BASE * (hashTxt - txt.charCodeAt(i) * h) + txt.charCodeAt(i + m)) % PRIME; if (hashTxt < 0) hashTxt += PRIME; log.push(`Rehash to index ${i + 1}: ${hashTxt}`); steps.push({ type: 'rehash', start: i + 1, hashPat, hashTxt, log: [...log] }); }
-    }
-    log.push('Search complete');
-    steps.push({ type: 'done', log: [...log] });
-    return steps;
-  }, []);
-
-  const handleRun = useCallback(() => { startAnimation(generateSteps(text, pattern)); }, [text, pattern, generateSteps, startAnimation]);
+  const handleRun = useCallback(() => { startAnimation(generateSteps(text, pattern)); }, [text, pattern, startAnimation]);
   useEffect(() => { setGenerator(handleRun); }, [handleRun, setGenerator]);
 
   const { currentStep, steps } = useAlgorithm();
