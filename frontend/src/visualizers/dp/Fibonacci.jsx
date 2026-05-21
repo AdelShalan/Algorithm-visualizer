@@ -48,31 +48,33 @@ export default function Fibonacci() {
           </div>
         </div>
 
-        <div className="w-[180px] flex flex-col">
-          <div className="font-heading font-bold text-[0.8125rem] text-ink mb-3">Memo Table</div>
-          <div className="flex flex-col gap-1">
-            {Object.entries(currentData.memo ?? {}).map(([k, v]) => (
-              <div key={k} className="flex justify-between px-2 py-1.5 rounded-md bg-bg">
-                <span className="font-mono text-[0.6875rem] text-ink2">fib({k})</span>
-                <span className="font-mono text-[0.6875rem] font-bold text-purple">{v}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {currentData.log && (
-          <div className="bg-white border border-border rounded-[10px] px-5 py-4 flex flex-col overflow-hidden">
-            <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-2 flex-shrink-0">Execution trace</div>
-            <div ref={logRef} className="flex-1 overflow-y-auto flex flex-col gap-[3px]">
-              {currentData.log.map((entry, i) => {
-                const isLast = i === currentData.log.length - 1;
-                return (
-                  <div key={i} className="font-mono text-[0.625rem] px-2 py-[0.3rem] rounded" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
-                );
-              })}
+        <div className="flex flex-col gap-5 overflow-hidden min-h-0">
+          <div className="flex-shrink-0">
+            <div className="font-heading font-bold text-[0.8125rem] text-ink mb-3">Memo Table</div>
+            <div className="flex flex-col gap-1">
+              {Object.entries(currentData.memo ?? {}).map(([k, v]) => (
+                <div key={k} className="flex justify-between px-2 py-1.5 rounded-md bg-bg">
+                  <span className="font-mono text-[0.6875rem] text-ink2">fib({k})</span>
+                  <span className="font-mono text-[0.6875rem] font-bold text-purple">{v}</span>
+                </div>
+              ))}
             </div>
           </div>
-        )}
+
+          {currentData.log && (
+            <div className="flex-1 min-h-0 bg-white border border-border rounded-[10px] px-5 py-4 flex flex-col overflow-hidden">
+              <div className="font-mono text-[0.5625rem] tracking-[0.08em] uppercase text-muted mb-2 flex-shrink-0">Execution trace</div>
+              <div ref={logRef} className="flex-1 overflow-y-auto flex flex-col gap-[3px]">
+                {currentData.log.map((entry, i) => {
+                  const isLast = i === currentData.log.length - 1;
+                  return (
+                    <div key={i} className="font-mono text-[0.625rem] px-2 py-[0.3rem] rounded" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
