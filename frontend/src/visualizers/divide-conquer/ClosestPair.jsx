@@ -50,12 +50,12 @@ export default function ClosestPair() {
               })}
             </svg>
           </div>
-          {currentData.dist !== undefined && currentData.dist !== Infinity && (
-            <div className="rounded-lg bg-bg px-4 py-2 text-center">
-              <span className="font-body text-[.75rem] text-muted">Closest distance: </span>
-              <span className="font-mono text-[1rem] font-bold text-purple">{currentData.dist.toFixed(2)}</span>
-            </div>
-          )}
+          <div className="rounded-lg bg-bg px-4 py-2 text-center">
+            <span className="font-body text-[.75rem] text-muted">Closest distance: </span>
+            <span className="font-mono text-[1rem] font-bold text-purple">
+              {currentData.dist !== undefined && currentData.dist !== Infinity ? currentData.dist.toFixed(2) : '—'}
+            </span>
+          </div>
         </div>
 
         {currentData.log && (

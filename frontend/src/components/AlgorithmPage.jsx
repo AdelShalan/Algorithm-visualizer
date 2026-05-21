@@ -287,7 +287,7 @@ function CodeTab({ algoInfo }) {
 
   const handleWheel = useCallback((e) => {
     if (codeRef.current && Math.abs(e.deltaX) < Math.abs(e.deltaY)) {
-      e.preventDefault();
+      if (e.cancelable) e.preventDefault();
       codeRef.current.scrollBy({ left: e.deltaY * 0.17, behavior: 'smooth' });
     }
   }, []);
