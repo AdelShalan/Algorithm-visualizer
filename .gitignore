@@ -38,6 +38,9 @@ REFACTORING_SUMMARY.md
 *.png
 *.jpg
 *.jpeg
+
+# Screenshots for README (not build artifacts)
+!screenshots/*.png
 .vite/
 test-results/
 

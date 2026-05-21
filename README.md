@@ -2,6 +2,10 @@
 
 An interactive, real-time algorithm visualization platform built with React, Vite, and a lightweight Hono + SQLite backend. Explore how algorithms work step-by-step with beautiful, animated visualizations.
 
+| Red-Black Tree (self-balancing BST with color invariants) | Dijkstra's Algorithm (shortest path on weighted graph) |
+|---|---|
+| ![Red-Black Tree visualizer in action](screenshots/screenshot-rb-tree.png) | ![Dijkstra's algorithm visualizer](screenshots/screenshot-dijkstra.png) |
+
 ## Features
 
 ### Tree Operations
