@@ -9,12 +9,16 @@ export default function BST() {
 
   function insert(node, val) {
     if (!node) return new TreeNode(val);
-    if (val < node.val) node.left = insert(node.left, val);
-    else if (val > node.val) node.right = insert(node.right, val);
-    return node;
+    const newNode = new TreeNode(node.val);
+    newNode.left = node.left;
+    newNode.right = node.right;
+    if (val < node.val) newNode.left = insert(node.left, val);
+    else if (val > node.val) newNode.right = insert(node.right, val);
+    return newNode;
   }
 
-  const handleInsert = (val) => {
+  const handleInsert = () => {
+    const val = parseInt(inputValue);
     if (isNaN(val)) return;
     const newRoot = insert(root, val);
     setRoot(newRoot);
