@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import { HTTPException } from 'hono/http-exception';
 import { serve } from '@hono/node-server';
 import content from './routes/content.js';
 import admin from './routes/admin.js';
@@ -19,6 +20,9 @@ app.route('/api/admin', admin);
 
 // Error handler
 app.onError((err, c) => {
+  if (err instanceof HTTPException) {
+    return err.getResponse();
+  }
   console.error(err);
   return c.json({ error: { code: 'INTERNAL_ERROR', message: 'Internal server error' } }, 500);
 });
@@ -30,8 +34,9 @@ app.notFound((c) => {
 
 const port = parseInt(process.env.PORT || '3001');
 
-console.log(`Server starting on port ${port}...`);
-
-serve({ fetch: app.fetch, port });
+if (process.env.NODE_ENV !== 'test') {
+  console.log(`Server starting on port ${port}...`);
+  serve({ fetch: app.fetch, port });
+}
 
 export default app;
