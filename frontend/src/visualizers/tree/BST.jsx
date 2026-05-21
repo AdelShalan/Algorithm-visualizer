@@ -6,6 +6,7 @@ export default function BST() {
   const { startAnimation, setGenerator } = useAlgorithm();
   const [root, setRoot] = useState(null);
   const [inputValue, setInputValue] = useState(50);
+  const [insertLog, setInsertLog] = useState([]);
 
   function insert(node, val) {
     if (!node) return new TreeNode(val);
@@ -23,6 +24,7 @@ export default function BST() {
     const newRoot = insert(root, val);
     setRoot(newRoot);
     setInputValue('');
+    setInsertLog(prev => [...prev, `Inserted ${val}`]);
   };
 
   const handleSearch = () => {
@@ -33,17 +35,23 @@ export default function BST() {
 
   useEffect(() => { setGenerator(handleSearch); }, [handleSearch, setGenerator]);
 
-  const handleClear = useCallback(() => { setRoot(null); }, []);
+  const handleClear = useCallback(() => {
+    setRoot(null);
+    setInsertLog([]);
+  }, []);
   const handleRandom = useCallback(() => {
     let r = null;
-    for (let i = 0; i < 8; i++) { const v = Math.floor(Math.random() * 100) + 1; r = insert(r, v); }
+    const vals = [];
+    for (let i = 0; i < 8; i++) { const v = Math.floor(Math.random() * 100) + 1; vals.push(v); r = insert(r, v); }
     setRoot(r);
+    setInsertLog(prev => [...prev, ...vals.map(v => `Inserted ${v}`)]);
   }, [insert]);
 
   const { currentStep, steps } = useAlgorithm();
   const currentData = steps?.[currentStep] || { type: 'idle', log: [] };
+  const displayLog = steps?.length > 0 ? currentData.log : insertLog;
   const logRef = useRef(null);
-  useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [currentData.log]);
+  useEffect(() => { if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight; }, [displayLog]);
 
   const nodeSpacing = 70;
   const leafGap = 28;
@@ -128,11 +136,11 @@ export default function BST() {
           )}
         </div>
 
-        {currentData.log && (
+        {displayLog.length > 0 && (
           <div className="flex flex-col overflow-hidden rounded-[10px] border border-border bg-white px-5 py-4">
             <div className="mb-2 shrink-0 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Operation log</div>
             <div ref={logRef} className="flex flex-1 flex-col gap-[3px] overflow-y-auto">
-              {currentData.log.map((entry, i) => {
+              {displayLog.map((entry, i) => {
                 const isLast = i === currentData.log.length - 1;
                 return (
                   <div key={i} className="rounded px-2 py-[.3rem] font-mono text-[.625rem]" style={{ color: isLast ? 'var(--purple)' : 'var(--muted)', background: isLast ? 'var(--purple-light)' : 'transparent', fontWeight: isLast ? 500 : 400 }}>{entry}</div>
