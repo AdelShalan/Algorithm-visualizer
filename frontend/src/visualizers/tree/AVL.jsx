@@ -52,9 +52,16 @@ export default function AVL() {
 
   const handleClear = useCallback(() => { setRoot(null); setSteps([]); }, []);
   const handleRandom = useCallback(() => {
-    let r = null; const vals = [];
-    for (let i = 0; i < 8; i++) { const v = Math.floor(Math.random() * 100) + 1; vals.push(v); const result = insert(r, v); r = result.node; }
+    let r = null;
+    const allSteps = [];
+    for (let i = 0; i < 8; i++) {
+      const v = Math.floor(Math.random() * 100) + 1;
+      const result = insert(r, v);
+      r = result.node;
+      allSteps.push(...result.steps);
+    }
     setRoot(r);
+    setSteps(allSteps);
   }, [insert]);
 
   const nodeSpacing = 70;
