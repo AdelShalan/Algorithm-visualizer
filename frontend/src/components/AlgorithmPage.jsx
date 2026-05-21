@@ -201,7 +201,7 @@ export default function AlgorithmPage() {
           </div>
 
           <div className="flex-1 overflow-y-auto p-5">
-            {activeTab === 'info' && <InfoTab algoInfo={algoInfo} steps={steps} currentStep={currentStep} relatedAlgos={relatedAlgos} category={category} />}
+            {activeTab === 'info' && <InfoTab algoInfo={algoInfo} steps={steps} currentStep={currentStep} relatedAlgos={relatedAlgos} category={category} algorithmLookup={algorithmLookup} />}
             {activeTab === 'code' && <CodeTab algoInfo={algoInfo} />}
             {activeTab === 'complexity' && <ComplexityTab algoInfo={algoInfo} />}
           </div>
@@ -238,7 +238,7 @@ function ComplexityBox({ label, value, quality }) {
   );
 }
 
-function InfoTab({ algoInfo, steps, currentStep, relatedAlgos, category }) {
+function InfoTab({ algoInfo, steps, currentStep, relatedAlgos, category, algorithmLookup }) {
   return (
     <div>
       {algoInfo.overview && (
