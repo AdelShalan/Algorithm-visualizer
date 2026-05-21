@@ -207,11 +207,9 @@ export default function RedBlack() {
       </div>
 
       <div className="grid min-h-0 flex-1 grid-cols-[1fr_280px] gap-5">
-        <div className="flex flex-col rounded-[10px] border border-border bg-white p-5">
-          <div className="mb-4 font-mono text-[.5625rem] uppercase tracking-[.08em] text-muted">Red-Black Tree</div>
-          <div className="flex flex-1 items-center justify-center overflow-hidden min-h-0">
-            {root ? (
-              <svg viewBox={viewBox} preserveAspectRatio="xMidYMid meet" className="h-full w-full max-h-full">
+        <div className="flex items-center justify-center overflow-hidden rounded-[10px] border border-border bg-white p-5 min-h-0">
+          {root ? (
+            <svg viewBox={viewBox} preserveAspectRatio="xMidYMid meet" className="h-full w-full">
                 {edges.map((e, i) => (
                   <line key={i} x1={e.x1} y1={e.y1} x2={e.x2} y2={e.y2} stroke="var(--border)" strokeWidth={2} />
                 ))}
@@ -231,7 +229,6 @@ export default function RedBlack() {
                 <p className="text-[.75rem]">Insert values to see the tree</p>
               </div>
             )}
-          </div>
         </div>
 
         {log.length > 0 && (
