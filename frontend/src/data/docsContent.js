@@ -215,26 +215,6 @@ The array is conceptually divided into two regions — a sorted prefix on the le
         ],
       },
       {
-        id: 'complexity',
-        title: 'Complexity',
-        type: 'text',
-        content: `Selection sort always performs exactly n(n−1)/2 comparisons regardless of input order — it never detects that the array is already sorted. However, it makes at most n−1 swaps, which is its distinguishing feature.`,
-        table: {
-          headers: ['Case', 'Time', 'Swaps', 'Notes'],
-          rows: [
-            { cells: ['Best', 'O(n²)', '0', 'Already sorted'], classes: ['bad', 'mono', ''] },
-            { cells: ['Average', 'O(n²)', '~n/2', 'Random input'], classes: ['bad', 'mono', ''] },
-            { cells: ['Worst', 'O(n²)', 'n−1', 'Reverse sorted'], classes: ['bad', 'mono', ''] },
-            { cells: ['Space', 'O(1)', '—', 'In-place'], classes: ['good', 'mono', ''] },
-          ],
-        },
-        callout: {
-          type: 'info',
-          title: 'Fewer writes matter',
-          body: 'Selection sort\'s most distinctive property is that it makes at most n−1 swaps. For data structures where writing is expensive (like flash memory or EEPROM), this can be a genuine advantage over algorithms that perform O(n²) swaps.',
-        },
-      },
-      {
         id: 'code',
         title: 'Implementation',
         type: 'code',
@@ -305,6 +285,26 @@ The array is conceptually divided into two regions — a sorted prefix on the le
         ],
       },
       {
+        id: 'complexity',
+        title: 'Complexity',
+        type: 'text',
+        content: `Selection sort always performs exactly n(n−1)/2 comparisons regardless of input order — it never detects that the array is already sorted. However, it makes at most n−1 swaps, which is its distinguishing feature.`,
+        table: {
+          headers: ['Case', 'Time', 'Swaps', 'Notes'],
+          rows: [
+            { cells: ['Best', 'O(n²)', '0', 'Already sorted'], classes: ['bad', 'mono', ''] },
+            { cells: ['Average', 'O(n²)', '~n/2', 'Random input'], classes: ['bad', 'mono', ''] },
+            { cells: ['Worst', 'O(n²)', 'n−1', 'Reverse sorted'], classes: ['bad', 'mono', ''] },
+            { cells: ['Space', 'O(1)', '—', 'In-place'], classes: ['good', 'mono', ''] },
+          ],
+        },
+        callout: {
+          type: 'info',
+          title: 'Fewer writes matter',
+          body: 'Selection sort\'s most distinctive property is that it makes at most n−1 swaps. For data structures where writing is expensive (like flash memory or EEPROM), this can be a genuine advantage over algorithms that perform O(n²) swaps.',
+        },
+      },
+      {
         id: 'related',
         title: 'Related algorithms',
         type: 'related',
@@ -344,26 +344,6 @@ The algorithm maintains a sorted prefix of the array and, for each new element, 
           { title: 'Shift larger elements', text: 'Each element larger than the key is shifted one position to the right, creating a gap.' },
           { title: 'Insert the key', text: 'When an element ≤ key is found (or the beginning is reached), place the key in the gap.' },
         ],
-      },
-      {
-        id: 'complexity',
-        title: 'Complexity',
-        type: 'text',
-        content: `Insertion sort is the most efficient simple sorting algorithm for small or nearly-sorted data. Its adaptive nature means it runs in O(n + d) time where d is the number of inversions.`,
-        table: {
-          headers: ['Case', 'Time', 'Inversions', 'Notes'],
-          rows: [
-            { cells: ['Best', 'O(n)', '0', 'Already sorted'], classes: ['good', 'mono', ''] },
-            { cells: ['Average', 'O(n²)', 'n²/4', 'Random input'], classes: ['bad', 'mono', ''] },
-            { cells: ['Worst', 'O(n²)', 'n(n−1)/2', 'Reverse sorted'], classes: ['bad', 'mono', ''] },
-            { cells: ['Space', 'O(1)', '—', 'In-place, stable'], classes: ['good', 'mono', ''] },
-          ],
-        },
-        callout: {
-          type: 'success',
-          title: 'Why it matters',
-          body: 'Insertion sort is the algorithm of choice as a base case in hybrid sorts like Timsort (Python, Java) and Introsort (C++ STL), which switch to Insertion Sort for subarrays of size ≤ 16. It\'s stable, in-place, online, and adaptive.',
-        },
       },
       {
         id: 'code',
@@ -427,6 +407,26 @@ The algorithm maintains a sorted prefix of the array and, for each new element, 
 }`,
           },
         ],
+      },
+      {
+        id: 'complexity',
+        title: 'Complexity',
+        type: 'text',
+        content: `Insertion sort is the most efficient simple sorting algorithm for small or nearly-sorted data. Its adaptive nature means it runs in O(n + d) time where d is the number of inversions.`,
+        table: {
+          headers: ['Case', 'Time', 'Inversions', 'Notes'],
+          rows: [
+            { cells: ['Best', 'O(n)', '0', 'Already sorted'], classes: ['good', 'mono', ''] },
+            { cells: ['Average', 'O(n²)', 'n²/4', 'Random input'], classes: ['bad', 'mono', ''] },
+            { cells: ['Worst', 'O(n²)', 'n(n−1)/2', 'Reverse sorted'], classes: ['bad', 'mono', ''] },
+            { cells: ['Space', 'O(1)', '—', 'In-place, stable'], classes: ['good', 'mono', ''] },
+          ],
+        },
+        callout: {
+          type: 'success',
+          title: 'Why it matters',
+          body: 'Insertion sort is the algorithm of choice as a base case in hybrid sorts like Timsort (Python, Java) and Introsort (C++ STL), which switch to Insertion Sort for subarrays of size ≤ 16. It\'s stable, in-place, online, and adaptive.',
+        },
       },
       {
         id: 'related',
