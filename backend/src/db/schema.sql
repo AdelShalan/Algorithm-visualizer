@@ -36,5 +36,6 @@ CREATE TABLE IF NOT EXISTS doc_sections (
   section_id TEXT NOT NULL,
   title TEXT,
   type TEXT,
-  content TEXT
+  content TEXT,
+  UNIQUE(doc_id, section_id)
 );

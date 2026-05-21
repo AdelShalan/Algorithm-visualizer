@@ -15,6 +15,12 @@ const schema = fs.readFileSync(schemaPath, 'utf-8');
 db.run(schema);
 console.log('Schema created.');
 
+// Clear existing data so re-running the seed doesn't duplicate rows
+db.run('DELETE FROM doc_sections');
+db.run('DELETE FROM docs');
+db.run('DELETE FROM algorithms');
+db.run('DELETE FROM categories');
+
 // Import data from frontend — use file:// URLs for ESM on Windows
 const dataDir = pathToFileURL(path.join(__dirname, '../../../frontend/src/data')).href;
 const { categories } = await import(`${dataDir}/algorithms.js`);
