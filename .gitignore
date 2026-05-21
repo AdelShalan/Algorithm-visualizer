@@ -28,8 +28,11 @@ opencode.json
 .playwright
 .playwright-mcp
 .claude
+.agents/
+skills-lock.json
 AGENTS.md
 REFACTOR.md
+REFACTORING_SUMMARY.md
 
 # Build/test artifacts
 *.png
