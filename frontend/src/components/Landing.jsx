@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Nav from './Nav';
 import { useAlgorithmData } from '../hooks/useAlgorithmData';
@@ -31,14 +31,26 @@ const featuredCategories = [
 ];
 
 export default function Landing() {
-  const { data, loading } = useAlgorithmData();
+  const { data, loading, error } = useAlgorithmData();
   const categories = data?.categories || [];
   const totalAlgorithms = categories.reduce((s, c) => s + c.algorithms.length, 0);
+  const heroRef = useRef(null);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-bg">
         <div className="text-center text-muted">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-bg">
+        <div className="text-center">
+          <div className="font-heading text-xl font-bold text-ink mb-2">Failed to load</div>
+          <p className="text-muted">{error.message}</p>
+        </div>
       </div>
     );
   }
@@ -50,7 +62,7 @@ export default function Landing() {
       {/* Main content (pushes footer down) */}
       <div className="flex-1">
       {/* Hero */}
-      <div className="px-[2.5rem] pt-[5rem] pb-[4rem] bg-white border-b border-border relative overflow-hidden">
+      <div ref={heroRef} className="px-[2.5rem] pt-[5rem] pb-[4rem] bg-white border-b border-border relative overflow-hidden">
         {/* Dot grid background */}
         <div
           className="absolute inset-0 opacity-40 pointer-events-none"
@@ -59,8 +71,9 @@ export default function Landing() {
             backgroundSize: '32px 32px',
           }}
         />
+        <GridAnimation heroRef={heroRef} />
 
-        <div className="grid grid-cols-[1fr_420px] gap-12 items-center max-w-[1100px] relative">
+        <div className="grid grid-cols-[1fr_420px] gap-12 items-center max-w-[1100px] relative" style={{ zIndex: 3 }}>
           <div>
             {/* Badge */}
             <div className="inline-flex items-center gap-1.5 bg-purple-light text-purple font-mono text-[0.6875rem] font-medium px-[0.875rem] py-[0.3125rem] rounded-full mb-6 tracking-[0.02em]">
@@ -101,7 +114,9 @@ export default function Landing() {
           </div>
 
           {/* Demo vis card */}
-          <DemoCard />
+          <div data-demo-card>
+            <DemoCard />
+          </div>
         </div>
       </div>
 
@@ -364,5 +379,183 @@ function DemoCard() {
         ))}
       </div>
     </div>
+  );
+}
+
+/* ─── Grid animation ─── */
+function GridAnimation({ heroRef }) {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const hero = heroRef.current;
+    if (!canvas || !hero) return;
+
+    const ctx = canvas.getContext('2d');
+    let animId;
+    let particles = [];
+    let lastSpawn = 0;
+    let frame = 0;
+    const GRID = 32;
+    const COLORS = [
+      '108, 71, 255',   // purple
+      '13, 148, 136',   // teal
+      '245, 158, 11',   // amber
+      '22, 163, 74',    // green
+      '225, 29, 72',    // red
+      '37, 99, 235',    // blue
+    ];
+
+    function resize() {
+      const rect = hero.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    }
+    resize();
+
+    const cardEl = hero.querySelector('[data-demo-card]');
+
+    function getCardBounds() {
+      if (!cardEl) return null;
+      const hr = hero.getBoundingClientRect();
+      const cr = cardEl.getBoundingClientRect();
+      return { x: cr.left - hr.left, y: cr.top - hr.top, w: cr.width, h: cr.height };
+    }
+
+    function spawn() {
+      const w = canvas.width;
+      const h = canvas.height;
+      const cols = Math.floor(w / GRID);
+      const rows = Math.floor(h / GRID);
+      const side = Math.floor(Math.random() * 4);
+      let x, y, dx, dy;
+
+      switch (side) {
+        case 0: x = Math.floor(Math.random() * cols) * GRID; y = 0; dx = 0; dy = GRID; break;
+        case 1: x = Math.floor(w / GRID) * GRID; y = Math.floor(Math.random() * rows) * GRID; dx = -GRID; dy = 0; break;
+        case 2: x = Math.floor(Math.random() * cols) * GRID; y = Math.floor(h / GRID) * GRID; dx = 0; dy = -GRID; break;
+        case 3: x = 0; y = Math.floor(Math.random() * rows) * GRID; dx = GRID; dy = 0; break;
+      }
+
+      particles.push({
+        x, y, dx, dy,
+        trail: [{ x, y }],
+        turns: 0,
+        maxTurns: 1 + Math.floor(Math.random() * 2),
+        life: 0,
+        maxLife: 120 + Math.floor(Math.random() * 120),
+        fading: false,
+        fadeStart: 0,
+        speed: 8 + Math.floor(Math.random() * 8),
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        progress: 0,
+      });
+    }
+
+    function update() {
+      const w = canvas.width;
+      const h = canvas.height;
+      frame++;
+
+      if (!lastSpawn || Date.now() - lastSpawn > 600 + Math.random() * 800) {
+        if (particles.length < 20) spawn();
+        lastSpawn = Date.now();
+      }
+
+      ctx.clearRect(0, 0, w, h);
+      const cardBounds = getCardBounds();
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.life++;
+
+        p.progress += 1 / p.speed;
+        if (p.progress >= 1) {
+          p.progress -= 1;
+          p.x += p.dx;
+          p.y += p.dy;
+          p.trail.push({ x: p.x, y: p.y });
+        }
+
+        const vx = p.x + p.dx * p.progress;
+        const vy = p.y + p.dy * p.progress;
+
+        if (!p.fading && cardBounds) {
+          const margin = 20;
+          if (vx >= cardBounds.x - margin && vx <= cardBounds.x + cardBounds.w + margin &&
+              vy >= cardBounds.y - margin && vy <= cardBounds.y + cardBounds.h + margin) {
+            p.fading = true;
+            p.fadeStart = p.life;
+          }
+        }
+
+        if (!p.fading && p.turns < p.maxTurns && p.progress === 0 && Math.random() < 0.04) {
+          const turn = Math.random() > 0.5 ? 1 : -1;
+          if (p.dx !== 0) { p.dy = p.dx * turn > 0 ? GRID : -GRID; p.dx = 0; }
+          else { p.dx = -(p.dy * turn) > 0 ? GRID : -GRID; p.dy = 0; }
+          p.turns++;
+        }
+
+        const outOfBounds = vx < -GRID || vx > w + GRID || vy < -GRID || vy > h + GRID;
+        if (!p.fading && (outOfBounds || p.life > p.maxLife)) {
+          p.fading = true;
+          p.fadeStart = p.life;
+        }
+
+        if (p.fading && p.life - p.fadeStart > 40) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        let trailAlpha = 1;
+        let dotAlpha = 1;
+        if (p.fading) {
+          const fadeProgress = (p.life - p.fadeStart) / 30;
+          trailAlpha = Math.max(0, 1 - fadeProgress);
+          dotAlpha = Math.max(0, 1 - fadeProgress);
+          if (trailAlpha <= 0) { particles.splice(i, 1); continue; }
+        }
+
+        const maxTrail = 12;
+        const start = Math.max(0, p.trail.length - maxTrail);
+        const segs = p.trail.slice(start);
+        const allPoints = [...segs, { x: vx, y: vy }];
+
+        for (let j = 0; j < allPoints.length - 1; j++) {
+          const t = (j + 1) / allPoints.length;
+          ctx.beginPath();
+          ctx.moveTo(allPoints[j].x, allPoints[j].y);
+          ctx.lineTo(allPoints[j + 1].x, allPoints[j + 1].y);
+          ctx.strokeStyle = `rgba(${p.color},${(t * 0.5 * trailAlpha).toFixed(2)})`;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        }
+
+        const pulse = 1 + 0.3 * Math.sin(p.life * 0.15);
+        ctx.beginPath();
+        ctx.arc(vx, vy, 3 * pulse, 0, Math.PI * 2);
+        const da = ((0.5 + 0.4 * Math.sin(p.life * 0.15)) * dotAlpha).toFixed(2);
+        ctx.fillStyle = `rgba(${p.color},${da})`;
+        ctx.fill();
+      }
+
+      animId = requestAnimationFrame(update);
+    }
+
+    animId = requestAnimationFrame(update);
+    window.addEventListener('resize', resize);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', resize);
+    };
+  }, [heroRef]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 pointer-events-none"
+      style={{ zIndex: 1 }}
+    />
   );
 }
